@@ -1,0 +1,34 @@
+[
+    [
+        "ip",
+        "185.199.108.153"
+    ],
+    [
+        "port",
+        443
+    ],
+    [
+        "dimensions",
+        {
+            "width": 800,
+            "height": 600,
+            "deviceScaleFactor": 1
+        }
+    ],
+    [
+        "security",
+        [
+            {
+                "_subjectName": "www.github.com",
+                "_issuer": "DigiCert SHA2 High Assurance Server CA",
+                "_validFrom": 1530057600,
+                "_validTo": 1592654400,
+                "_protocol": "TLS 1.2"
+            }
+        ]
+    ],
+    [
+        "nodes",
+        []
+    ]
+]
