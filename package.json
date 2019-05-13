@@ -4,12 +4,14 @@
 	"description": "Website testing",
 	"main": "index.js",
 	"scripts": {
+		"test:deep": "DEBUG=\"puppeteer:*\" node src/core/Pioneer.js",
 		"test": "mocha"
 	},
 	"author": "Parellin Technologies LLC",
 	"license": "MIT",
 	"dependencies": {
 		"@parellin/lightmap": "0.1.2",
-		"puppeteer": "1.13.0"
+		"puppeteer": "1.13.0",
+		"vis": "4.21.0"
 	}
 }

@@ -1,7 +1,7 @@
 [
     [
         "ip",
-        "185.199.110.153"
+        "185.199.109.153"
     ],
     [
         "port",
@@ -39,7 +39,7 @@
                     "external": false,
                     "parent": "https://parellin-technologies-llc.github.io/lightmap/",
                     "remoteAddress": {
-                        "ip": "185.199.110.153",
+                        "ip": "185.199.109.153",
                         "port": 443
                     },
                     "securityDetails": {
@@ -60,7 +60,7 @@
                     "external": false,
                     "parent": "https://parellin-technologies-llc.github.io/lightmap/",
                     "remoteAddress": {
-                        "ip": "185.199.110.153",
+                        "ip": "185.199.109.153",
                         "port": 443
                     },
                     "securityDetails": {
@@ -81,7 +81,7 @@
                     "external": false,
                     "parent": "https://parellin-technologies-llc.github.io/lightmap/",
                     "remoteAddress": {
-                        "ip": "185.199.110.153",
+                        "ip": "185.199.109.153",
                         "port": 443
                     },
                     "securityDetails": {
@@ -102,7 +102,7 @@
                     "external": false,
                     "parent": "https://parellin-technologies-llc.github.io/lightmap/",
                     "remoteAddress": {
-                        "ip": "185.199.110.153",
+                        "ip": "185.199.109.153",
                         "port": 443
                     },
                     "securityDetails": {
@@ -123,7 +123,7 @@
                     "external": false,
                     "parent": "https://parellin-technologies-llc.github.io/lightmap/",
                     "remoteAddress": {
-                        "ip": "185.199.110.153",
+                        "ip": "185.199.109.153",
                         "port": 443
                     },
                     "securityDetails": {
@@ -144,7 +144,7 @@
                     "external": true,
                     "parent": "https://parellin-technologies-llc.github.io/lightmap/",
                     "remoteAddress": {
-                        "ip": "52.216.108.69",
+                        "ip": "52.216.162.61",
                         "port": 443
                     },
                     "securityDetails": {
@@ -186,7 +186,7 @@
                     "external": false,
                     "parent": "https://parellin-technologies-llc.github.io/lightmap/",
                     "remoteAddress": {
-                        "ip": "185.199.110.153",
+                        "ip": "185.199.109.153",
                         "port": 443
                     },
                     "securityDetails": {
@@ -207,7 +207,7 @@
                     "external": false,
                     "parent": "https://parellin-technologies-llc.github.io/lightmap/",
                     "remoteAddress": {
-                        "ip": "185.199.110.153",
+                        "ip": "185.199.109.153",
                         "port": 443
                     },
                     "securityDetails": {
@@ -228,7 +228,7 @@
                     "external": false,
                     "parent": "https://parellin-technologies-llc.github.io/lightmap/",
                     "remoteAddress": {
-                        "ip": "185.199.110.153",
+                        "ip": "185.199.109.153",
                         "port": 443
                     },
                     "securityDetails": {
@@ -249,7 +249,7 @@
                     "external": true,
                     "parent": "https://parellin-technologies-llc.github.io/lightmap/",
                     "remoteAddress": {
-                        "ip": "104.16.93.83",
+                        "ip": "104.16.92.83",
                         "port": 443
                     },
                     "securityDetails": {
@@ -273,7 +273,7 @@
                     "external": true,
                     "parent": "https://parellin-technologies-llc.github.io/lightmap/",
                     "remoteAddress": {
-                        "ip": "13.249.44.73",
+                        "ip": "99.84.216.121",
                         "port": 443
                     },
                     "securityDetails": {
@@ -297,7 +297,7 @@
                     "external": false,
                     "parent": "https://parellin-technologies-llc.github.io/lightmap/index.html",
                     "remoteAddress": {
-                        "ip": "185.199.110.153",
+                        "ip": "185.199.109.153",
                         "port": 443
                     },
                     "securityDetails": {
@@ -323,7 +323,7 @@
                     "external": false,
                     "parent": "https://parellin-technologies-llc.github.io/lightmap/LightMap.html",
                     "remoteAddress": {
-                        "ip": "185.199.110.153",
+                        "ip": "185.199.109.153",
                         "port": 443
                     },
                     "securityDetails": {
@@ -362,7 +362,7 @@
                     "external": false,
                     "parent": "https://parellin-technologies-llc.github.io/lightmap/LightMap.js.html",
                     "remoteAddress": {
-                        "ip": "185.199.110.153",
+                        "ip": "185.199.109.153",
                         "port": 443
                     },
                     "securityDetails": {
@@ -410,7 +410,7 @@
                     "external": true,
                     "parent": "https://parellin-technologies-llc.github.io/lightmap/LightMap.js.html",
                     "remoteAddress": {
-                        "ip": "192.30.253.112",
+                        "ip": "192.30.253.113",
                         "port": 443
                     },
                     "securityDetails": {
