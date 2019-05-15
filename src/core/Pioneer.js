@@ -12,6 +12,9 @@ const
 	puppeteer = require( 'puppeteer' ),
 	LightMap  = require( '@parellin/lightmap' );
 
+const
+	ScanPage = require( './ScanPage' );
+
 async function getHrefs( page ) {
 	return await page.evaluate( () => {
 		const anchors = document.querySelectorAll( 'a' );
@@ -24,84 +27,6 @@ async function searchForLinks( browser, parent, cache ) {
 
 	const page = await browser.newPage();
 	await page.setRequestInterception( true );
-
-	page
-		.on( 'request', request => {
-			console.log( 'on:request' );
-			const url = new URL( request.url() );
-
-			// Set it up in case it doesn't respond
-
-			if( cache.get( 'nodes' ).has( url.href ) ) {
-				return request.abort( 'aborted' );
-			}
-
-			cache.get( 'nodes' ).set(
-				url.href,
-				{
-					url: url.href,
-					status: 0,
-					ok: 'unknown',
-					external: url.hostname !== parent.hostname,
-					parent: parent.href
-				}
-			);
-
-			console.log( 'request  url:', url.href );
-			request.continue();
-		} )
-		.on( 'requestfailed', request => {
-			console.log( 'on:requestfailed' );
-			const url    = new URL( request.url() );
-			const reason = request.failure();
-
-			if( reason.errorText === 'net::ERR_ABORTED' ) {
-				// Do nothing because we aborted it
-				return;
-			}
-
-			// TODO:: check request response codes and cache
-			cache.get( 'nodes' ).set(
-				url.href,
-				{
-					url: url.href,
-					status: 0,
-					ok: reason.errorText,
-					external: url.hostname !== parent.hostname,
-					parent: parent.href
-				}
-			);
-
-			console.log( 'request failed url:', url.href );
-		} )
-		.on( 'response', response => {
-			console.log( 'on:response' );
-			const request = response.request();
-			const status  = response.status();
-			const url     = new URL( request.url() );
-			const ref     = cache.get( 'nodes' ).get( url.href );
-
-			ref.url           = url.href;
-			ref.status        = status;
-			ref.ok            = response.ok();
-			ref.external      = url.hostname !== parent.hostname;
-			ref.parent        = parent.href;
-			ref.remoteAddress = response.remoteAddress();
-
-			const secDetails = response.securityDetails();
-
-			if( secDetails ) {
-				ref.securityDetails = {
-					subjectName: secDetails.subjectName(),
-					issuer: secDetails.issuer(),
-					validFrom: secDetails.validFrom(),
-					validTo: secDetails.validTo(),
-					protocol: secDetails.protocol()
-				};
-			}
-
-			console.log( 'response url:', url.href, 'status:', status );
-		} );
 
 	await page.goto( parent, { waitUntil: 'networkidle2' } );
 	await page.waitFor( 500 );
@@ -190,7 +115,7 @@ async function searchForLinks( browser, parent, cache ) {
 
 ( async () => {
 	const browser = await puppeteer.launch( {
-		slowMo: 250
+		// slowMo: 250
 	} );
 
 	// const page = await browser.newPage();
@@ -200,11 +125,27 @@ async function searchForLinks( browser, parent, cache ) {
 	// await page.screenshot( { path: 'example.png' } );
 	// const url    = 'https://parellin-technologies-llc.github.io/lightmap/';
 
-	const cache  = new LightMap();
-	const url    = 'http://localhost:8080/';
-	const parent = new URL( url );
+	// info.external      = url.hostname !== parent.hostname;
 
-	console.log( parent );
+
+	const x      = new ScanPage( {
+		browser,
+		url: new URL( 'http://localhost:8080/' )
+	} );
+
+	await x.init();
+	await x.goto();
+
+	console.log( x );
+	console.log( x.cache );
+
+	// await this.page.waitFor( 500 );
+
+	// const cache  = new LightMap();
+	// const url    = 'http://localhost:8080/';
+	// const parent = new URL( url );
+	//
+	// console.log( parent );
 
 	// const x      = await page.goto( url, { waitUntil: 'networkidle2' } );
 	// cache.set( 'ip', x._remoteAddress.ip );
@@ -219,15 +160,15 @@ async function searchForLinks( browser, parent, cache ) {
 	// cache.set( 'dimensions', dimensions );
 
 	// cache.set( 'security', [ x._securityDetails ] );
-	cache.set( 'nodes', new LightMap( [
-		[ parent.href, {
-			// status: x._status,
-			hostname: parent,
-			parent: null
-		} ]
-	] ) );
+	// cache.set( 'nodes', new LightMap( [
+	// 	[ parent.href, {
+	// 		// status: x._status,
+	// 		hostname: parent,
+	// 		parent: null
+	// 	} ]
+	// ] ) );
 
-	await searchForLinks( browser, parent, cache );
+	// await searchForLinks( browser, parent, cache );
 
 	// const walk = await page.evaluate( () => {
 	// 	const data = {
@@ -273,9 +214,9 @@ async function searchForLinks( browser, parent, cache ) {
 	// console.log( walk.pendingNavigation );
 	// console.log( walk.log );
 
-	console.log( cache );
+	// console.log( cache );
 
-	await writeFile( './logs.json', JSON.stringify( cache.toJSON(), null, 4 ) );
+	// await writeFile( './logs.json', JSON.stringify( cache.toJSON(), null, 4 ) );
 
 	await browser.close();
 } )();
