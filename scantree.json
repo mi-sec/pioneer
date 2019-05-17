@@ -61,20 +61,20 @@
                         "timing",
                         {
                             "initial": [
-                                4855,
-                                582703148
+                                6328,
+                                131667087
                             ],
                             "responseEnd": [
                                 0,
-                                4629913
+                                4946804
                             ],
                             "requestEnd": [
                                 0,
-                                10941874
+                                12171171
                             ],
                             "domcontentloaded": [
                                 0,
-                                12799712
+                                14243964
                             ]
                         }
                     ],
@@ -110,7 +110,7 @@
                             "url": "http://localhost:8080/img/default.png",
                             "headers": {
                                 "content-type": "image/png",
-                                "date": "Fri, 17 May 2019 20:51:19 GMT",
+                                "date": "Fri, 17 May 2019 21:15:51 GMT",
                                 "connection": "close"
                             },
                             "method": "HEAD",
@@ -123,12 +123,12 @@
                         "timing",
                         {
                             "initial": [
-                                4856,
-                                601253494
+                                6329,
+                                150614657
                             ],
                             "responseEnd": [
                                 0,
-                                13671651
+                                12396743
                             ]
                         }
                     ],
@@ -225,20 +225,20 @@
                         "timing",
                         {
                             "initial": [
-                                4856,
-                                712591003
+                                6329,
+                                253008416
                             ],
                             "responseEnd": [
                                 0,
-                                2084550
+                                2023647
                             ],
                             "requestEnd": [
                                 0,
-                                8310811
+                                7798277
                             ],
                             "domcontentloaded": [
                                 0,
-                                11150793
+                                10468433
                             ]
                         }
                     ],
@@ -274,7 +274,7 @@
                             "url": "http://localhost:8080/page1/css/main.css",
                             "headers": {
                                 "content-type": "text/css",
-                                "date": "Fri, 17 May 2019 20:51:20 GMT",
+                                "date": "Fri, 17 May 2019 21:15:52 GMT",
                                 "connection": "close"
                             },
                             "method": "HEAD",
@@ -287,12 +287,12 @@
                         "timing",
                         {
                             "initial": [
-                                4857,
-                                727447663
+                                6330,
+                                271050512
                             ],
                             "responseEnd": [
                                 0,
-                                2524670
+                                2554117
                             ]
                         }
                     ],
@@ -439,20 +439,20 @@
                         "timing",
                         {
                             "initial": [
-                                4857,
-                                817157895
+                                6330,
+                                360737696
                             ],
                             "responseEnd": [
                                 0,
-                                79454962
+                                95730937
                             ],
                             "requestEnd": [
                                 0,
-                                88522126
+                                105499275
                             ],
                             "domcontentloaded": [
                                 0,
-                                241434228
+                                260256417
                             ]
                         }
                     ],

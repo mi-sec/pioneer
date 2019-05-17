@@ -4,10 +4,10 @@
 	"description": "Website testing",
 	"main": "index.js",
 	"scripts": {
-		"test:deep": "DEBUG=\"puppeteer:*\" node src/core/Pioneer.js",
+		"test:deep": "DEBUG=\\\"puppeteer:*\\\" node src/core/Pioneer.js",
 		"test": "mocha"
 	},
-	"author": "Parellin Technologies LLC",
+	"author": "MISec",
 	"license": "MIT",
 	"dependencies": {
 		"@parellin/lightmap": "0.1.2",
