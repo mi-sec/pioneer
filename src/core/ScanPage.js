@@ -6,7 +6,8 @@
 'use strict';
 
 const
-	LightMap = require( '@parellin/lightmap' );
+	LightMap               = require( '@parellin/lightmap' ),
+	scanForNavigationLinks = require( '../plugins/scanForNavigationLinks' );
 
 class ScanPage
 {
@@ -17,12 +18,17 @@ class ScanPage
 		}
 
 		this.browser = browser;
-		this.url     = url;
+		this.url     = new URL( url );
+		this.href    = this.url.href;
 
 		this.opts  = opts;
 		this.cache = new LightMap();
+		this.cache.set( 'url', url );
 		this.cache.set( 'info', {} );
+		this.cache.set( 'links', [] );
 		this.cache.set( 'timing', {} );
+		this.cache.set( 'external', false );
+		this.cache.set( 'consoleMsg', [] );
 	}
 
 	async init()
@@ -34,13 +40,8 @@ class ScanPage
 		this.page.on( 'requestfailed', this.requestfailed.bind( this ) );
 		this.page.on( 'requestfinished', this.requestfinished.bind( this ) );
 		this.page.on( 'domcontentloaded', this.domcontentloaded.bind( this ) );
-		this.page.on( 'metrics', function() {
-			console.log( '\n\n' );
-			console.log( arguments );
-			console.log( '\n\n' );
-		} );
-
 		this.page.on( 'response', this.response.bind( this ) );
+		this.page.on( 'console', this.console.bind( this ) );
 	}
 
 	async goto( opts = { waitUntil: 'networkidle2' } )
@@ -50,6 +51,16 @@ class ScanPage
 
 	request( request )
 	{
+		console.log( 'on:request' );
+		if( this.opts.disableExternalLoading ) {
+			const type = request.resourceType();
+
+			if( [ 'image', 'stylesheet', 'font', 'script' ].indexOf( type ) !== -1 ) {
+				this.cache.get( 'links' ).push( { type, url: request.url() } );
+				return request.abort( 'aborted' );
+			}
+		}
+
 		const
 			info   = this.cache.get( 'info' ),
 			timing = this.cache.get( 'timing' );
@@ -60,21 +71,6 @@ class ScanPage
 		info.resourceType = request.resourceType();
 		timing.initial    = process.hrtime();
 
-		// Set it up in case it doesn't respond
-		// if( cache.get( 'nodes' ).has( url.href ) ) {
-		// 	return request.abort( 'aborted' );
-		// }
-		// cache.get( 'nodes' ).set(
-		// 	url.href,
-		// 	{
-		// 		url: url.href,
-		// 		status: 0,
-		// 		ok: 'unknown',
-		// 		external: url.hostname !== parent.hostname,
-		// 		parent: parent.href
-		// 	}
-		// );
-
 		request.continue();
 	}
 
@@ -84,33 +80,30 @@ class ScanPage
 		const url    = new URL( request.url() );
 		const reason = request.failure();
 
+		console.log( reason );
+
 		if( reason.errorText === 'net::ERR_ABORTED' ) {
 			// Do nothing because we aborted it
 			return;
 		}
 
-		const timing      = this.cache.get( 'timing' );
-		timing.requestEnd = process.hrtime( timing.requestStart );
+		const
+			info   = this.cache.get( 'info' ),
+			timing = this.cache.get( 'timing' );
 
-		// TODO:: check request response codes and cache
-		cache.get( 'nodes' ).set(
-			url.href,
-			{
-				url: url.href,
-				status: 0,
-				ok: reason.errorText,
-				external: url.hostname !== parent.hostname,
-				parent: parent.href
-			}
-		);
+		timing.requestEnd = process.hrtime( timing.initial );
+
+		if( reason.errorText === 'net::ERR_CONNECTION_REFUSED' ) {
+			info.status     = 'ERR_CONNECTION_REFUSED';
+			info.statusCode = 0;
+		}
 
 		console.log( 'request failed url:', url.href );
 	}
 
 	requestfinished()
 	{
-		console.log( '\n\n' );
-		console.log( arguments );
+		console.log( 'on:requestfinished' );
 		const timing      = this.cache.get( 'timing' );
 		timing.requestEnd = process.hrtime( timing.initial );
 	}
@@ -118,14 +111,15 @@ class ScanPage
 	response( response )
 	{
 		console.log( 'on:response' );
-		// const request = response.request();
-		const status = response.status();
-		// const url     = request.url();
+
+		const timing       = this.cache.get( 'timing' );
+		timing.responseEnd = process.hrtime( timing.initial );
 
 		const info = this.cache.get( 'info' );
 
-		info.status        = status;
 		info.ok            = response.ok();
+		info.status        = response.statusText();
+		info.statusCode    = response.status();
 		info.remoteAddress = response.remoteAddress();
 
 		const secDetails = response.securityDetails();
@@ -145,6 +139,38 @@ class ScanPage
 	{
 		const timing            = this.cache.get( 'timing' );
 		timing.domcontentloaded = process.hrtime( timing.initial );
+	}
+
+	async console( msg )
+	{
+		const payload = [];
+
+		for( const arg of msg.args() ) {
+			const val = await arg.jsonValue();
+			payload.push( val );
+		}
+
+		this.cache.get( 'consoleMsg' ).push( payload );
+	}
+
+	async getPageDimensions()
+	{
+		const dimensions = await this.page.evaluate( () => {
+			return {
+				width: document.documentElement.clientWidth,
+				height: document.documentElement.clientHeight,
+				deviceScaleFactor: window.devicePixelRatio
+			};
+		} );
+
+		this.cache.set( 'dimensions', dimensions );
+	}
+
+	async scanForNavigationLinks()
+	{
+		this.cache.get( 'links' ).push(
+			...( await scanForNavigationLinks( this.page ) )
+		);
 	}
 }
 
