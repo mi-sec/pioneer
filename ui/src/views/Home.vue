@@ -1,26 +1,47 @@
 <template>
-	<!--<Chart :tweetData="loadData"/>-->
-	<FlowTree2
+	<v-container
 		v-if="loadData"
-		:treeData="loadData"/>
+		fluid
+		ma-0
+		pa-0
+	>
+		<FlowTree2
+			ref="tree"
+			class="tree"
+			:identifier="getId"
+			:treeData="loadData"
+			:node-text="nodeText"
+			:margin-x="Marginx"
+			:margin-y="Marginy"
+			@clicked="onClick"
+			@expand="onExpand"
+			@retract="onRetract"
+		/>
+	</v-container>
 </template>
 
 <script>
 	import * as d3  from 'd3';
 	import LightMap from '@mi-sec/lightmap';
 	
-	// import Chart      from '@/components/Chart';
 	import FlowTree2 from '@/components/FlowTree2';
+	import Resource  from '@/utils/Resource';
 	
 	export default {
 		name: 'Home',
 		components: {
 			FlowTree2
-			// Chart
 		},
-		data: function() {
+		data() {
 			return {
-				loadData: null
+				nodeText: 'url',
+				loadData: null,
+				Marginx: 30,
+				Marginy: 30,
+				radius: 3,
+				currentNode: null,
+				isLoading: false,
+				events: []
 			};
 		},
 		mounted() {
@@ -28,52 +49,85 @@
 			this.fetchData();
 		},
 		methods: {
+			do( action ) {
+				console.log( 'do', action );
+				if ( this.currentNode ) {
+					this.isLoading = true;
+					this.$refs[ 'tree' ][ action ]( this.currentNode )
+						.then( () => this.isLoading = false );
+				}
+			},
+			getId( node ) {
+				return node.id;
+			},
+			expandAll() {
+				this.do( 'expandAll' );
+			},
+			collapseAll() {
+				this.do( 'collapseAll' );
+			},
+			showOnly() {
+				this.do( 'showOnly' );
+			},
+			show() {
+				this.do( 'show' );
+			},
+			onClick( evt ) {
+				this.currentNode = evt.element;
+				this.onEvent( 'onClick', evt );
+			},
+			onExpand( evt ) {
+				this.onEvent( 'onExpand', evt );
+			},
+			onRetract( evt ) {
+				this.onEvent( 'onRetract', evt );
+			},
+			onEvent( eventName, data ) {
+				this.events.push( { eventName, data: data.data } );
+			},
+			resetZoom() {
+				if ( !this.$refs[ 'tree' ] ) {
+					return;
+				}
+				this.isLoading = true;
+				this.$refs[ 'tree' ].resetZoom().then( () => { this.isLoading = false; } );
+			},
 			async fetchData() {
 				let data = await d3.json( './scantree.json' );
 				data     = new LightMap( data );
 				
-				const root = {};
+				const
+					entryNode = data.get( 'nodes' ).get( data.get( 'baseUrl' ) ),
+					rootNode  = new Resource( entryNode );
 				
-				root.name     = data.get( 'baseUrl' );
-				root.children = data.get( 'nodes' );
-				
-				console.log( root );
-				const x = {
-					'name': 'Eve',
-					'children': [
-						{
-							'name': 'Cain'
-						},
-						{
-							'name': 'Seth',
-							'children': [
-								{
-									'name': 'Enos'
-								},
-								{
-									'name': 'Noam'
-								}
-							]
-						},
-						{
-							'name': 'Abel'
-						},
-						{
-							'name': 'Awan',
-							'children': [
-								{
-									'name': 'Enoch'
-								}
-							]
-						},
-						{
-							'name': 'Azura'
+				function mapNodeLinks( node ) {
+					if ( !node.hasOwnProperty( 'links' ) ) {
+						return node;
+					}
+					
+					return node.links.map(
+						link => {
+							if ( data.get( 'nodes' ).has( link.url ) ) {
+								const _node = new Resource( data.get( 'nodes' ).get( link.url ) );
+								_node.links = mapNodeLinks( _node );
+								return _node;
+							}
+							else {
+								return link;
+							}
 						}
-					]
-				};
+					);
+				}
 				
-				this.loadData = root;
+				rootNode.links = mapNodeLinks( rootNode );
+				this.loadData  = rootNode;
 			}
 		}
 	};
 </script>
+
+<style>
+	.tree {
+		height: 800px;
+	}
+</style>

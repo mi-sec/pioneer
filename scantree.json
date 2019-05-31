@@ -17,12 +17,12 @@
                         "info",
                         {
                             "url": "http://localhost:8080/",
+                            "type": "document",
                             "headers": {
                                 "upgrade-insecure-requests": "1",
-                                "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/74.0.3723.0 Safari/537.36"
+                                "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/74.0.3723.0 Safari/537.36"
                             },
                             "method": "GET",
-                            "resourceType": "document",
                             "ok": true,
                             "status": "OK",
                             "statusCode": 200,
@@ -61,20 +61,20 @@
                         "timing",
                         {
                             "initial": [
-                                6328,
-                                131667087
+                                50205,
+                                94997912
                             ],
                             "responseEnd": [
                                 0,
-                                4946804
+                                4814975
                             ],
                             "requestEnd": [
                                 0,
-                                12171171
+                                10691373
                             ],
                             "domcontentloaded": [
                                 0,
-                                14243964
+                                12690403
                             ]
                         }
                     ],
@@ -85,6 +85,14 @@
                     [
                         "consoleMsg",
                         []
+                    ],
+                    [
+                        "id",
+                        0
+                    ],
+                    [
+                        "type",
+                        "document"
                     ],
                     [
                         "dimensions",
@@ -104,13 +112,17 @@
                         "http://localhost:8080/img/default.png"
                     ],
                     [
+                        "type",
+                        "image"
+                    ],
+                    [
                         "info",
                         {
                             "resourceType": "image",
                             "url": "http://localhost:8080/img/default.png",
                             "headers": {
                                 "content-type": "image/png",
-                                "date": "Fri, 17 May 2019 21:15:51 GMT",
+                                "date": "Fri, 31 May 2019 20:39:07 GMT",
                                 "connection": "close"
                             },
                             "method": "HEAD",
@@ -123,12 +135,12 @@
                         "timing",
                         {
                             "initial": [
-                                6329,
-                                150614657
+                                50206,
+                                114589169
                             ],
                             "responseEnd": [
                                 0,
-                                12396743
+                                11542381
                             ]
                         }
                     ],
@@ -139,6 +151,10 @@
                     [
                         "consoleMsg",
                         []
+                    ],
+                    [
+                        "id",
+                        1
                     ]
                 ]
             ],
@@ -153,12 +169,12 @@
                         "info",
                         {
                             "url": "http://localhost:8080/page1/page1.html",
+                            "type": "document",
                             "headers": {
                                 "upgrade-insecure-requests": "1",
-                                "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/74.0.3723.0 Safari/537.36"
+                                "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/74.0.3723.0 Safari/537.36"
                             },
                             "method": "GET",
-                            "resourceType": "document",
                             "ok": true,
                             "status": "OK",
                             "statusCode": 200,
@@ -225,20 +241,20 @@
                         "timing",
                         {
                             "initial": [
-                                6329,
-                                253008416
+                                50206,
+                                210575517
                             ],
                             "responseEnd": [
                                 0,
-                                2023647
+                                1983958
                             ],
                             "requestEnd": [
                                 0,
-                                7798277
+                                7883977
                             ],
                             "domcontentloaded": [
                                 0,
-                                10468433
+                                10543247
                             ]
                         }
                     ],
@@ -249,6 +265,14 @@
                     [
                         "consoleMsg",
                         []
+                    ],
+                    [
+                        "id",
+                        2
+                    ],
+                    [
+                        "type",
+                        "document"
                     ],
                     [
                         "dimensions",
@@ -268,13 +292,17 @@
                         "http://localhost:8080/page1/css/main.css"
                     ],
                     [
+                        "type",
+                        "stylesheet"
+                    ],
+                    [
                         "info",
                         {
                             "resourceType": "stylesheet",
                             "url": "http://localhost:8080/page1/css/main.css",
                             "headers": {
                                 "content-type": "text/css",
-                                "date": "Fri, 17 May 2019 21:15:52 GMT",
+                                "date": "Fri, 31 May 2019 20:39:08 GMT",
                                 "connection": "close"
                             },
                             "method": "HEAD",
@@ -287,12 +315,12 @@
                         "timing",
                         {
                             "initial": [
-                                6330,
-                                271050512
+                                50207,
+                                223867784
                             ],
                             "responseEnd": [
                                 0,
-                                2554117
+                                2480352
                             ]
                         }
                     ],
@@ -303,15 +331,37 @@
                     [
                         "consoleMsg",
                         []
+                    ],
+                    [
+                        "id",
+                        3
                     ]
                 ]
             ],
             [
                 "javascript:void(0);",
-                {
-                    "url": "javascript:void(0);",
-                    "error": "requires javascript click"
-                }
+                [
+                    [
+                        "id",
+                        4
+                    ],
+                    [
+                        "url",
+                        "javascript:void(0);"
+                    ],
+                    [
+                        "type",
+                        "error"
+                    ],
+                    [
+                        "error",
+                        "requires javascript click"
+                    ],
+                    [
+                        "external",
+                        false
+                    ]
+                ]
             ],
             [
                 "https://www.w3schools.com/w3css/default.asp",
@@ -324,12 +374,12 @@
                         "info",
                         {
                             "url": "https://www.w3schools.com/w3css/default.asp",
+                            "type": "document",
                             "headers": {
                                 "upgrade-insecure-requests": "1",
-                                "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/74.0.3723.0 Safari/537.36"
+                                "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/74.0.3723.0 Safari/537.36"
                             },
                             "method": "GET",
-                            "resourceType": "document",
                             "ok": true,
                             "status": "",
                             "statusCode": 200,
@@ -359,15 +409,15 @@
                             },
                             {
                                 "type": "script",
-                                "url": "https://snigelweb-com.videoplayerhub.com/videoloader.js"
-                            },
-                            {
-                                "type": "script",
                                 "url": "https://static.h-bid.com/sncmp/sncmp_stub.min.js"
                             },
                             {
                                 "type": "script",
                                 "url": "https://static.h-bid.com/w3schools.com/20190327/snhb-w3schools.com.min.js?20190327"
+                            },
+                            {
+                                "type": "image",
+                                "url": "https://www.w3schools.com/w3css/img_temp_food_blog.jpg"
                             },
                             {
                                 "type": "script",
@@ -376,10 +426,6 @@
                             {
                                 "type": "script",
                                 "url": "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
-                            },
-                            {
-                                "type": "image",
-                                "url": "https://www.w3schools.com/w3css/img_temp_food_blog.jpg"
                             },
                             {
                                 "type": "image",
@@ -411,15 +457,23 @@
                             },
                             {
                                 "type": "script",
-                                "url": "https://snigelweb-com.videoplayerhub.com/videoloader.js"
+                                "url": "https://www.googletagservices.com/tag/js/gpt.js"
                             },
                             {
                                 "type": "font",
                                 "url": "https://www.w3schools.com/lib/fonts/fontawesome.woff?14663396"
                             },
                             {
+                                "type": "image",
+                                "url": "https://www.w3schools.com/w3css/img_temp_food_blog.jpg"
+                            },
+                            {
                                 "type": "font",
                                 "url": "https://www.w3schools.com/lib/fonts/fontawesome.ttf?14663396"
+                            },
+                            {
+                                "type": "image",
+                                "url": "https://www.w3schools.com/images/colorpicker.gif"
                             },
                             {
                                 "type": "image",
@@ -439,20 +493,20 @@
                         "timing",
                         {
                             "initial": [
-                                6330,
-                                360737696
+                                50207,
+                                308219482
                             ],
                             "responseEnd": [
                                 0,
-                                95730937
+                                43670171
                             ],
                             "requestEnd": [
                                 0,
-                                105499275
+                                52622845
                             ],
                             "domcontentloaded": [
                                 0,
-                                260256417
+                                195291748
                             ]
                         }
                     ],
@@ -463,6 +517,14 @@
                     [
                         "consoleMsg",
                         []
+                    ],
+                    [
+                        "id",
+                        5
+                    ],
+                    [
+                        "type",
+                        "document"
                     ]
                 ]
             ]

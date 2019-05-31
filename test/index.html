@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+	<title>Tree layout</title>
+</head>
+
+<style>
+	body {
+		font-family: "Helvetica Neue", Helvetica, sans-serif;
+		font-size: 9px;
+	}
+	
+	.links path {
+		fill: none;
+		stroke: #ccc;
+	}
+</style>
+
+<body>
+
+<svg width="800" height="920">
+	<g class="wrapper" transform="translate(20, 20)">
+		<g class="links"></g>
+		<g class="nodes"></g>
+	</g>
+</svg>
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script>
+	
+	
+	var treeLayout = d3.tree()
+		.size( [ 900, 600 ] );
+	
+	function link( d ) {
+		return 'M' + d.y + ',' + d.x
+			+ 'C' + ( d.y + d.parent.y ) / 2 + ',' + d.x
+			+ ' ' + ( d.y + d.parent.y ) / 2 + ',' + d.parent.x
+			+ ' ' + d.parent.y + ',' + d.parent.x;
+	}
+	
+	function make( root ) {
+		var nodes = d3.select( '.nodes' )
+			.selectAll( 'g.node' )
+			.data( root.descendants() );
+		
+		var enteringNodes = nodes.enter()
+			.append( 'g' )
+			.classed( 'node', true )
+			.attr( 'transform', function( d ) {
+				return 'translate(' + d.y + ',' + d.x + ')';
+			} );
+		
+		enteringNodes
+			.append( 'circle' )
+			.attr( 'r', 2 );
+		
+		enteringNodes
+			.append( 'text' )
+			.attr( 'x', 5 )
+			.attr( 'y', 4 )
+			.text( function( d ) {
+				switch ( d.depth ) {
+					case 1:
+					case 2:
+						return d.data.key;
+					case 3:
+						return d.data.Film;
+				}
+				
+				return '';
+			} );
+		
+		var links = d3.select( '.links' )
+			.selectAll( 'path' )
+			.data( root.descendants().slice( 1 ) );
+		
+		links.enter()
+			.append( 'path' )
+			.attr( 'd', link );
+	}
+	
+	
+	function ready( err, data ) {
+		console.log( data );
+		var nest = d3.nest()
+			.key( function( d ) {return d.Genre;} )
+			.key( function( d ) { return d[ 'Lead Studio' ]; } )
+			.entries( data );
+		
+		nest = {
+			key: 'root',
+			values: nest
+		};
+		
+		var root = d3.hierarchy( nest, function( d ) {
+			return d.values;
+		} );
+		
+		treeLayout( root );
+		make( root );
+	}
+	
+	d3.csv( '/films.csv', ready );
+</script>
+</body>
+</html>
