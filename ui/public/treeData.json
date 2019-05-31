@@ -1,0 +1,418 @@
+{
+    "url": "http://localhost:8080/",
+    "text": "http://localhost:8080/",
+    "children": [
+        {
+            "url": "http://localhost:8080/img/default.png",
+            "text": "http://localhost:8080/im",
+            "children": [],
+            "type": "image",
+            "info": {
+                "resourceType": "image",
+                "url": "http://localhost:8080/img/default.png",
+                "headers": {
+                    "content-type": "image/png",
+                    "date": "Fri, 31 May 2019 21:43:15 GMT",
+                    "connection": "close"
+                },
+                "method": "HEAD",
+                "ok": true,
+                "status": "OK",
+                "statusCode": 200
+            },
+            "timing": {
+                "initial": [
+                    54054,
+                    829291333
+                ],
+                "responseEnd": [
+                    0,
+                    12028733
+                ]
+            },
+            "external": false,
+            "dimensions": {},
+            "consoleMsg": [],
+            "id": 1
+        },
+        {
+            "type": "navigation",
+            "url": "http://localhost:8080/#",
+            "id": 2
+        },
+        {
+            "url": "http://localhost:8080/page1/page1.html",
+            "text": "http://localhost:8080/pa",
+            "children": [
+                {
+                    "url": "http://localhost:8080/page1/css/main.css",
+                    "text": "http://localhost:8080/pa",
+                    "children": [],
+                    "type": "stylesheet",
+                    "info": {
+                        "resourceType": "stylesheet",
+                        "url": "http://localhost:8080/page1/css/main.css",
+                        "headers": {
+                            "content-type": "text/css",
+                            "date": "Fri, 31 May 2019 21:43:17 GMT",
+                            "connection": "close"
+                        },
+                        "method": "HEAD",
+                        "ok": true,
+                        "status": "OK",
+                        "statusCode": 200
+                    },
+                    "timing": {
+                        "initial": [
+                            54055,
+                            949824143
+                        ],
+                        "responseEnd": [
+                            0,
+                            2309510
+                        ]
+                    },
+                    "external": false,
+                    "dimensions": {},
+                    "consoleMsg": [],
+                    "id": 4
+                },
+                {
+                    "url": "javascript:void(0);",
+                    "text": "javascript:void(0);",
+                    "children": [],
+                    "type": "error",
+                    "info": {},
+                    "timing": {},
+                    "external": false,
+                    "dimensions": {},
+                    "consoleMsg": [],
+                    "id": 5
+                },
+                {
+                    "type": "navigation",
+                    "url": "http://localhost:8080/page1/page1.html#",
+                    "id": 6
+                },
+                {
+                    "type": "navigation",
+                    "url": "http://localhost:8080/page1/page1.html#",
+                    "id": 7
+                },
+                {
+                    "type": "navigation",
+                    "url": "http://localhost:8080/page1/page1.html#",
+                    "id": 8
+                },
+                {
+                    "type": "navigation",
+                    "url": "http://localhost:8080/page1/page1.html#",
+                    "id": 9
+                },
+                {
+                    "type": "navigation",
+                    "url": "http://localhost:8080/page1/page1.html#",
+                    "id": 10
+                },
+                {
+                    "type": "navigation",
+                    "url": "http://localhost:8080/page1/page1.html#",
+                    "id": 11
+                },
+                {
+                    "type": "navigation",
+                    "url": "http://localhost:8080/page1/page1.html#",
+                    "id": 12
+                },
+                {
+                    "type": "navigation",
+                    "url": "http://localhost:8080/page1/page1.html#",
+                    "id": 13
+                },
+                {
+                    "type": "navigation",
+                    "url": "http://localhost:8080/page1/page1.html#",
+                    "id": 14
+                },
+                {
+                    "url": "https://www.w3schools.com/w3css/default.asp",
+                    "text": "https://www.w3schools.co",
+                    "children": [
+                        {
+                            "type": "stylesheet",
+                            "url": "https://www.w3schools.com/w3css/4/w3.css",
+                            "id": 16
+                        },
+                        {
+                            "type": "stylesheet",
+                            "url": "https://fonts.googleapis.com/css?family=Source%20Code%20Pro",
+                            "id": 17
+                        },
+                        {
+                            "type": "script",
+                            "url": "https://static.h-bid.com/sncmp/sncmp_stub.min.js",
+                            "id": 18
+                        },
+                        {
+                            "type": "script",
+                            "url": "https://static.h-bid.com/w3schools.com/20190327/snhb-w3schools.com.min.js?20190327",
+                            "id": 19
+                        },
+                        {
+                            "type": "image",
+                            "url": "https://www.w3schools.com/w3css/img_temp_food_blog.jpg",
+                            "id": 20
+                        },
+                        {
+                            "type": "script",
+                            "url": "https://static.h-bid.com/sncmp/sncmp_stub.min.js",
+                            "id": 21
+                        },
+                        {
+                            "type": "script",
+                            "url": "https://www.w3schools.com/lib/w3schools_footer.js",
+                            "id": 22
+                        },
+                        {
+                            "type": "script",
+                            "url": "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit",
+                            "id": 23
+                        },
+                        {
+                            "type": "image",
+                            "url": "https://www.w3schools.com/w3css/img_temp_band.jpg",
+                            "id": 24
+                        },
+                        {
+                            "type": "image",
+                            "url": "https://www.w3schools.com/w3css/img_temp_cafe.jpg",
+                            "id": 25
+                        },
+                        {
+                            "type": "image",
+                            "url": "https://www.w3schools.com/w3css/img_temp_wedding.jpg",
+                            "id": 26
+                        },
+                        {
+                            "type": "image",
+                            "url": "https://www.w3schools.com/w3css/img_temp_dark_icon.jpg",
+                            "id": 27
+                        },
+                        {
+                            "type": "image",
+                            "url": "https://www.w3schools.com/images/colorpicker.gif",
+                            "id": 28
+                        },
+                        {
+                            "type": "image",
+                            "url": "https://www.w3schools.com/images/w3schoolscom_gray.gif",
+                            "id": 29
+                        },
+                        {
+                            "type": "script",
+                            "url": "https://www.google-analytics.com/analytics.js",
+                            "id": 30
+                        },
+                        {
+                            "type": "script",
+                            "url": "https://www.googletagservices.com/tag/js/gpt.js",
+                            "id": 31
+                        },
+                        {
+                            "type": "script",
+                            "url": "https://static.h-bid.com/w3schools.com/20190327/snhb-w3schools.com.min.js?20190327",
+                            "id": 32
+                        },
+                        {
+                            "type": "font",
+                            "url": "https://www.w3schools.com/lib/fonts/fontawesome.woff?14663396",
+                            "id": 33
+                        },
+                        {
+                            "type": "image",
+                            "url": "https://www.w3schools.com/w3css/img_temp_food_blog.jpg",
+                            "id": 34
+                        },
+                        {
+                            "type": "image",
+                            "url": "https://www.w3schools.com/w3css/img_temp_band.jpg",
+                            "id": 35
+                        },
+                        {
+                            "type": "image",
+                            "url": "https://www.w3schools.com/w3css/img_temp_cafe.jpg",
+                            "id": 36
+                        },
+                        {
+                            "type": "font",
+                            "url": "https://www.w3schools.com/lib/fonts/fontawesome.ttf?14663396",
+                            "id": 37
+                        },
+                        {
+                            "type": "image",
+                            "url": "https://www.w3schools.com/images/colorpicker.gif",
+                            "id": 38
+                        },
+                        {
+                            "type": "image",
+                            "url": "https://www.w3schools.com/images/w3schoolscom_gray.gif",
+                            "id": 39
+                        },
+                        {
+                            "type": "script",
+                            "url": "https://www.w3schools.com/lib/w3schools_footer.js",
+                            "id": 40
+                        },
+                        {
+                            "type": "script",
+                            "url": "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit",
+                            "id": 41
+                        }
+                    ],
+                    "type": "document",
+                    "info": {
+                        "url": "https://www.w3schools.com/w3css/default.asp",
+                        "type": "document",
+                        "headers": {
+                            "upgrade-insecure-requests": "1",
+                            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/74.0.3723.0 Safari/537.36"
+                        },
+                        "method": "GET",
+                        "ok": true,
+                        "status": "",
+                        "statusCode": 200,
+                        "remoteAddress": {
+                            "ip": "192.229.173.207",
+                            "port": 443
+                        },
+                        "securityDetails": {
+                            "subjectName": "*.w3schools.com",
+                            "issuer": "DigiCert SHA2 Secure Server CA",
+                            "validFrom": 1508889600,
+                            "validTo": 1588680000,
+                            "protocol": "TLS 1.3"
+                        }
+                    },
+                    "timing": {
+                        "initial": [
+                            54056,
+                            36226741
+                        ],
+                        "responseEnd": [
+                            0,
+                            39387195
+                        ],
+                        "requestEnd": [
+                            0,
+                            47441217
+                        ],
+                        "domcontentloaded": [
+                            0,
+                            199100197
+                        ]
+                    },
+                    "external": true,
+                    "dimensions": {},
+                    "consoleMsg": [],
+                    "id": 15
+                }
+            ],
+            "type": "document",
+            "info": {
+                "url": "http://localhost:8080/page1/page1.html",
+                "type": "document",
+                "headers": {
+                    "upgrade-insecure-requests": "1",
+                    "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/74.0.3723.0 Safari/537.36"
+                },
+                "method": "GET",
+                "ok": true,
+                "status": "OK",
+                "statusCode": 200,
+                "remoteAddress": {
+                    "ip": "[::1]",
+                    "port": 8080
+                }
+            },
+            "timing": {
+                "initial": [
+                    54054,
+                    934318276
+                ],
+                "responseEnd": [
+                    0,
+                    3070352
+                ],
+                "requestEnd": [
+                    0,
+                    10479076
+                ],
+                "domcontentloaded": [
+                    0,
+                    13405320
+                ]
+            },
+            "external": false,
+            "dimensions": {
+                "width": 800,
+                "height": 600,
+                "deviceScaleFactor": 1
+            },
+            "consoleMsg": [],
+            "id": 3
+        },
+        {
+            "type": "navigation",
+            "url": "http://localhost:8080/#",
+            "id": 42
+        },
+        {
+            "type": "navigation",
+            "url": "http://localhost:8080/#",
+            "id": 43
+        }
+    ],
+    "type": "document",
+    "info": {
+        "url": "http://localhost:8080/",
+        "type": "document",
+        "headers": {
+            "upgrade-insecure-requests": "1",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/74.0.3723.0 Safari/537.36"
+        },
+        "method": "GET",
+        "ok": true,
+        "status": "OK",
+        "statusCode": 200,
+        "remoteAddress": {
+            "ip": "[::1]",
+            "port": 8080
+        }
+    },
+    "timing": {
+        "initial": [
+            54053,
+            810525024
+        ],
+        "responseEnd": [
+            0,
+            5050116
+        ],
+        "requestEnd": [
+            0,
+            11785244
+        ],
+        "domcontentloaded": [
+            0,
+            13541062
+        ]
+    },
+    "external": false,
+    "dimensions": {
+        "width": 800,
+        "height": 600,
+        "deviceScaleFactor": 1
+    },
+    "consoleMsg": [],
+    "id": 0
+}

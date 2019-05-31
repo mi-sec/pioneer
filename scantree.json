@@ -61,20 +61,20 @@
                         "timing",
                         {
                             "initial": [
-                                50205,
-                                94997912
+                                54053,
+                                810525024
                             ],
                             "responseEnd": [
                                 0,
-                                4814975
+                                5050116
                             ],
                             "requestEnd": [
                                 0,
-                                10691373
+                                11785244
                             ],
                             "domcontentloaded": [
                                 0,
-                                12690403
+                                13541062
                             ]
                         }
                     ],
@@ -85,10 +85,6 @@
                     [
                         "consoleMsg",
                         []
-                    ],
-                    [
-                        "id",
-                        0
                     ],
                     [
                         "type",
@@ -122,7 +118,7 @@
                             "url": "http://localhost:8080/img/default.png",
                             "headers": {
                                 "content-type": "image/png",
-                                "date": "Fri, 31 May 2019 20:39:07 GMT",
+                                "date": "Fri, 31 May 2019 21:43:15 GMT",
                                 "connection": "close"
                             },
                             "method": "HEAD",
@@ -135,12 +131,12 @@
                         "timing",
                         {
                             "initial": [
-                                50206,
-                                114589169
+                                54054,
+                                829291333
                             ],
                             "responseEnd": [
                                 0,
-                                11542381
+                                12028733
                             ]
                         }
                     ],
@@ -151,10 +147,6 @@
                     [
                         "consoleMsg",
                         []
-                    ],
-                    [
-                        "id",
-                        1
                     ]
                 ]
             ],
@@ -241,20 +233,20 @@
                         "timing",
                         {
                             "initial": [
-                                50206,
-                                210575517
+                                54054,
+                                934318276
                             ],
                             "responseEnd": [
                                 0,
-                                1983958
+                                3070352
                             ],
                             "requestEnd": [
                                 0,
-                                7883977
+                                10479076
                             ],
                             "domcontentloaded": [
                                 0,
-                                10543247
+                                13405320
                             ]
                         }
                     ],
@@ -265,10 +257,6 @@
                     [
                         "consoleMsg",
                         []
-                    ],
-                    [
-                        "id",
-                        2
                     ],
                     [
                         "type",
@@ -302,7 +290,7 @@
                             "url": "http://localhost:8080/page1/css/main.css",
                             "headers": {
                                 "content-type": "text/css",
-                                "date": "Fri, 31 May 2019 20:39:08 GMT",
+                                "date": "Fri, 31 May 2019 21:43:17 GMT",
                                 "connection": "close"
                             },
                             "method": "HEAD",
@@ -315,12 +303,12 @@
                         "timing",
                         {
                             "initial": [
-                                50207,
-                                223867784
+                                54055,
+                                949824143
                             ],
                             "responseEnd": [
                                 0,
-                                2480352
+                                2309510
                             ]
                         }
                     ],
@@ -331,10 +319,6 @@
                     [
                         "consoleMsg",
                         []
-                    ],
-                    [
-                        "id",
-                        3
                     ]
                 ]
             ],
@@ -343,7 +327,7 @@
                 [
                     [
                         "id",
-                        4
+                        null
                     ],
                     [
                         "url",
@@ -421,6 +405,10 @@
                             },
                             {
                                 "type": "script",
+                                "url": "https://static.h-bid.com/sncmp/sncmp_stub.min.js"
+                            },
+                            {
+                                "type": "script",
                                 "url": "https://www.w3schools.com/lib/w3schools_footer.js"
                             },
                             {
@@ -460,12 +448,24 @@
                                 "url": "https://www.googletagservices.com/tag/js/gpt.js"
                             },
                             {
+                                "type": "script",
+                                "url": "https://static.h-bid.com/w3schools.com/20190327/snhb-w3schools.com.min.js?20190327"
+                            },
+                            {
                                 "type": "font",
                                 "url": "https://www.w3schools.com/lib/fonts/fontawesome.woff?14663396"
                             },
                             {
                                 "type": "image",
                                 "url": "https://www.w3schools.com/w3css/img_temp_food_blog.jpg"
+                            },
+                            {
+                                "type": "image",
+                                "url": "https://www.w3schools.com/w3css/img_temp_band.jpg"
+                            },
+                            {
+                                "type": "image",
+                                "url": "https://www.w3schools.com/w3css/img_temp_cafe.jpg"
                             },
                             {
                                 "type": "font",
@@ -493,20 +493,20 @@
                         "timing",
                         {
                             "initial": [
-                                50207,
-                                308219482
+                                54056,
+                                36226741
                             ],
                             "responseEnd": [
                                 0,
-                                43670171
+                                39387195
                             ],
                             "requestEnd": [
                                 0,
-                                52622845
+                                47441217
                             ],
                             "domcontentloaded": [
                                 0,
-                                195291748
+                                199100197
                             ]
                         }
                     ],
@@ -517,10 +517,6 @@
                     [
                         "consoleMsg",
                         []
-                    ],
-                    [
-                        "id",
-                        5
                     ],
                     [
                         "type",
