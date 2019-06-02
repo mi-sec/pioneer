@@ -61,20 +61,20 @@
                         "timing",
                         {
                             "initial": [
-                                54053,
-                                810525024
+                                60468,
+                                258382185
                             ],
                             "responseEnd": [
                                 0,
-                                5050116
+                                4580862
                             ],
                             "requestEnd": [
                                 0,
-                                11785244
+                                11031785
                             ],
                             "domcontentloaded": [
                                 0,
-                                13541062
+                                12753765
                             ]
                         }
                     ],
@@ -118,7 +118,7 @@
                             "url": "http://localhost:8080/img/default.png",
                             "headers": {
                                 "content-type": "image/png",
-                                "date": "Fri, 31 May 2019 21:43:15 GMT",
+                                "date": "Sun, 02 Jun 2019 15:51:36 GMT",
                                 "connection": "close"
                             },
                             "method": "HEAD",
@@ -131,12 +131,12 @@
                         "timing",
                         {
                             "initial": [
-                                54054,
-                                829291333
+                                60469,
+                                275761982
                             ],
                             "responseEnd": [
                                 0,
-                                12028733
+                                11768756
                             ]
                         }
                     ],
@@ -233,20 +233,20 @@
                         "timing",
                         {
                             "initial": [
-                                54054,
-                                934318276
+                                60469,
+                                367214517
                             ],
                             "responseEnd": [
                                 0,
-                                3070352
+                                2250942
                             ],
                             "requestEnd": [
                                 0,
-                                10479076
+                                8090368
                             ],
                             "domcontentloaded": [
                                 0,
-                                13405320
+                                10538579
                             ]
                         }
                     ],
@@ -290,7 +290,7 @@
                             "url": "http://localhost:8080/page1/css/main.css",
                             "headers": {
                                 "content-type": "text/css",
-                                "date": "Fri, 31 May 2019 21:43:17 GMT",
+                                "date": "Sun, 02 Jun 2019 15:51:37 GMT",
                                 "connection": "close"
                             },
                             "method": "HEAD",
@@ -303,12 +303,12 @@
                         "timing",
                         {
                             "initial": [
-                                54055,
-                                949824143
+                                60470,
+                                382659696
                             ],
                             "responseEnd": [
                                 0,
-                                2309510
+                                2463444
                             ]
                         }
                     ],
@@ -393,6 +393,10 @@
                             },
                             {
                                 "type": "script",
+                                "url": "https://snigelweb-com.videoplayerhub.com/videoloader.js"
+                            },
+                            {
+                                "type": "script",
                                 "url": "https://static.h-bid.com/sncmp/sncmp_stub.min.js"
                             },
                             {
@@ -400,8 +404,8 @@
                                 "url": "https://static.h-bid.com/w3schools.com/20190327/snhb-w3schools.com.min.js?20190327"
                             },
                             {
-                                "type": "image",
-                                "url": "https://www.w3schools.com/w3css/img_temp_food_blog.jpg"
+                                "type": "script",
+                                "url": "https://www.w3schools.com/lib/w3schools_footer.js"
                             },
                             {
                                 "type": "script",
@@ -409,11 +413,11 @@
                             },
                             {
                                 "type": "script",
-                                "url": "https://www.w3schools.com/lib/w3schools_footer.js"
+                                "url": "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
                             },
                             {
-                                "type": "script",
-                                "url": "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
+                                "type": "image",
+                                "url": "https://www.w3schools.com/w3css/img_temp_food_blog.jpg"
                             },
                             {
                                 "type": "image",
@@ -445,7 +449,7 @@
                             },
                             {
                                 "type": "script",
-                                "url": "https://www.googletagservices.com/tag/js/gpt.js"
+                                "url": "https://snigelweb-com.videoplayerhub.com/videoloader.js"
                             },
                             {
                                 "type": "script",
@@ -456,24 +460,8 @@
                                 "url": "https://www.w3schools.com/lib/fonts/fontawesome.woff?14663396"
                             },
                             {
-                                "type": "image",
-                                "url": "https://www.w3schools.com/w3css/img_temp_food_blog.jpg"
-                            },
-                            {
-                                "type": "image",
-                                "url": "https://www.w3schools.com/w3css/img_temp_band.jpg"
-                            },
-                            {
-                                "type": "image",
-                                "url": "https://www.w3schools.com/w3css/img_temp_cafe.jpg"
-                            },
-                            {
                                 "type": "font",
                                 "url": "https://www.w3schools.com/lib/fonts/fontawesome.ttf?14663396"
-                            },
-                            {
-                                "type": "image",
-                                "url": "https://www.w3schools.com/images/colorpicker.gif"
                             },
                             {
                                 "type": "image",
@@ -493,20 +481,20 @@
                         "timing",
                         {
                             "initial": [
-                                54056,
-                                36226741
+                                60470,
+                                473139852
                             ],
                             "responseEnd": [
                                 0,
-                                39387195
+                                47238386
                             ],
                             "requestEnd": [
                                 0,
-                                47441217
+                                56017205
                             ],
                             "domcontentloaded": [
                                 0,
-                                199100197
+                                202301563
                             ]
                         }
                     ],

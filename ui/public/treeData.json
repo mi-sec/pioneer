@@ -1,10 +1,10 @@
 {
     "url": "http://localhost:8080/",
-    "text": "http://localhost:8080/",
+    "name": "http://localhost:8080/",
     "children": [
         {
             "url": "http://localhost:8080/img/default.png",
-            "text": "http://localhost:8080/im",
+            "name": "http://localhost:8080/img/default.png",
             "children": [],
             "type": "image",
             "info": {
@@ -12,7 +12,7 @@
                 "url": "http://localhost:8080/img/default.png",
                 "headers": {
                     "content-type": "image/png",
-                    "date": "Fri, 31 May 2019 21:43:15 GMT",
+                    "date": "Sun, 02 Jun 2019 15:51:36 GMT",
                     "connection": "close"
                 },
                 "method": "HEAD",
@@ -22,12 +22,12 @@
             },
             "timing": {
                 "initial": [
-                    54054,
-                    829291333
+                    60469,
+                    275761982
                 ],
                 "responseEnd": [
                     0,
-                    12028733
+                    11768756
                 ]
             },
             "external": false,
@@ -38,15 +38,16 @@
         {
             "type": "navigation",
             "url": "http://localhost:8080/#",
-            "id": 2
+            "id": 2,
+            "name": "http://localhost:8080/#"
         },
         {
             "url": "http://localhost:8080/page1/page1.html",
-            "text": "http://localhost:8080/pa",
+            "name": "http://localhost:8080/page1/page1.html",
             "children": [
                 {
                     "url": "http://localhost:8080/page1/css/main.css",
-                    "text": "http://localhost:8080/pa",
+                    "name": "http://localhost:8080/page1/css/main.css",
                     "children": [],
                     "type": "stylesheet",
                     "info": {
@@ -54,7 +55,7 @@
                         "url": "http://localhost:8080/page1/css/main.css",
                         "headers": {
                             "content-type": "text/css",
-                            "date": "Fri, 31 May 2019 21:43:17 GMT",
+                            "date": "Sun, 02 Jun 2019 15:51:37 GMT",
                             "connection": "close"
                         },
                         "method": "HEAD",
@@ -64,12 +65,12 @@
                     },
                     "timing": {
                         "initial": [
-                            54055,
-                            949824143
+                            60470,
+                            382659696
                         ],
                         "responseEnd": [
                             0,
-                            2309510
+                            2463444
                         ]
                     },
                     "external": false,
@@ -79,7 +80,7 @@
                 },
                 {
                     "url": "javascript:void(0);",
-                    "text": "javascript:void(0);",
+                    "name": "javascript:void(0);",
                     "children": [],
                     "type": "error",
                     "info": {},
@@ -92,181 +93,198 @@
                 {
                     "type": "navigation",
                     "url": "http://localhost:8080/page1/page1.html#",
-                    "id": 6
+                    "id": 6,
+                    "name": "http://localhost:8080/page1/page1.html#"
                 },
                 {
                     "type": "navigation",
                     "url": "http://localhost:8080/page1/page1.html#",
-                    "id": 7
+                    "id": 7,
+                    "name": "http://localhost:8080/page1/page1.html#"
                 },
                 {
                     "type": "navigation",
                     "url": "http://localhost:8080/page1/page1.html#",
-                    "id": 8
+                    "id": 8,
+                    "name": "http://localhost:8080/page1/page1.html#"
                 },
                 {
                     "type": "navigation",
                     "url": "http://localhost:8080/page1/page1.html#",
-                    "id": 9
+                    "id": 9,
+                    "name": "http://localhost:8080/page1/page1.html#"
                 },
                 {
                     "type": "navigation",
                     "url": "http://localhost:8080/page1/page1.html#",
-                    "id": 10
+                    "id": 10,
+                    "name": "http://localhost:8080/page1/page1.html#"
                 },
                 {
                     "type": "navigation",
                     "url": "http://localhost:8080/page1/page1.html#",
-                    "id": 11
+                    "id": 11,
+                    "name": "http://localhost:8080/page1/page1.html#"
                 },
                 {
                     "type": "navigation",
                     "url": "http://localhost:8080/page1/page1.html#",
-                    "id": 12
+                    "id": 12,
+                    "name": "http://localhost:8080/page1/page1.html#"
                 },
                 {
                     "type": "navigation",
                     "url": "http://localhost:8080/page1/page1.html#",
-                    "id": 13
+                    "id": 13,
+                    "name": "http://localhost:8080/page1/page1.html#"
                 },
                 {
                     "type": "navigation",
                     "url": "http://localhost:8080/page1/page1.html#",
-                    "id": 14
+                    "id": 14,
+                    "name": "http://localhost:8080/page1/page1.html#"
                 },
                 {
                     "url": "https://www.w3schools.com/w3css/default.asp",
-                    "text": "https://www.w3schools.co",
+                    "name": "https://www.w3schools.com/w3css/default.asp",
                     "children": [
                         {
                             "type": "stylesheet",
                             "url": "https://www.w3schools.com/w3css/4/w3.css",
-                            "id": 16
+                            "id": 16,
+                            "name": "https://www.w3schools.com/w3css/4/w3.css"
                         },
                         {
                             "type": "stylesheet",
                             "url": "https://fonts.googleapis.com/css?family=Source%20Code%20Pro",
-                            "id": 17
+                            "id": 17,
+                            "name": "https://fonts.googleapis.com/css?family=Source%20Code%20Pro"
+                        },
+                        {
+                            "type": "script",
+                            "url": "https://snigelweb-com.videoplayerhub.com/videoloader.js",
+                            "id": 18,
+                            "name": "https://snigelweb-com.videoplayerhub.com/videoloader.js"
                         },
                         {
                             "type": "script",
                             "url": "https://static.h-bid.com/sncmp/sncmp_stub.min.js",
-                            "id": 18
+                            "id": 19,
+                            "name": "https://static.h-bid.com/sncmp/sncmp_stub.min.js"
                         },
                         {
                             "type": "script",
                             "url": "https://static.h-bid.com/w3schools.com/20190327/snhb-w3schools.com.min.js?20190327",
-                            "id": 19
-                        },
-                        {
-                            "type": "image",
-                            "url": "https://www.w3schools.com/w3css/img_temp_food_blog.jpg",
-                            "id": 20
-                        },
-                        {
-                            "type": "script",
-                            "url": "https://static.h-bid.com/sncmp/sncmp_stub.min.js",
-                            "id": 21
+                            "id": 20,
+                            "name": "https://static.h-bid.com/w3schools.com/20190327/snhb-w3schools.com.min.js?20190327"
                         },
                         {
                             "type": "script",
                             "url": "https://www.w3schools.com/lib/w3schools_footer.js",
-                            "id": 22
+                            "id": 21,
+                            "name": "https://www.w3schools.com/lib/w3schools_footer.js"
+                        },
+                        {
+                            "type": "script",
+                            "url": "https://static.h-bid.com/sncmp/sncmp_stub.min.js",
+                            "id": 22,
+                            "name": "https://static.h-bid.com/sncmp/sncmp_stub.min.js"
                         },
                         {
                             "type": "script",
                             "url": "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit",
-                            "id": 23
+                            "id": 23,
+                            "name": "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
+                        },
+                        {
+                            "type": "image",
+                            "url": "https://www.w3schools.com/w3css/img_temp_food_blog.jpg",
+                            "id": 24,
+                            "name": "https://www.w3schools.com/w3css/img_temp_food_blog.jpg"
                         },
                         {
                             "type": "image",
                             "url": "https://www.w3schools.com/w3css/img_temp_band.jpg",
-                            "id": 24
+                            "id": 25,
+                            "name": "https://www.w3schools.com/w3css/img_temp_band.jpg"
                         },
                         {
                             "type": "image",
                             "url": "https://www.w3schools.com/w3css/img_temp_cafe.jpg",
-                            "id": 25
+                            "id": 26,
+                            "name": "https://www.w3schools.com/w3css/img_temp_cafe.jpg"
                         },
                         {
                             "type": "image",
                             "url": "https://www.w3schools.com/w3css/img_temp_wedding.jpg",
-                            "id": 26
+                            "id": 27,
+                            "name": "https://www.w3schools.com/w3css/img_temp_wedding.jpg"
                         },
                         {
                             "type": "image",
                             "url": "https://www.w3schools.com/w3css/img_temp_dark_icon.jpg",
-                            "id": 27
+                            "id": 28,
+                            "name": "https://www.w3schools.com/w3css/img_temp_dark_icon.jpg"
                         },
                         {
                             "type": "image",
                             "url": "https://www.w3schools.com/images/colorpicker.gif",
-                            "id": 28
+                            "id": 29,
+                            "name": "https://www.w3schools.com/images/colorpicker.gif"
                         },
                         {
                             "type": "image",
                             "url": "https://www.w3schools.com/images/w3schoolscom_gray.gif",
-                            "id": 29
+                            "id": 30,
+                            "name": "https://www.w3schools.com/images/w3schoolscom_gray.gif"
                         },
                         {
                             "type": "script",
                             "url": "https://www.google-analytics.com/analytics.js",
-                            "id": 30
+                            "id": 31,
+                            "name": "https://www.google-analytics.com/analytics.js"
                         },
                         {
                             "type": "script",
-                            "url": "https://www.googletagservices.com/tag/js/gpt.js",
-                            "id": 31
+                            "url": "https://snigelweb-com.videoplayerhub.com/videoloader.js",
+                            "id": 32,
+                            "name": "https://snigelweb-com.videoplayerhub.com/videoloader.js"
                         },
                         {
                             "type": "script",
                             "url": "https://static.h-bid.com/w3schools.com/20190327/snhb-w3schools.com.min.js?20190327",
-                            "id": 32
+                            "id": 33,
+                            "name": "https://static.h-bid.com/w3schools.com/20190327/snhb-w3schools.com.min.js?20190327"
                         },
                         {
                             "type": "font",
                             "url": "https://www.w3schools.com/lib/fonts/fontawesome.woff?14663396",
-                            "id": 33
-                        },
-                        {
-                            "type": "image",
-                            "url": "https://www.w3schools.com/w3css/img_temp_food_blog.jpg",
-                            "id": 34
-                        },
-                        {
-                            "type": "image",
-                            "url": "https://www.w3schools.com/w3css/img_temp_band.jpg",
-                            "id": 35
-                        },
-                        {
-                            "type": "image",
-                            "url": "https://www.w3schools.com/w3css/img_temp_cafe.jpg",
-                            "id": 36
+                            "id": 34,
+                            "name": "https://www.w3schools.com/lib/fonts/fontawesome.woff?14663396"
                         },
                         {
                             "type": "font",
                             "url": "https://www.w3schools.com/lib/fonts/fontawesome.ttf?14663396",
-                            "id": 37
-                        },
-                        {
-                            "type": "image",
-                            "url": "https://www.w3schools.com/images/colorpicker.gif",
-                            "id": 38
+                            "id": 35,
+                            "name": "https://www.w3schools.com/lib/fonts/fontawesome.ttf?14663396"
                         },
                         {
                             "type": "image",
                             "url": "https://www.w3schools.com/images/w3schoolscom_gray.gif",
-                            "id": 39
+                            "id": 36,
+                            "name": "https://www.w3schools.com/images/w3schoolscom_gray.gif"
                         },
                         {
                             "type": "script",
                             "url": "https://www.w3schools.com/lib/w3schools_footer.js",
-                            "id": 40
+                            "id": 37,
+                            "name": "https://www.w3schools.com/lib/w3schools_footer.js"
                         },
                         {
                             "type": "script",
                             "url": "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit",
-                            "id": 41
+                            "id": 38,
+                            "name": "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
                         }
                     ],
                     "type": "document",
@@ -295,20 +313,20 @@
                     },
                     "timing": {
                         "initial": [
-                            54056,
-                            36226741
+                            60470,
+                            473139852
                         ],
                         "responseEnd": [
                             0,
-                            39387195
+                            47238386
                         ],
                         "requestEnd": [
                             0,
-                            47441217
+                            56017205
                         ],
                         "domcontentloaded": [
                             0,
-                            199100197
+                            202301563
                         ]
                     },
                     "external": true,
@@ -336,20 +354,20 @@
             },
             "timing": {
                 "initial": [
-                    54054,
-                    934318276
+                    60469,
+                    367214517
                 ],
                 "responseEnd": [
                     0,
-                    3070352
+                    2250942
                 ],
                 "requestEnd": [
                     0,
-                    10479076
+                    8090368
                 ],
                 "domcontentloaded": [
                     0,
-                    13405320
+                    10538579
                 ]
             },
             "external": false,
@@ -364,12 +382,14 @@
         {
             "type": "navigation",
             "url": "http://localhost:8080/#",
-            "id": 42
+            "id": 39,
+            "name": "http://localhost:8080/#"
         },
         {
             "type": "navigation",
             "url": "http://localhost:8080/#",
-            "id": 43
+            "id": 40,
+            "name": "http://localhost:8080/#"
         }
     ],
     "type": "document",
@@ -391,20 +411,20 @@
     },
     "timing": {
         "initial": [
-            54053,
-            810525024
+            60468,
+            258382185
         ],
         "responseEnd": [
             0,
-            5050116
+            4580862
         ],
         "requestEnd": [
             0,
-            11785244
+            11031785
         ],
         "domcontentloaded": [
             0,
-            13541062
+            12753765
         ]
     },
     "external": false,

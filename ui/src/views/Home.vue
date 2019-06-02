@@ -5,7 +5,7 @@
 		ma-0
 		pa-0
 	>
-		<tree
+		<FlowTree
 			ref="tree"
 			class="tree"
 			:type="type"
@@ -29,13 +29,13 @@
 	import * as d3  from 'd3';
 	import LightMap from '@mi-sec/lightmap';
 	
-	import { tree } from 'vued3tree';
 	import Resource from '@/utils/Resource';
+	import FlowTree from '@/components/FlowTree';
 	
 	export default {
 		name: 'Home',
 		components: {
-			tree
+			FlowTree
 		},
 		data() {
 			return {
@@ -43,7 +43,7 @@
 				treeData: null,
 				type: 'tree',
 				layoutType: 'euclidean',
-				radius: 3,
+				radius: 6,
 				Marginx: 30,
 				Marginy: 30,
 				duration: 750,
