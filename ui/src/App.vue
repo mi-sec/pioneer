@@ -23,9 +23,7 @@
 			Toolbar
 		},
 		data() {
-			return {
-				//
-			};
+			return {};
 		},
 		methods: {
 			...mapActions( [ 'loadConfig' ] )

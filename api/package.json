@@ -1,0 +1,27 @@
+{
+	"name": "pioneer-api",
+	"version": "0.0.1",
+	"description": "Pioneer API",
+	"main": "entrypoint.js",
+	"scripts": {
+		"lint": "eslint .",
+		"start": "pm2-runtime start ecosystem.config.js --env development",
+		"test": "mocha"
+	},
+	"author": "MI-SEC",
+	"license": "MIT",
+	"dependencies": {
+		"@mi-sec/lightmap": "0.1.4",
+		"@pm2/io": "4.2.3",
+		"body-parser": "1.19.0",
+		"config": "3.1.0",
+		"cors": "2.8.5",
+		"express": "4.17.1",
+		"express-pino-logger": "4.0.0",
+		"http-response-class": "1.2.6",
+		"mongoose": "5.5.15",
+		"pino": "5.12.6",
+		"superstruct": "0.6.1",
+		"uuid": "3.3.2"
+	}
+}

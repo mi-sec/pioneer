@@ -11,6 +11,10 @@
 		<v-toolbar-items class="hidden-sm-and-down">
 			<v-btn to="/" flat>Home</v-btn>
 		</v-toolbar-items>
+		
+		<v-toolbar-items class="hidden-sm-and-down">
+			<v-btn to="/scan" flat>Scan</v-btn>
+		</v-toolbar-items>
 	
 	</v-toolbar>
 </template>

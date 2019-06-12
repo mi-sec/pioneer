@@ -1,0 +1,66 @@
+version: '3'
+
+networks:
+    pioneer_network:
+        driver: bridge
+
+services:
+    nginx:
+        container_name: nginx
+        hostname: nginx
+        image: nginx
+        ports:
+            - ${NGINX_PORT:-80}:80
+        volumes:
+            - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+            - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+        restart: always
+        networks:
+            - pioneer_network
+
+
+    mongo:
+        container_name: mongo
+        hostname: mongo
+        image: mongo
+        ports:
+            - ${MONGO_PORT:-27017}:27017
+        restart: always
+        networks:
+            - pioneer_network
+
+
+    api:
+        container_name: api
+        hostname: api
+        build:
+            context: ./api
+        environment:
+            - BUILD_ENV=${BUILD_ENV:-development}
+        ports:
+            - 3000:3000
+        restart: always
+        volumes:
+            - ./api/:/opt/app/
+            # - ./api/config:/opt/app/config
+            # - ./api/src:/opt/app/src
+            # - ./api/ecosystem.config.js:/opt/app/ecosystem.config.js
+            # - ./api/entrypoint.js:/opt/app/entrypoint.js
+            # - ./api/workers.js:/opt/app/workers.js
+        networks:
+            - pioneer_network
+        depends_on:
+            - nginx
+            - mongo
+
+
+#    ui:
+#        build:
+#            context: ./ui
+#        volumes:
+#            - ./ui/dist:/opt/app/dist
+#            - ./ui/package.json:/opt/app/package.json
+#        networks:
+#            - pioneer_network
+#        depends_on:
+#            - nginx

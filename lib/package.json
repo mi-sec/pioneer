@@ -7,7 +7,7 @@
 		"test:deep": "DEBUG=\\\"puppeteer:*\\\" node src/core/Pioneer.js",
 		"test": "mocha"
 	},
-	"author": "MISec",
+	"author": "MI-SEC",
 	"license": "MIT",
 	"dependencies": {
 		"@parellin/lightmap": "0.1.2",
