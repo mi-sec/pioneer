@@ -41,11 +41,28 @@ module.exports = {
 	arrayOfObjects: [ 'object' ],
 	object: 'object',
 	objectId: 'objectId',
-	task: {
-		url: 'hostname',
-		pageOpts: 'object?',
-		plugins: 'array?'
-	},
+	pioneerTask: struct(
+		{
+			url: 'hostname',
+			browserOpts: 'object?',
+			pageOpts: 'object?',
+			scan: 'boolean?',
+			plugins: 'array'
+		},
+		{
+			browserOpts: {
+				headless: true,
+				slowMo: 250,
+				devtools: true
+			},
+			pageOpts: {
+				disableExternalLoading: true,
+				waitUntil: 'networkidle2'
+			},
+			scan: false,
+			plugins: []
+		}
+	),
 	types,
 	struct,
 	validate: ( expected, data ) => new Promise(

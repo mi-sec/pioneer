@@ -17,7 +17,6 @@ const queueSchema = new Schema(
 			enum: [ 'PENDING', 'IN_PROGRESS', 'STALLED', 'FATAL', 'FAILED', 'COMPLETE' ],
 			default: 'PENDING'
 		},
-		progress: String,
 		config: Object,
 		data: {
 			type: Object,

@@ -10,7 +10,7 @@ const
 	MongoDB  = require( '../../services/mongo/MongoDB' ),
 	{
 		validate,
-		task
+		pioneerTask
 	}        = require( '../../services/superstructs' );
 
 module.exports.method = 'POST';
@@ -19,7 +19,7 @@ module.exports.exec   = async ( req, res ) => {
 	const p = res.locals;
 
 	try {
-		await validate( task, p.data );
+		p.data = pioneerTask( p.data );
 
 		const Queue = MongoDB.collections.get( 'queue' );
 

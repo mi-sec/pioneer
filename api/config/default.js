@@ -34,6 +34,10 @@ const config = {
 		useNewUrlParser: true
 	},
 
+	storage: {
+		path: join( process.cwd(), 'storage' )
+	},
+
 	workers: {
 		polling: {
 			// frequency: 10000

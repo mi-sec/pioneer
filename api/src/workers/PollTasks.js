@@ -6,11 +6,11 @@
 'use strict';
 
 const
-	{ Worker }  = require( 'worker_threads' ),
-	{ resolve } = require( 'path' ),
-	config      = require( 'config' ),
-	LightMap    = require( '@mi-sec/lightmap' ),
-	opts        = config.get( 'workers.polling' );
+	{ Worker, SHARE_ENV } = require( 'worker_threads' ),
+	{ resolve }           = require( 'path' ),
+	config                = require( 'config' ),
+	LightMap              = require( '@mi-sec/lightmap' ),
+	opts                  = config.get( 'workers.polling' );
 
 const
 	{ waitFor } = require( '../utils/general' ),
@@ -20,7 +20,7 @@ const
 	Scheduler = require( './Scheduler' );
 
 const
-	workerFile = resolve( __dirname, './tasks/Scan.js' );
+	workerFile = resolve( __dirname, './tasks/ScanTask.js' );
 
 class PollTasks extends Scheduler
 {
@@ -77,17 +77,17 @@ class PollTasks extends Scheduler
 						const
 							task   = pendingTasks[ i ],
 							worker = new Worker( workerFile, {
-								workerData: task.config
+								workerData: task.config,
+								env: SHARE_ENV
 							} );
 
 						worker
 							.on( 'online', async () => {
 								console.log( 'WORKER online' );
 							} )
-							.on( 'message', async ( { state, progress, ...data } ) => {
-								task.state    = state;
-								task.progress = progress;
-								task.data     = data;
+							.on( 'message', async ( { state, ...data } ) => {
+								task.state = state;
+								task.data  = data;
 
 								await task.save();
 							} )
@@ -99,6 +99,7 @@ class PollTasks extends Scheduler
 								await task.save();
 							} )
 							.on( 'exit', () => {
+								console.log( 'exit' );
 								this.tasks.delete( task._id );
 							} );
 
