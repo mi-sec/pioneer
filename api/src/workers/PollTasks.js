@@ -6,11 +6,11 @@
 'use strict';
 
 const
-	{ Worker, SHARE_ENV } = require( 'worker_threads' ),
-	{ resolve }           = require( 'path' ),
-	config                = require( 'config' ),
-	LightMap              = require( '@mi-sec/lightmap' ),
-	opts                  = config.get( 'workers.polling' );
+	{ Worker }  = require( 'worker_threads' ),
+	{ resolve } = require( 'path' ),
+	config      = require( 'config' ),
+	LightMap    = require( '@mi-sec/lightmap' ),
+	opts        = config.get( 'workers.polling' );
 
 const
 	{ waitFor } = require( '../utils/general' ),
@@ -77,29 +77,24 @@ class PollTasks extends Scheduler
 						const
 							task   = pendingTasks[ i ],
 							worker = new Worker( workerFile, {
-								workerData: task.config,
-								env: SHARE_ENV
+								workerData: task.config
 							} );
 
 						worker
 							.on( 'online', async () => {
 								console.log( 'WORKER online' );
 							} )
-							.on( 'message', async ( { state, ...data } ) => {
+							.on( 'message', async ( { state, data } ) => {
 								task.state = state;
 								task.data  = data;
-
 								await task.save();
 							} )
 							.on( 'error', async e => {
-								console.log( e );
 								task.state = 'FATAL';
 								task.error = e;
-
 								await task.save();
 							} )
 							.on( 'exit', () => {
-								console.log( 'exit' );
 								this.tasks.delete( task._id );
 							} );
 

@@ -11,6 +11,7 @@ const
 class PioneerPage
 {
 	#page = null;
+	#data = null;
 
 	constructor( url, config )
 	{
@@ -56,20 +57,18 @@ class PioneerPage
 
 	async goto()
 	{
-		try {
-			console.log( 'GOTO::: ', this.url );
+		this.#data = await this.#page.goto( this.url, {
+			timeout: this.config.pageOpts.timeout,
+			waitUntil: this.config.pageOpts.waitUntil,
+			referer: this.config.pageOpts.referer
+		} );
 
-			this.data = await this.#page.goto( this.url, {
-				timeout: this.config.pageOpts.timeout,
-				waitUntil: this.config.pageOpts.waitUntil,
-				referer: this.config.pageOpts.referer
-			} );
-		} catch ( e ) {
-			console.log( 'rrr' );
-			console.log( e );
-			console.log( e.message );
-			console.log( 'rrr' );
-		}
+		this.info.metrics = await this.#page.metrics();
+	}
+
+	_page()
+	{
+		return this.#page;
 	}
 
 	request( request )
