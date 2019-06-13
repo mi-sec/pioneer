@@ -8,11 +8,15 @@
 const
 	Response        = require( 'http-response-class' ),
 	{ superstruct } = require( 'superstruct' ),
-	{ isValidURL }  = require( '../utils/general' );
+	{
+		isValidURL,
+		isObjectId
+	}               = require( '../utils/general' );
 
 const
 	types  = {
 		hostname: d => isValidURL( d ),
+		objectId: d => isObjectId( d ),
 		stringNumber: d => +d === d,
 		map: d => Array.isArray( d ) ?
 			d.filter(
@@ -36,6 +40,7 @@ module.exports = {
 	array: 'array',
 	arrayOfObjects: [ 'object' ],
 	object: 'object',
+	objectId: 'objectId',
 	task: {
 		url: 'hostname',
 		pageOpts: 'object?',

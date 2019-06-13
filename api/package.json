@@ -21,7 +21,25 @@
 		"http-response-class": "1.2.6",
 		"mongoose": "5.5.15",
 		"pino": "5.12.6",
+		"puppeteer": "1.17.0",
 		"superstruct": "0.6.1",
 		"uuid": "3.3.2"
-	}
+	},
+	"directories": {
+		"test": "test"
+	},
+	"devDependencies": {},
+	"repository": {
+		"type": "git",
+		"url": "git+ssh://git@github.com/mi-sec/pioneer.git"
+	},
+	"keywords": [
+		"pioneer",
+		"web",
+		"crawler"
+	],
+	"bugs": {
+		"url": "https://github.com/mi-sec/pioneer/issues"
+	},
+	"homepage": "https://github.com/mi-sec/pioneer#readme"
 }

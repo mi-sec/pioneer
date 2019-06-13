@@ -14,14 +14,16 @@ const queueSchema = new Schema(
 		_id: Schema.Types.ObjectId,
 		state: {
 			type: String,
-			enum: [ 'PENDING', 'IN_PROGRESS', 'STALLED', 'FAILED', 'COMPLETE' ],
+			enum: [ 'PENDING', 'IN_PROGRESS', 'STALLED', 'FATAL', 'FAILED', 'COMPLETE' ],
 			default: 'PENDING'
 		},
+		progress: String,
 		config: Object,
 		data: {
 			type: Object,
 			default: {}
-		}
+		},
+		error: Object
 	},
 	{
 		timestamp: true

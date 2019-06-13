@@ -73,8 +73,6 @@ class PollTasks extends Scheduler
 			if ( pendingTasks.length ) {
 				this.pause();
 				try {
-					// spawn worker
-
 					for ( let i = 0; i < pendingTasks.length; i++ ) {
 						const
 							task   = pendingTasks[ i ],
@@ -86,26 +84,21 @@ class PollTasks extends Scheduler
 							.on( 'online', async () => {
 								console.log( 'WORKER online' );
 							} )
-							.on( 'message', async d => {
-								console.log( 'WORKER message' );
-								console.log( d );
+							.on( 'message', async ( { state, progress, ...data } ) => {
+								task.state    = state;
+								task.progress = progress;
+								task.data     = data;
 
-								task.state = d.state;
 								await task.save();
 							} )
 							.on( 'error', async e => {
-								console.log( 'WORKER error' );
 								console.log( e );
-								task.state      = 'FAILED';
-								task.data.error = e;
+								task.state = 'FATAL';
+								task.error = e;
+
 								await task.save();
 							} )
-							.on( 'exit', async code => {
-								console.log( 'WORKER exit' );
-								task.data.exitcode = code;
-								console.log( task );
-								await task.save();
-
+							.on( 'exit', () => {
 								this.tasks.delete( task._id );
 							} );
 
