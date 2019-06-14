@@ -46,6 +46,19 @@ const PioneerPage = require( './PioneerPage' );
 			patterns: [ { urlPattern: '*' } ]
 		} );
 
+		await cdpSession.on( 'Network.requestIntercepted', async e => {
+			console.log( 'EVENT INFO: ' );
+			console.log( e );
+			console.log( e.interceptionId );
+			console.log( e.resourceType );
+			console.log( e.isNavigationRequest );
+
+			// pass all network requests (not part of a question)
+			await cdpSession.send( 'Network.continueInterceptedRequest', {
+				interceptionId: e.interceptionId
+			} );
+		} );
+
 		await page.goto();
 
 		// console.log( page );
