@@ -1,13 +1,13 @@
 export default [
 	{
 		path: '/',
-		name: 'Home',
+		name: 'home',
 		view: 'Home',
 		meta: {}
 	},
 	{
-		path: '/scan',
-		name: 'Scan',
+		path: '/scan/:_id',
+		name: 'scan',
 		view: 'Scan',
 		meta: {}
 	}

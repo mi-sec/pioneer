@@ -25,11 +25,18 @@
 		data() {
 			return {};
 		},
+		beforeCreate() {
+			this.$installApi();
+		},
 		methods: {
-			...mapActions( [ 'loadConfig' ] )
+			...mapActions( [
+				'loadLocalConfig',
+				'loadApiConfig'
+			] )
 		},
 		async mounted() {
-			await this.loadConfig();
+			await this.loadLocalConfig();
+			await this.loadApiConfig();
 		}
 	};
 </script>

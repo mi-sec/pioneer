@@ -12,12 +12,10 @@ import state     from './state';
 Vue.use( Vuex );
 
 // Create a new store
-const store = new Vuex.Store( {
+export default new Vuex.Store( {
 	actions,
 	getters,
 	modules,
 	mutations,
 	state
 } );
-
-export default store;

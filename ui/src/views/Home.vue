@@ -35,53 +35,45 @@
 			</v-container>
 		</v-form>
 		
-		<v-layout align-center justify-center row fill-height>
+		<v-container>
 			<v-card>
 				<v-list two-line>
-					<template v-for="(item, index) in items">
+					<template v-for="( item, index ) in scans">
 						<v-list-tile
-							:key="item.title"
-							avatar
+							:key="item._id"
 							ripple
-							@click="toggle(index)"
+							@click="select( item._id )"
 						>
 							<v-list-tile-content>
-								<v-list-tile-title>{{ item.title }}</v-list-tile-title>
-								<v-list-tile-sub-title class="text--primary">{{ item.headline }}</v-list-tile-sub-title>
-								<v-list-tile-sub-title>{{ item.subtitle }}</v-list-tile-sub-title>
+								<v-list-tile-title>{{ item.config.url }}</v-list-tile-title>
+								<v-list-tile-sub-title class="text--primary">{{ item.state }}</v-list-tile-sub-title>
+								<v-list-tile-sub-title>
+									{{ item.config.plugins }}
+								</v-list-tile-sub-title>
 							</v-list-tile-content>
 							
 							<v-list-tile-action>
-								<v-list-tile-action-text>{{ item.action }}</v-list-tile-action-text>
-								<v-icon
-									v-if="selected.indexOf(index) < 0"
-									color="grey lighten-1"
-								>
-									star_border
-								</v-icon>
-								
-								<v-icon
-									v-else
-									color="yellow darken-2"
-								>
-									star
-								</v-icon>
+								<v-list-tile-action-text>
+									{{ item.updatedAt }}
+								</v-list-tile-action-text>
 							</v-list-tile-action>
 						
 						</v-list-tile>
 						<v-divider
-							v-if="index + 1 < items.length"
+							v-if="index + 1 < scans.length"
 							:key="index"
 						></v-divider>
 					</template>
 				</v-list>
 			</v-card>
-		</v-layout>
+		</v-container>
 	
 	</v-container>
 </template>
 
 <script>
+	import { mapActions, mapGetters } from 'vuex';
+	
 	export default {
 		name: 'Home',
 		components: {},
@@ -92,57 +84,35 @@
 				ipRules: [
 					v => !!v || 'Hostname is required'
 				],
-				
-				selected: [ 2 ],
-				items: [
-					{
-						action: '15 min',
-						headline: 'Brunch this weekend?',
-						title: 'Ali Connors',
-						subtitle: 'I\'ll be in your neighborhood doing errands this weekend. Do you want to hang out?'
-					},
-					{
-						action: '2 hr',
-						headline: 'Summer BBQ',
-						title: 'me, Scrott, Jennifer',
-						subtitle: 'Wish I could come, but I\'m out of town this weekend.'
-					},
-					{
-						action: '6 hr',
-						headline: 'Oui oui',
-						title: 'Sandra Adams',
-						subtitle: 'Do you have Paris recommendations? Have you ever been?'
-					},
-					{
-						action: '12 hr',
-						headline: 'Birthday gift',
-						title: 'Trevor Hansen',
-						subtitle: 'Have any ideas about what we should get Heidi for her birthday?'
-					},
-					{
-						action: '18hr',
-						headline: 'Recipe to try',
-						title: 'Britta Holt',
-						subtitle: 'We should eat this: Grate, Squash, Corn, and tomatillo Tacos.'
-					}
-				]
+				refreshInterval: null
 			};
 		},
-		mounted() {
+		computed: {
+			...mapGetters( 'scan', {
+				scans: 'getScans'
+			} )
+		},
+		async mounted() {
+			await this.listScans();
+			
+			this.refreshInterval = setInterval(
+				async () => await this.listScans(),
+				1500
+			);
+		},
+		beforeDestroy() {
+			clearInterval( this.refreshInterval );
 		},
 		methods: {
+			...mapActions( 'scan', [ 'listScans' ] ),
 			async submit() {
 			
 			},
-			toggle( index ) {
-				const i = this.selected.indexOf( index );
-				
-				if ( i > -1 ) {
-					this.selected.splice( i, 1 );
-				}
-				else {
-					this.selected.push( index );
-				}
+			select( _id ) {
+				this.$router.push( {
+					name: 'scan',
+					params: { _id }
+				} );
 			}
 		}
 	};

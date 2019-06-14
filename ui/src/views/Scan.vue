@@ -1,140 +1,186 @@
 <template>
 	<v-container
-		v-if="treeData"
 		fluid
 		ma-0
 		pa-0
 	>
-		<FlowTree
-			ref="tree"
-			class="tree"
-			:type="type"
-			:data="treeData"
-			:node-text="nodeText"
-			:identifier="getId"
-			:zoomable="zoomable"
-			:margin-x="Marginx"
-			:margin-y="Marginy"
-			:radius="radius"
-			:layout-type="layoutType"
-			:duration="duration"
-			@clicked="onClick"
-			@expand="onExpand"
-			@retract="onRetract"
-		/>
+		
+		<v-container
+			v-if="scan"
+			grid-list-xl
+			ma-0
+			pa-auto
+		>
+			<v-layout row wrap>
+				<v-flex xs12 sm6 md6>
+					<v-flex xs12>
+						<v-card>
+							<v-img
+								v-if="screenshot"
+								:src="screenshot"
+								class="elevation-4"
+								aspect-ratio="3.0"
+							/>
+							
+							<v-card-title>
+								<div>
+									<h3 class="mb-0">{{ scan.data.url }}</h3>
+									<span class="grey--text">Created: {{ scan.createdAt }}</span><br/>
+									
+									<span class="font-weight-bold">Type: </span>
+									<span>{{ scan.data.type }}</span><br/>
+									
+									<span class="font-weight-bold">Mime-Type: </span>
+									<span>{{ scan.data.response.mimeType }}</span><br/>
+									
+									<v-divider class="mt-2 mb-2"/>
+									
+									<span class="font-weight-bold">Protocol: </span>
+									<code>{{ scan.data.response.protocol }}</code><br/>
+									
+									<span class="font-weight-bold">Remote Address: </span>
+									<code>{{ scan.data.response.remoteIPAddress }}</code><br/>
+									
+									<span class="font-weight-bold">Remote Port: </span>
+									<code>{{ scan.data.response.remotePort }}</code><br/>
+								</div>
+							</v-card-title>
+						</v-card>
+					</v-flex>
+					
+					<v-flex xs12>
+						<v-card>
+							<v-card-title>
+								<div>
+									<h3 class="mb-0">Security</h3>
+									
+									<span class="font-weight-bold">security state: </span>
+									<v-btn
+										small
+										dark
+										:color="scan.data.response.securityState === 'secure' ? 'green' : 'red'"
+									>
+										{{ scan.data.response.securityState }}
+									</v-btn>
+									<br/>
+									
+									<div v-if="scan.data.response.securityDetails">
+										<span class="font-weight-bold">Connection:</span>
+										<ul>
+											<li>
+												<span class="font-weight-bold">Protocol: </span>
+												<code>{{ scan.data.response.securityDetails.protocol }}</code>
+											</li>
+											<li>
+												<span class="font-weight-bold">Key exchange: </span>
+												<code>{{ scan.data.response.securityDetails.keyExchange }}</code>
+											</li>
+											<li>
+												<span class="font-weight-bold">Key exchange group: </span>
+												<code>{{ scan.data.response.securityDetails.keyExchangeGroup }}</code>
+											</li>
+											<li>
+												<span class="font-weight-bold">Cipher: </span>
+												<code>{{ scan.data.response.securityDetails.cipher }}</code>
+											</li>
+											<li>
+												<span class="font-weight-bold">Cipher Suite: </span>
+												<code>{{ scan.data.response.securityDetails.cipherSuite }}</code>
+											</li>
+										</ul>
+										
+										<br/>
+										
+										<span class="font-weight-bold">Certificate:</span>
+										<ul>
+											<li>
+												<span class="font-weight-bold">Subject: </span>
+												<code>{{ scan.data.response.securityDetails.subjectName }}</code>
+											</li>
+											<li>
+												<span class="font-weight-bold">SAN: </span>
+												<code>{{ scan.data.response.securityDetails.sanList }}</code>
+											</li>
+											<li>
+												<span class="font-weight-bold">Valid from: </span>
+												<code>{{ scan.data.response.securityDetails.validFrom }}</code>
+											</li>
+											<li>
+												<span class="font-weight-bold">Valid to: </span>
+												<code>{{ scan.data.response.securityDetails.validTo }}</code>
+											</li>
+											<li>
+												<span class="font-weight-bold">Issuer: </span>
+												<code>{{ scan.data.response.securityDetails.issuer }}</code>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</v-card-title>
+						</v-card>
+					</v-flex>
+				</v-flex>
+				
+				<v-flex xs7 offset-xs5 offset-md2 offset-lg5>
+					<v-card dark color="secondary">
+						<v-card-text>xs7 offset-(xs5 | md2 | lg5)</v-card-text>
+					</v-card>
+				</v-flex>
+				
+				<v-flex xs12 sm5 md3>
+					<v-card dark color="primary">
+						<v-card-text>(xs12 | sm5 | md3)</v-card-text>
+					</v-card>
+				</v-flex>
+				
+				<v-flex xs12 sm5 md5 offset-xs0 offset-lg2>
+					<v-card dark color="green">
+						<v-card-text>(xs12 | sm5 | md5) offset-(xs0 | lg2)</v-card-text>
+					</v-card>
+				</v-flex>
+			</v-layout>
+		</v-container>
+		
+		<v-layout>
+			<v-flex xs12 sm6 offset-sm3>
+			</v-flex>
+		</v-layout>
+	
 	</v-container>
 </template>
 
 <script>
-	import * as d3  from 'd3';
-	import LightMap from '@mi-sec/lightmap';
-	
-	import Resource from '@/utils/Resource';
-	import FlowTree from '@/components/FlowTree';
+	import { mapActions, mapMutations, mapGetters } from 'vuex';
 	
 	export default {
-		name: 'Home',
-		components: {
-			FlowTree
-		},
+		name: 'Scan',
+		components: {},
 		data() {
 			return {
-				nodeText: 'url',
-				treeData: null,
-				type: 'tree',
-				layoutType: 'euclidean',
-				radius: 6,
-				Marginx: 30,
-				Marginy: 30,
-				duration: 750,
-				currentNode: null,
-				zoomable: true,
-				isLoading: false,
-				events: []
+				id: null,
+				screenshot: null
 			};
 		},
-		mounted() {
-			this.fetchData();
+		computed: {
+			...mapGetters( 'scan', {
+				scan: 'getCurrentScan'
+			} )
+		},
+		async mounted() {
+			this.id = this.$route.params._id;
+			
+			await this.getScan( this.id );
+			this.setCurrentScan( this.id );
+			
+			const screenshot = this.scan.data.plugins.find( plugin => plugin.module === 'screenshot' );
+			
+			if ( screenshot ) {
+				this.screenshot = screenshot.apiPath;
+			}
 		},
 		methods: {
-			async fetchData() {
-				let treedata  = await d3.json( './treeData.json' );
-				this.treeData = treedata;
-				// this.treeData = treedata.Graph.tree;
-				console.log( this.treeData );
-				return;
-				
-				let data = await d3.json( './scantree.json' );
-				data     = new LightMap( data );
-				
-				const
-					entryNode = data.get( 'nodes' ).get( data.get( 'baseUrl' ) ),
-					rootNode  = new Resource( entryNode );
-				
-				function mapNodeLinks( node ) {
-					if ( !node.hasOwnProperty( 'links' ) ) {
-						return node;
-					}
-					
-					return node.links.map(
-						link => {
-							if ( data.get( 'nodes' ).has( link.url ) ) {
-								const _node = new Resource( data.get( 'nodes' ).get( link.url ) );
-								_node.links = mapNodeLinks( _node );
-								return _node;
-							}
-							else {
-								return link;
-							}
-						}
-					);
-				}
-				
-				rootNode.links = mapNodeLinks( rootNode );
-				this.treeData  = rootNode;
-				console.log( this.treeData );
-			},
-			do( action ) {
-				if ( this.currentNode ) {
-					this.isLoading = true;
-					this.$refs[ 'tree' ][ action ]( this.currentNode ).then( () => { this.isLoading = false; } );
-				}
-			},
-			getId( node ) {
-				return node.id;
-			},
-			expandAll() {
-				this.do( 'expandAll' );
-			},
-			collapseAll() {
-				this.do( 'collapseAll' );
-			},
-			showOnly() {
-				this.do( 'showOnly' );
-			},
-			show() {
-				this.do( 'show' );
-			},
-			onClick( evt ) {
-				this.currentNode = evt.element;
-				this.onEvent( 'onClick', evt );
-			},
-			onExpand( evt ) {
-				this.onEvent( 'onExpand', evt );
-			},
-			onRetract( evt ) {
-				this.onEvent( 'onRetract', evt );
-			},
-			onEvent( eventName, data ) {
-				this.events.push( { eventName, data: data.data } );
-			},
-			resetZoom() {
-				if ( !this.$refs[ 'tree' ] ) {
-					return;
-				}
-				this.isLoading = true;
-				this.$refs[ 'tree' ].resetZoom().then( () => { this.isLoading = false; } );
-			}
+			...mapActions( 'scan', [ 'getScan' ] ),
+			...mapMutations( 'scan', [ 'setCurrentScan' ] )
 		}
 	};
 </script>

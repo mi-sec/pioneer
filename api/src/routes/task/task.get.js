@@ -18,7 +18,7 @@ module.exports.route  = [
 	'/task',
 	'/task/:summary(summary)',
 	'/task/:_id',
-	'/task/:_id/summary'
+	'/task/:_id/:summary(summary)'
 ];
 module.exports.exec   = async ( req, res ) => {
 	const p = res.locals;
@@ -37,10 +37,13 @@ module.exports.exec   = async ( req, res ) => {
 
 		if ( p.params._id ) {
 			doc = Queue.findById( p.params._id );
-
 		}
 		else {
 			doc = Queue.find();
+		}
+
+		if ( p.params.summary ) {
+			doc = doc.select( '-data' );
 		}
 
 		doc = await doc.exec();
