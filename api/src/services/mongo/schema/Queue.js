@@ -25,7 +25,7 @@ const queueSchema = new Schema(
 		error: Object
 	},
 	{
-		timestamp: true
+		timestamps: true
 	}
 );
 

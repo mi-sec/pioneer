@@ -6,25 +6,38 @@
 'use strict';
 
 const
-	{ getId } = require( './utils' );
+	config      = require( 'config' ),
+	UUIDv4      = require( 'uuid/v4' ),
+	LightMap    = require( '@mi-sec/lightmap' ),
+	{ resolve } = require( 'path' ),
+	{ getId }   = require( './utils' );
 
 class PioneerPage
 {
-	#page = null;
-	#data = null;
+	#config     = null;
+	#page       = null;
+	#cdpSession = null;
+	#data       = null;
+	#requestId  = null;
 
 	constructor( url, config )
 	{
-		this.id         = getId();
-		this.url        = url;
-		this.config     = config;
-		this.type       = '';
-		this.info       = {};
-		this.timing     = {};
-		this.external   = false;
-		this.consoleMsg = [];
-		this.links      = [];
-		this.children   = [];
+		this.#config = config;
+
+		this.id   = getId();
+		this.url  = url;
+		this.type = '';
+
+		this.request  = null;
+		this.response = null;
+
+		this.external = false;
+
+		this.consoleMsg      = [];
+		this.children        = [];
+		this.navigationLinks = [];
+		this.plugins         = [];
+		this.resources       = new LightMap();
 	}
 
 	formatURL()
@@ -45,25 +58,71 @@ class PioneerPage
 		this.formatURL();
 
 		this.#page = await browser.newPage();
-		await this.#page.setRequestInterception( true );
 
-		this.#page.on( 'request', this.request.bind( this ) );
-		this.#page.on( 'requestfailed', this.requestfailed.bind( this ) );
-		this.#page.on( 'response', this.response.bind( this ) );
-		this.#page.on( 'domcontentloaded', this.domcontentloaded.bind( this ) );
-		this.#page.on( 'requestfinished', this.requestfinished.bind( this ) );
-		this.#page.on( 'console', this.console.bind( this ) );
+		await this.#page.setRequestInterception( true );
+		this.#page.on( 'request', this._request.bind( this ) );
+		this.#page.on( 'requestfailed', this._requestfailed.bind( this ) );
+		this.#page.on( 'response', this._response.bind( this ) );
+		this.#page.on( 'domcontentloaded', this._domcontentloaded.bind( this ) );
+		this.#page.on( 'requestfinished', this._requestfinished.bind( this ) );
+		this.#page.on( 'console', this._console.bind( this ) );
+
+		this.#cdpSession = await this.#page.target().createCDPSession();
+
+		await this.#cdpSession.send( 'Network.enable' );
+		await this.#cdpSession.send( 'Network.setRequestInterception', {
+			patterns: [ { urlPattern: '*' } ]
+		} );
+
+		await this.#cdpSession.on( 'Network.requestIntercepted', async e => {
+			if ( e.request.url === this.url ) {
+				this.#requestId = e.requestId;
+				this.request    = e.request;
+			}
+			else {
+				this.resources.set( '' + e.requestId, {
+					request: e,
+					response: null
+				} );
+			}
+
+			await this.#cdpSession.send( 'Network.continueInterceptedRequest', {
+				interceptionId: e.interceptionId
+			} );
+		} );
+
+		await this.#cdpSession.on( 'Network.responseReceived', async e => {
+			if ( e.requestId === this.#requestId ) {
+				this.type     = e.type;
+				this.response = e.response;
+			}
+			else {
+				this.resources.get( '' + e.requestId ).response = e;
+			}
+		} );
 	}
 
 	async goto()
 	{
 		this.#data = await this.#page.goto( this.url, {
-			timeout: this.config.pageOpts.timeout,
-			waitUntil: this.config.pageOpts.waitUntil,
-			referer: this.config.pageOpts.referer
+			timeout: this.#config.pageOpts.timeout,
+			waitUntil: this.#config.pageOpts.waitUntil,
+			referer: this.#config.pageOpts.referer
 		} );
+	}
 
-		this.info.metrics = await this.#page.metrics();
+	async execPlugins()
+	{
+		for ( let i = 0; i < this.#config.plugins.length; i++ ) {
+			const plugin = this.#config.plugins[ i ];
+
+			if ( plugin.module === 'screenshot' ) {
+				await this.takeScreenshot( plugin.opts );
+			}
+			else if ( plugin.module === 'pdf' ) {
+				await this.printToPDF( plugin.opts );
+			}
+		}
 	}
 
 	_page()
@@ -71,86 +130,33 @@ class PioneerPage
 		return this.#page;
 	}
 
-	request( request )
+	_request( request )
 	{
 		console.log( 'on:request' );
-		if ( this.config.pageOpts.disableExternalLoading ) {
-			const type = request.resourceType();
-
-			if ( [ 'image', 'stylesheet', 'font', 'script' ].indexOf( type ) !== -1 ) {
-				this.links.push( { type, url: request.url() } );
-				return request.abort( 'aborted' );
-			}
-		}
-
-		this.info.url       = request.url();
-		this.info.type      = request.resourceType();
-		this.info.headers   = request.headers();
-		this.info.method    = request.method();
-		this.timing.initial = process.hrtime();
-
 		request.continue();
 	}
 
-	requestfailed( request )
+	_requestfailed( request )
 	{
 		console.log( 'on:requestfailed' );
-		const
-			url    = new URL( request.url() ),
-			reason = request.failure();
-
-		console.log( reason );
-
-		if ( reason.errorText === 'net::ERR_ABORTED' ) {
-			// Do nothing because we aborted it
-			return;
-		}
-
-		this.timing.requestEnd = process.hrtime( this.timing.initial );
-
-		if ( reason.errorText === 'net::ERR_CONNECTION_REFUSED' ) {
-			this.info.status     = 'ERR_CONNECTION_REFUSED';
-			this.info.statusCode = 0;
-		}
-
-		console.log( 'request failed url:', url.href );
 	}
 
-	response( response )
+	_response( response )
 	{
 		console.log( 'on:response' );
-
-		this.timing.responseEnd = process.hrtime( this.timing.initial );
-		this.info.ok            = response.ok();
-		this.info.status        = response.statusText();
-		this.info.statusCode    = response.status();
-		this.info.remoteAddress = response.remoteAddress();
-
-		const secDetails = response.securityDetails();
-
-		if ( secDetails ) {
-			this.info.securityDetails = {
-				subjectName: secDetails.subjectName(),
-				issuer: secDetails.issuer(),
-				validFrom: secDetails.validFrom(),
-				validTo: secDetails.validTo(),
-				protocol: secDetails.protocol()
-			};
-		}
 	}
 
-	domcontentloaded()
+	_domcontentloaded()
 	{
-		this.timing.domcontentloaded = process.hrtime( this.timing.initial );
+		console.log( 'on:domcontentloaded' );
 	}
 
-	requestfinished()
+	_requestfinished()
 	{
 		console.log( 'on:requestfinished' );
-		this.timing.requestEnd = process.hrtime( this.timing.initial );
 	}
 
-	async console( msg )
+	async _console( msg )
 	{
 		const payload = [];
 
@@ -162,21 +168,60 @@ class PioneerPage
 		this.consoleMsg.push( payload );
 	}
 
-	async getPageDimensions()
+	generateStoragePath( ext = '' )
 	{
-		this.info.dimensions = await this.#page.evaluate( () => {
-			return {
-				width: document.documentElement.clientWidth,
-				height: document.documentElement.clientHeight,
-				deviceScaleFactor: window.devicePixelRatio
-			};
+		const id = UUIDv4();
+
+		return {
+			filePath: resolve( config.get( 'storage.path' ), `${ id }${ ext }` ),
+			apiPath: `${ config.get( 'storage.apiRoute' ) }${ id }${ ext }`
+		};
+	}
+
+	// See https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#pagescreenshotoptions
+	async takeScreenshot( opts = {} )
+	{
+		const
+			pathInfo = this.generateStoragePath( '.png' );
+
+		await this.#page.screenshot( {
+			...opts,
+			path: pathInfo.filePath
+		} );
+
+		this.plugins.push( {
+			module: 'screenshot',
+			...pathInfo
+		} );
+	}
+
+	// See https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#pagepdfoptions
+	async printToPDF( opts = {} )
+	{
+		const
+			pathInfo = this.generateStoragePath( '.pdf' );
+
+		await this.#page.pdf( {
+			...opts,
+			path: pathInfo.filePath
+		} );
+
+		this.plugins.push( {
+			module: 'pdf',
+			...pathInfo
 		} );
 	}
 
 	async scanForNavigationLinks()
 	{
-		this.cache.get( 'links' ).push(
-			...( await scanForNavigationLinks( this.page ) )
+		this.navigationLinks = await this.#page.evaluate(
+			() => Array.from(
+				Object.keys( document.links )
+					.map( k => ( {
+						type: 'navigation',
+						url: document.links[ k ].href
+					} ) )
+			)
 		);
 	}
 }

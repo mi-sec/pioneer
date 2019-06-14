@@ -35,7 +35,8 @@ const config = {
 	},
 
 	storage: {
-		path: join( process.cwd(), 'storage' )
+		path: join( process.cwd(), 'storage' ),
+		apiRoute: '/api/storage/'
 	},
 
 	workers: {

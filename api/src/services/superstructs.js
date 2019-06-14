@@ -56,7 +56,6 @@ module.exports = {
 				devtools: true
 			},
 			pageOpts: {
-				disableExternalLoading: true,
 				waitUntil: 'networkidle2'
 			},
 			scan: false,
