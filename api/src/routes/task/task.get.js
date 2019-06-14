@@ -16,7 +16,9 @@ const
 module.exports.method = 'GET';
 module.exports.route  = [
 	'/task',
-	'/task/:_id'
+	'/task/:summary(summary)',
+	'/task/:_id',
+	'/task/:_id/summary'
 ];
 module.exports.exec   = async ( req, res ) => {
 	const p = res.locals;
@@ -31,8 +33,11 @@ module.exports.exec   = async ( req, res ) => {
 
 		let doc = null;
 
+		console.log( p.params );
+
 		if ( p.params._id ) {
 			doc = Queue.findById( p.params._id );
+
 		}
 		else {
 			doc = Queue.find();
