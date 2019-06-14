@@ -14,129 +14,20 @@
 			<v-layout row wrap>
 				<v-flex xs12 sm6 md6>
 					<v-flex xs12>
-						<v-card>
-							<v-img
-								v-if="screenshot"
-								:src="screenshot"
-								class="elevation-4"
-								aspect-ratio="3.0"
-							/>
-							
-							<v-card-title>
-								<div>
-									<h3 class="mb-0">{{ scan.data.url }}</h3>
-									<span class="grey--text">Created: {{ scan.createdAt }}</span><br/>
-									
-									<span class="font-weight-bold">Type: </span>
-									<span>{{ scan.data.type }}</span><br/>
-									
-									<span class="font-weight-bold">Mime-Type: </span>
-									<span>{{ scan.data.response.mimeType }}</span><br/>
-									
-									<v-divider class="mt-2 mb-2"/>
-									
-									<span class="font-weight-bold">Protocol: </span>
-									<code>{{ scan.data.response.protocol }}</code><br/>
-									
-									<span class="font-weight-bold">Remote Address: </span>
-									<code>{{ scan.data.response.remoteIPAddress }}</code><br/>
-									
-									<span class="font-weight-bold">Remote Port: </span>
-									<code>{{ scan.data.response.remotePort }}</code><br/>
-								</div>
-							</v-card-title>
-						</v-card>
+						<SummaryCard
+							:scan="scan"
+						/>
 					</v-flex>
 					
 					<v-flex xs12>
-						<v-card>
-							<v-card-title>
-								<div>
-									<h3 class="mb-0">Security</h3>
-									
-									<span class="font-weight-bold">security state: </span>
-									<v-btn
-										small
-										dark
-										:color="scan.data.response.securityState === 'secure' ? 'green' : 'red'"
-									>
-										{{ scan.data.response.securityState }}
-									</v-btn>
-									<br/>
-									
-									<div v-if="scan.data.response.securityDetails">
-										<span class="font-weight-bold">Connection:</span>
-										<ul>
-											<li>
-												<span class="font-weight-bold">Protocol: </span>
-												<code>{{ scan.data.response.securityDetails.protocol }}</code>
-											</li>
-											<li>
-												<span class="font-weight-bold">Key exchange: </span>
-												<code>{{ scan.data.response.securityDetails.keyExchange }}</code>
-											</li>
-											<li>
-												<span class="font-weight-bold">Key exchange group: </span>
-												<code>{{ scan.data.response.securityDetails.keyExchangeGroup }}</code>
-											</li>
-											<li>
-												<span class="font-weight-bold">Cipher: </span>
-												<code>{{ scan.data.response.securityDetails.cipher }}</code>
-											</li>
-											<li>
-												<span class="font-weight-bold">Cipher Suite: </span>
-												<code>{{ scan.data.response.securityDetails.cipherSuite }}</code>
-											</li>
-										</ul>
-										
-										<br/>
-										
-										<span class="font-weight-bold">Certificate:</span>
-										<ul>
-											<li>
-												<span class="font-weight-bold">Subject: </span>
-												<code>{{ scan.data.response.securityDetails.subjectName }}</code>
-											</li>
-											<li>
-												<span class="font-weight-bold">SAN: </span>
-												<code>{{ scan.data.response.securityDetails.sanList }}</code>
-											</li>
-											<li>
-												<span class="font-weight-bold">Valid from: </span>
-												<code>{{ scan.data.response.securityDetails.validFrom }}</code>
-											</li>
-											<li>
-												<span class="font-weight-bold">Valid to: </span>
-												<code>{{ scan.data.response.securityDetails.validTo }}</code>
-											</li>
-											<li>
-												<span class="font-weight-bold">Issuer: </span>
-												<code>{{ scan.data.response.securityDetails.issuer }}</code>
-											</li>
-										</ul>
-									</div>
-								</div>
-							</v-card-title>
-						</v-card>
+						<SecurityInfoCard
+							:scan="scan"
+						/>
 					</v-flex>
 				</v-flex>
 				
-				<v-flex xs7 offset-xs5 offset-md2 offset-lg5>
-					<v-card dark color="secondary">
-						<v-card-text>xs7 offset-(xs5 | md2 | lg5)</v-card-text>
-					</v-card>
-				</v-flex>
-				
-				<v-flex xs12 sm5 md3>
-					<v-card dark color="primary">
-						<v-card-text>(xs12 | sm5 | md3)</v-card-text>
-					</v-card>
-				</v-flex>
-				
-				<v-flex xs12 sm5 md5 offset-xs0 offset-lg2>
-					<v-card dark color="green">
-						<v-card-text>(xs12 | sm5 | md5) offset-(xs0 | lg2)</v-card-text>
-					</v-card>
+				<v-flex xs12 sm6 md6>
+					
 				</v-flex>
 			</v-layout>
 		</v-container>
@@ -151,10 +42,12 @@
 
 <script>
 	import { mapActions, mapMutations, mapGetters } from 'vuex';
+	import SummaryCard                              from '@/components/scanPage/SummaryCard';
+	import SecurityInfoCard                         from '@/components/scanPage/SecurityInfoCard';
 	
 	export default {
 		name: 'Scan',
-		components: {},
+		components: { SecurityInfoCard, SummaryCard },
 		data() {
 			return {
 				id: null,
@@ -172,11 +65,11 @@
 			await this.getScan( this.id );
 			this.setCurrentScan( this.id );
 			
-			const screenshot = this.scan.data.plugins.find( plugin => plugin.module === 'screenshot' );
-			
-			if ( screenshot ) {
-				this.screenshot = screenshot.apiPath;
-			}
+			// const screenshot = this.scan.data.plugins.find( plugin => plugin.module === 'screenshot' );
+			//
+			// if ( screenshot ) {
+			// 	this.screenshot = screenshot.apiPath;
+			// }
 		},
 		methods: {
 			...mapActions( 'scan', [ 'getScan' ] ),

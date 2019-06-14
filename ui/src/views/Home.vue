@@ -41,10 +41,11 @@
 					<template v-for="( item, index ) in scans">
 						<v-list-tile
 							:key="item._id"
-							ripple
-							@click="select( item._id )"
 						>
-							<v-list-tile-content>
+							<v-list-tile-content
+								ripple
+								@click="select( item._id )"
+							>
 								<v-list-tile-title>{{ item.config.url }}</v-list-tile-title>
 								<v-list-tile-sub-title class="text--primary">{{ item.state }}</v-list-tile-sub-title>
 								<v-list-tile-sub-title>
@@ -56,6 +57,15 @@
 								<v-list-tile-action-text>
 									{{ item.updatedAt }}
 								</v-list-tile-action-text>
+								
+								<v-btn
+									color="error"
+									flat
+									icon
+									@click="removeScan( item._id )"
+								>
+									<v-icon>mdi-trash-can-outline</v-icon>
+								</v-btn>
 							</v-list-tile-action>
 						
 						</v-list-tile>
@@ -104,7 +114,7 @@
 			clearInterval( this.refreshInterval );
 		},
 		methods: {
-			...mapActions( 'scan', [ 'listScans' ] ),
+			...mapActions( 'scan', [ 'listScans', 'deleteScan' ] ),
 			async submit() {
 			
 			},
@@ -113,6 +123,9 @@
 					name: 'scan',
 					params: { _id }
 				} );
+			},
+			removeScan( _id ) {
+				this.deleteScan( _id );
 			}
 		}
 	};

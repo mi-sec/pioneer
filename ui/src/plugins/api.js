@@ -76,6 +76,16 @@ class Api
 		return this.request( params )
 			.then( resp => resp.data );
 	}
+
+	deleteScan( _id ) {
+		const params = {
+			path: `/task/${ _id }`,
+			method: 'delete'
+		};
+
+		return this.request( params )
+			.then( resp => resp.data );
+	}
 }
 
 Vue.use( {

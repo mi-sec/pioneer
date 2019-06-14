@@ -21,6 +21,21 @@ export default {
 
 		const scan = state.loadedScans.get( state.currentScan );
 
+		scan.data.request = scan.data.resources[ scan.data.entryResourceRequestId ].request;
+
+		scan.data.request = {
+			...scan.data.request,
+			...scan.data.request.request
+		};
+
+		scan.data.intercepted = scan.data.resources[ scan.data.entryResourceRequestId ].intercepted;
+
+		scan.data.response = scan.data.resources[ scan.data.entryResourceRequestId ].response;
+		scan.data.response = {
+			...scan.data.response,
+			...scan.data.response.response
+		};
+
 		if ( scan.data.response.securityDetails ) {
 			let suite = [];
 

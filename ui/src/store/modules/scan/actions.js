@@ -14,5 +14,13 @@ export default {
 		} catch ( e ) {
 			console.error( e );
 		}
+	},
+	async deleteScan( context, _id ) {
+		try {
+			await this.$api.deleteScan( _id );
+			context.commit( 'commitRemoveScan', _id );
+		} catch ( e ) {
+			console.error( e );
+		}
 	}
 };

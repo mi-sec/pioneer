@@ -18,7 +18,6 @@ class PioneerPage
 	#page       = null;
 	#cdpSession = null;
 	#data       = null;
-	#requestId  = null;
 
 	constructor( url, config )
 	{
@@ -28,10 +27,8 @@ class PioneerPage
 		this.url  = url;
 		this.type = '';
 
-		this.request  = null;
-		this.response = null;
-
-		this.external = false;
+		this.entryResourceRequestId = null;
+		this.external               = false;
 
 		this.consoleMsg      = [];
 		this.children        = [];
@@ -74,17 +71,18 @@ class PioneerPage
 			patterns: [ { urlPattern: '*' } ]
 		} );
 
+		await this.#cdpSession.on( 'Network.requestWillBeSent', async e => {
+			if ( !this.entryResourceRequestId ) {
+				this.entryResourceRequestId = e.requestId;
+			}
+
+			this.createResourceEntry( e.requestId );
+			this.resources.get( e.requestId ).request = e;
+		} );
+
 		await this.#cdpSession.on( 'Network.requestIntercepted', async e => {
-			if ( e.request.url === this.url ) {
-				this.#requestId = e.requestId;
-				this.request    = e.request;
-			}
-			else {
-				this.resources.set( '' + e.requestId, {
-					request: e,
-					response: null
-				} );
-			}
+			this.createResourceEntry( e.requestId );
+			this.resources.get( e.requestId ).intercepted = e;
 
 			await this.#cdpSession.send( 'Network.continueInterceptedRequest', {
 				interceptionId: e.interceptionId
@@ -92,14 +90,19 @@ class PioneerPage
 		} );
 
 		await this.#cdpSession.on( 'Network.responseReceived', async e => {
-			if ( e.requestId === this.#requestId ) {
-				this.type     = e.type;
-				this.response = e.response;
-			}
-			else {
-				this.resources.get( '' + e.requestId ).response = e;
-			}
+			this.resources.get( e.requestId ).response = e;
 		} );
+	}
+
+	createResourceEntry( id )
+	{
+		if ( !this.resources.has( id ) ) {
+			this.resources.set( id, {
+				request: null,
+				intercepted: null,
+				response: null
+			} );
+		}
 	}
 
 	async goto()
