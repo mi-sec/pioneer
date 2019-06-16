@@ -73,6 +73,8 @@ class PollTasks extends Scheduler
 			if ( pendingTasks.length ) {
 				this.pause();
 				try {
+
+					// Make reporting system from worker to see if it's still alive
 					for ( let i = 0; i < pendingTasks.length; i++ ) {
 						const
 							task   = pendingTasks[ i ],

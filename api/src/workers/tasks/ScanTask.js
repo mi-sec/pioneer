@@ -6,11 +6,12 @@
 'use strict';
 
 const
-	puppeteer = require( 'puppeteer' ),
+	puppeteer  = require( 'puppeteer' ),
+	lighthouse = require( 'lighthouse' ),
 	{
 		parentPort,
 		workerData
-	}         = require( 'worker_threads' );
+	}          = require( 'worker_threads' );
 
 const
 	PioneerPage = require( './PioneerPage' );
@@ -30,10 +31,34 @@ const
 		} );
 
 		// TODO: start a timer to set STALLED timeout
-
 		const page = new PioneerPage( data.url, data.config );
 		await page.init( browser );
+
+		browser.on( 'targetchanged', async target => {
+			const page = await target.page();
+
+			if ( page && page.url() === url ) {
+				const client = await page.target().createCDPSession();
+				await client.send( 'Runtime.evaluate', {} );
+			}
+		} );
+
+
+		console.log( 'going' );
 		await page.goto();
+		console.log( 'done going' );
+
+		const { lhr } = await lighthouse( data.url, {
+			port: ( new URL( browser.wsEndpoint() ) ).port,
+			output: 'json',
+			logLevel: 'info'
+		} );
+
+		console.log( lhr );
+
+		console.log( `Lighthouse scores: ` );
+		console.log( lhr.categories );
+
 		await page.execPlugins();
 		await browser.close();
 

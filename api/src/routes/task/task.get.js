@@ -33,8 +33,6 @@ module.exports.exec   = async ( req, res ) => {
 
 		let doc = null;
 
-		console.log( p.params );
-
 		if ( p.params._id ) {
 			doc = Queue.findById( p.params._id );
 		}

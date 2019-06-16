@@ -4,6 +4,7 @@
 		ma-0
 		pa-0
 	>
+		<ScanSidebar/>
 		
 		<v-container
 			v-if="scan"
@@ -11,6 +12,7 @@
 			ma-0
 			pa-auto
 		>
+			
 			<v-layout row wrap>
 				<v-flex xs12 sm6 md6>
 					<v-flex xs12>
@@ -27,7 +29,7 @@
 				</v-flex>
 				
 				<v-flex xs12 sm6 md6>
-					
+				
 				</v-flex>
 			</v-layout>
 		</v-container>
@@ -44,10 +46,11 @@
 	import { mapActions, mapMutations, mapGetters } from 'vuex';
 	import SummaryCard                              from '@/components/scanPage/SummaryCard';
 	import SecurityInfoCard                         from '@/components/scanPage/SecurityInfoCard';
+	import ScanSidebar                              from '@/components/ScanSidebar';
 	
 	export default {
 		name: 'Scan',
-		components: { SecurityInfoCard, SummaryCard },
+		components: { ScanSidebar, SecurityInfoCard, SummaryCard },
 		data() {
 			return {
 				id: null,

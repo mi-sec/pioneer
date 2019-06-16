@@ -5,20 +5,65 @@
  *******************************************************************************************************/
 'use strict';
 
-/**
- * Create plugins that extend from this - call each plugin per method
- * Example
- * await this.#cdpSession.on( 'Network.requestWillBeSent', async e => {
- * 		plugins.forEach( plugin => plugin.onNetworkRequestWillBeSent( e ) );
- * } );
- */
 class PioneerPlugin
 {
 	#config = null;
+	#result = null;
 
 	constructor( config )
 	{
 		this.#config = config;
+	}
+
+	getResults()
+	{
+		return this.#result;
+	}
+
+	setResults( v )
+	{
+		console.log( 'setResults', v );
+		this.#result = v;
+	}
+
+	init()
+	{
+
+	}
+
+	onPreBrowserLaunch()
+	{
+
+	}
+
+	onPostBrowserLaunch()
+	{
+
+	}
+
+	onPostPageLoaded()
+	{
+
+	}
+
+	onPreBrowserClose()
+	{
+
+	}
+
+	onPostBrowserClose()
+	{
+
+	}
+
+	onPrePageInit()
+	{
+
+	}
+
+	onPostPageInit()
+	{
+
 	}
 
 	onRequest()
@@ -51,12 +96,12 @@ class PioneerPlugin
 
 	}
 
-	onNetworkRequestIntercepted()
+	onNetworkRequestWillBeSent()
 	{
 
 	}
 
-	onNetworkRequestWillBeSent()
+	onNetworkRequestIntercepted()
 	{
 
 	}

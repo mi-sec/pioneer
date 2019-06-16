@@ -1,5 +1,9 @@
 <template>
-	<v-toolbar app dense>
+	<v-toolbar
+		clipped-left
+		dense
+		app
+	>
 		
 		<v-toolbar-title class="headline">
 			<span>Pioneer</span>

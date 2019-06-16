@@ -1,6 +1,7 @@
 <template>
 	<v-app>
 		<Toolbar/>
+		
 		<v-content>
 			<router-view></router-view>
 		</v-content>
@@ -10,15 +11,10 @@
 <script>
 	import { mapActions } from 'vuex';
 	
-	import Toolbar from './components/Toolbar';
+	import Toolbar from '@/components/Toolbar';
 	
 	export default {
 		name: 'App',
-		metaInfo() {
-			return {
-				title: 'Pioneer'
-			};
-		},
 		components: {
 			Toolbar
 		},
