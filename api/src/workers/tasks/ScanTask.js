@@ -6,12 +6,11 @@
 'use strict';
 
 const
-	puppeteer  = require( 'puppeteer' ),
-	lighthouse = require( 'lighthouse' ),
+	puppeteer = require( 'puppeteer' ),
 	{
 		parentPort,
 		workerData
-	}          = require( 'worker_threads' );
+	}         = require( 'worker_threads' );
 
 const
 	PioneerPage = require( './PioneerPage' );
@@ -26,7 +25,7 @@ const
 		};
 
 		const browser = await puppeteer.launch( {
-			args: [ '--no-sandbox', '--disable-setuid-sandbox' ],
+			args: [ '--no-sandbox', '--disable-setuid-sandbox', '--ignore-certificate-errors' ],
 			...data.config.browserOpts
 		} );
 
@@ -43,21 +42,7 @@ const
 			}
 		} );
 
-
-		console.log( 'going' );
 		await page.goto();
-		console.log( 'done going' );
-
-		const { lhr } = await lighthouse( data.url, {
-			port: ( new URL( browser.wsEndpoint() ) ).port,
-			output: 'json',
-			logLevel: 'info'
-		} );
-
-		console.log( lhr );
-
-		console.log( `Lighthouse scores: ` );
-		console.log( lhr.categories );
 
 		await page.execPlugins();
 		await browser.close();

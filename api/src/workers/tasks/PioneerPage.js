@@ -7,6 +7,7 @@
 
 const
 	config      = require( 'config' ),
+	lighthouse  = require( 'lighthouse' ),
 	UUIDv4      = require( 'uuid/v4' ),
 	LightMap    = require( '@mi-sec/lightmap' ),
 	{ resolve } = require( 'path' ),
@@ -15,6 +16,7 @@ const
 class PioneerPage
 {
 	#config     = null;
+	#browser    = null;
 	#page       = null;
 	#cdpSession = null;
 	#data       = null;
@@ -30,6 +32,7 @@ class PioneerPage
 		this.entryResourceRequestId = null;
 		this.external               = false;
 
+		this.auditReport     = null;
 		this.consoleMsg      = [];
 		this.children        = [];
 		this.navigationLinks = [];
@@ -54,7 +57,8 @@ class PioneerPage
 	{
 		this.formatURL();
 
-		this.#page = await browser.newPage();
+		this.#browser = browser;
+		this.#page    = await this.#browser.newPage();
 
 		await this.#page.setRequestInterception( true );
 		this.#page.on( 'request', this._request.bind( this ) );
@@ -114,20 +118,6 @@ class PioneerPage
 		} );
 	}
 
-	async execPlugins()
-	{
-		for ( let i = 0; i < this.#config.plugins.length; i++ ) {
-			const plugin = this.#config.plugins[ i ];
-
-			if ( plugin.module === 'screenshot' ) {
-				await this.takeScreenshot( plugin.opts );
-			}
-			else if ( plugin.module === 'pdf' ) {
-				await this.printToPDF( plugin.opts );
-			}
-		}
-	}
-
 	_page()
 	{
 		return this.#page;
@@ -169,6 +159,23 @@ class PioneerPage
 		}
 
 		this.consoleMsg.push( payload );
+	}
+
+	async execPlugins()
+	{
+		for ( let i = 0; i < this.#config.plugins.length; i++ ) {
+			const plugin = this.#config.plugins[ i ];
+
+			if ( plugin.module === 'screenshot' ) {
+				await this.takeScreenshot( plugin.opts );
+			}
+			else if ( plugin.module === 'pdf' ) {
+				await this.printToPDF( plugin.opts );
+			}
+			else if ( plugin.module === 'audit' ) {
+				await this.runAudit( plugin.opts );
+			}
+		}
 	}
 
 	generateStoragePath( ext = '' )
@@ -213,6 +220,27 @@ class PioneerPage
 			module: 'pdf',
 			...pathInfo
 		} );
+	}
+
+	async runAudit( opts = {} )
+	{
+		// TODO::: make a gif of the paint sequence using screenshot-thumbnails
+		opts.extends  = opts.extends || 'lighthouse:default';
+		opts.settings = opts.settings || {
+			skipAudits: [ 'screenshot-thumbnails', 'final-screenshot' ]
+		};
+
+		const { lhr } = await lighthouse(
+			this.url,
+			{
+				port: ( new URL( this.#browser.wsEndpoint() ) ).port,
+				output: 'json',
+				logLevel: 'info'
+			},
+			opts
+		);
+
+		this.auditReport = lhr;
 	}
 
 	async scanForNavigationLinks()

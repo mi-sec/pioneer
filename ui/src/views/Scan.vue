@@ -10,17 +10,35 @@
 			v-if="scan"
 			grid-list-xl
 			ma-0
-			pa-auto
+			pa-0
 		>
-			
-			<v-layout row wrap>
+			<v-layout
+				pa-2
+				wrap
+				row
+			>
 				<v-flex xs12 sm6 md6>
 					<v-flex xs12>
 						<SummaryCard
 							:scan="scan"
 						/>
 					</v-flex>
-					
+				</v-flex>
+				
+				<v-flex xs12 sm6 md6 lg3>
+					<StatsCard
+						:icon="dashboard"
+					/>
+				</v-flex>
+			</v-layout>
+			
+			<v-layout
+				class="secondary"
+				pa-2
+				wrap
+				row
+			>
+				<v-flex xs12 sm6 md6>
 					<v-flex xs12>
 						<SecurityInfoCard
 							:scan="scan"
@@ -32,6 +50,7 @@
 				
 				</v-flex>
 			</v-layout>
+		
 		</v-container>
 		
 		<v-layout>
@@ -47,10 +66,11 @@
 	import SummaryCard                              from '@/components/scanPage/SummaryCard';
 	import SecurityInfoCard                         from '@/components/scanPage/SecurityInfoCard';
 	import ScanSidebar                              from '@/components/ScanSidebar';
+	import StatsCard                                from '@/components/StatsCard';
 	
 	export default {
 		name: 'Scan',
-		components: { ScanSidebar, SecurityInfoCard, SummaryCard },
+		components: { StatsCard, ScanSidebar, SecurityInfoCard, SummaryCard },
 		data() {
 			return {
 				id: null,

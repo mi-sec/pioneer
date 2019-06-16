@@ -125,6 +125,7 @@
 				} );
 			},
 			removeScan( _id ) {
+				// TODO: marked for deletion disable
 				this.deleteScan( _id );
 			}
 		}

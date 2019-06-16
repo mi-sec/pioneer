@@ -17,13 +17,21 @@
 				:key="item.title"
 				@click=""
 			>
-				<v-list-tile-action>
-					<v-icon>{{ item.icon }}</v-icon>
-				</v-list-tile-action>
-				
-				<v-list-tile-content>
-					<v-list-tile-title>{{ item.title }}</v-list-tile-title>
-				</v-list-tile-content>
+				<v-tooltip
+					nudge-right="15"
+					open-delay="50"
+					right
+				>
+					<template slot="activator" slot-scope="{ on }">
+						<v-list-tile-action v-on="on">
+							<v-icon>{{ item.icon }}</v-icon>
+						</v-list-tile-action>
+					</template>
+					
+					<v-list-tile-content>
+						<v-list-tile-title>{{ item.title }}</v-list-tile-title>
+					</v-list-tile-content>
+				</v-tooltip>
 			</v-list-tile>
 		</v-list>
 	</v-navigation-drawer>
@@ -36,10 +44,15 @@
 			return {
 				model: null,
 				items: [
-					{ title: 'Home', icon: 'dashboard' },
+					{ title: 'Summary', icon: 'dashboard' },
 					{ title: 'About', icon: 'question_answer' }
 				]
 			};
+		},
+		methods: {
+			hovering() {
+				console.log( 'yup' );
+			}
 		}
 	};
 </script>
