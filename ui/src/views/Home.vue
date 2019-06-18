@@ -4,8 +4,7 @@
 		ma-0
 		pa-0
 	>
-		
-		<v-form v-model="valid">
+		<v-form ref="form" v-model="valid">
 			<v-container>
 				<v-layout>
 					
@@ -26,7 +25,7 @@
 					<v-btn
 						:disabled="!valid"
 						color="success"
-						@click="submit"
+						@click="submitScan"
 					>
 						Scan
 					</v-btn>
@@ -115,8 +114,20 @@
 		},
 		methods: {
 			...mapActions( 'scan', [ 'listScans', 'deleteScan' ] ),
-			async submit() {
-			
+			async submitScan() {
+				await this.$api.createScan( {
+					url: this.ip,
+					pageOpts: {
+						waitUntil: 'networkidle2',
+						timeout: 10000
+					},
+					plugins: [
+						{ module: 'screenshot' },
+						{ module: 'pdf' },
+						{ module: 'deepScan' },
+						{ module: 'audit' }
+					]
+				} );
 			},
 			select( _id ) {
 				this.$router.push( {

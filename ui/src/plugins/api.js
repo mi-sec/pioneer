@@ -57,6 +57,19 @@ class Api
 			} );
 	}
 
+	createScan( opts ) {
+		const params = {
+			path: '/task',
+			method: 'post',
+			data: {
+				...opts
+			}
+		};
+
+		return this.request( params )
+			.then( resp => resp.data );
+	}
+
 	getScanSummary( _id = '' ) {
 		const params = {
 			path: `/task${ _id ? '/' + _id : '' }/summary`,
