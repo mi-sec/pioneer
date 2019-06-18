@@ -15,7 +15,7 @@
 			<v-list-tile
 				v-for="item in items"
 				:key="item.title"
-				@click=""
+				@click="scrollTo( item.title )"
 			>
 				<v-tooltip
 					nudge-right="15"
@@ -45,13 +45,13 @@
 				model: null,
 				items: [
 					{ title: 'Summary', icon: 'dashboard' },
-					{ title: 'About', icon: 'question_answer' }
+					{ title: 'Performance', icon: 'mdi-speedometer' }
 				]
 			};
 		},
 		methods: {
-			hovering() {
-				console.log( 'yup' );
+			scrollTo( id ) {
+				id = id.toLowerCase();
 			}
 		}
 	};

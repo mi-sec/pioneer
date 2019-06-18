@@ -40,7 +40,8 @@ services:
         ports:
             - 8080:8080
         volumes:
-            - ./ui/:/app/
+            - ./ui/public:/app/public
+            - ./ui/src:/app/src
         networks:
             - d_network
         depends_on:

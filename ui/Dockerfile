@@ -2,7 +2,8 @@ FROM node:12
 
 WORKDIR /app
 
-COPY . .
+COPY ./package*.json ./
+COPY ./babel.config.js ./
 
 RUN npm i
 

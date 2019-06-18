@@ -1,57 +1,26 @@
 <template>
 	<v-container
+		v-if="scan"
 		fluid
 		ma-0
 		pa-0
 	>
 		<ScanSidebar/>
 		
-		<v-container
-			v-if="scan"
-			grid-list-xl
-			ma-0
-			pa-0
-		>
-			<v-layout
-				pa-2
-				wrap
-				row
-			>
-				<v-flex xs12 sm6 md6>
-					<v-flex xs12>
-						<SummaryCard
-							:scan="scan"
-						/>
-					</v-flex>
-				</v-flex>
-				
-				<v-flex xs12 sm6 md6 lg3>
-					<StatsCard
-						:icon="dashboard"
-					/>
-				</v-flex>
-			</v-layout>
-			
-			<v-layout
-				class="secondary"
-				pa-2
-				wrap
-				row
-			>
-				<v-flex xs12 sm6 md6>
-					<v-flex xs12>
-						<SecurityInfoCard
-							:scan="scan"
-						/>
-					</v-flex>
-				</v-flex>
-				
-				<v-flex xs12 sm6 md6>
-				
-				</v-flex>
-			</v-layout>
+		<SummaryBlock
+			id="summary"
+			:scan="scan"
+		/>
 		
-		</v-container>
+		<PerformanceBlock
+			id="performance"
+			:scan="scan"
+		/>
+		
+		<SecurityBlock
+			id="security"
+			:scan="scan"
+		/>
 		
 		<v-layout>
 			<v-flex xs12 sm6 offset-sm3>
@@ -63,14 +32,21 @@
 
 <script>
 	import { mapActions, mapMutations, mapGetters } from 'vuex';
-	import SummaryCard                              from '@/components/scanPage/SummaryCard';
 	import SecurityInfoCard                         from '@/components/scanPage/SecurityInfoCard';
 	import ScanSidebar                              from '@/components/ScanSidebar';
-	import StatsCard                                from '@/components/StatsCard';
+	import SummaryBlock                             from '@/components/scanPage/SummaryBlock';
+	import SecurityBlock                            from '@/components/scanPage/SecurityBlock';
+	import PerformanceBlock                         from '@/components/scanPage/PerformanceBlock';
 	
 	export default {
 		name: 'Scan',
-		components: { StatsCard, ScanSidebar, SecurityInfoCard, SummaryCard },
+		components: {
+			PerformanceBlock,
+			SecurityBlock,
+			SummaryBlock,
+			ScanSidebar,
+			SecurityInfoCard
+		},
 		data() {
 			return {
 				id: null,
@@ -96,13 +72,13 @@
 		},
 		methods: {
 			...mapActions( 'scan', [ 'getScan' ] ),
-			...mapMutations( 'scan', [ 'setCurrentScan' ] )
+			...mapMutations( 'scan', [ 'setCurrentScan' ] ),
+			getCategoriesForScan() {
+				return Object.keys( this.scan.data.auditReport.categories );
+			}
 		}
 	};
 </script>
 
 <style>
-	.tree {
-		height: 800px;
-	}
 </style>
