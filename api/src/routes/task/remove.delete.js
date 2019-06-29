@@ -18,6 +18,7 @@ module.exports.route  = '/task/:_id';
 module.exports.exec   = async ( req, res ) => {
 	const p = res.locals;
 
+	// TODO::: delete stored reports in `storage` - have flag for "preserveArtifacts" or something like that
 	try {
 		validate( objectId, p.params._id );
 

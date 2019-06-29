@@ -3,14 +3,18 @@ module.exports = {
 		es6: true,
 		node: true
 	},
-	extends: 'eslint:recommended',
+	
+	extends: [
+		'eslint:recommended',
+		'plugin:vue/essential'
+	],
+	
 	parserOptions: {
+		parser: 'babel-eslint',
 		ecmaVersion: 2017,
-		ecmaFeatures: {
-			experimentalObjectRestSpread: true
-		},
 		sourceType: 'module'
 	},
+	
 	globals: {
 		before: true,
 		after: true,
@@ -35,6 +39,7 @@ module.exports = {
 		require: true,
 		fetch: true
 	},
+	
 	rules: {
 		indent: [
 			2,
@@ -69,8 +74,8 @@ module.exports = {
 		'comma-spacing': [
 			1,
 			{
-				'before': false,
-				'after': true
+				before: false,
+				after: true
 			}
 		],
 		'comma-style': [ 1, 'last' ],
@@ -84,8 +89,8 @@ module.exports = {
 		'generator-star-spacing': [
 			1,
 			{
-				'before': true,
-				'after': true
+				before: true,
+				after: true
 			}
 		],
 		'handle-callback-err': [ 1, '^(err|error)$' ],
@@ -115,10 +120,10 @@ module.exports = {
 		'no-case-declarations': 'off',
 		'no-class-assign': 1,
 		'no-cond-assign': 1,
-		'no-console': 'off',
+		'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
 		'no-const-assign': 1,
 		'no-control-regex': 1,
-		'no-debugger': 1,
+		'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
 		'no-delete-var': 1,
 		'no-dupe-args': 1,
 		'no-dupe-class-members': 1,
@@ -204,7 +209,7 @@ module.exports = {
 		'no-useless-escape': 1,
 		'no-whitespace-before-property': 1,
 		'no-with': 1,
-		'one-var': [ 1, { var: 'always' } ],
+		'one-var': [ 1, { 'var': 'always' } ],
 		'operator-linebreak': [
 			1,
 			'after',
@@ -267,11 +272,27 @@ module.exports = {
 			}
 		],
 		'use-isnan': 1,
-		'valid-jsdoc': [ 1, { 'requireReturn': false } ],
+		'valid-jsdoc': [ 1, { requireReturn: false } ],
 		'valid-typeof': 1,
 		'wrap-iife': [ 1, 'any' ],
 		'yield-star-spacing': [ 1, 'both' ],
 		yoda: [ 1, 'never' ],
-		'max-statements-per-line': [ 1, { 'max': 2 } ]
-	}
+		'max-statements-per-line': [ 1, { max: 2 } ]
+	},
+	
+	overrides: [
+		{
+			files: [ '*.vue' ],
+			rules: {
+				'indent': 'off',
+				'vue/script-indent': [
+					'warn',
+					'tab',
+					{ baseIndent: 1 }
+				]
+			}
+		}
+	],
+	
+	root: true
 };

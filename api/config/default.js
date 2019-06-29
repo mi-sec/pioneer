@@ -29,14 +29,15 @@ const config = {
 	},
 
 	mongodb: {
-		uri: `mongodb://${ process.env.MONGO_HOST || 'mongo' }:${ process.env.MONGO_PORT || 27017 }/pioneer`,
+		uri: `mongodb://${ process.env.MONGO_HOST || 'pioneer_mongo' }:${ process.env.MONGO_PORT || 27017 }/pioneer`,
 		ipFamily: 4,
 		useNewUrlParser: true
 	},
 
 	storage: {
 		path: join( process.cwd(), 'storage' ),
-		apiRoute: '/api/storage/'
+		apiRoute: '/api/storage/',
+		assets: join( process.cwd(), 'assets' )
 	},
 
 	workers: {

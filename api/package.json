@@ -22,9 +22,11 @@
 		"http-response-class": "1.2.6",
 		"lighthouse": "5.1.0",
 		"mongoose": "5.5.15",
+		"pdfkit": "0.10.0",
 		"pino": "5.12.6",
 		"puppeteer": "1.17.0",
 		"superstruct": "0.6.1",
+		"svg-to-pdfkit": "0.1.7",
 		"uuid": "3.3.2"
 	},
 	"directories": {

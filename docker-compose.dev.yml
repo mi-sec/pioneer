@@ -6,8 +6,8 @@ networks:
 
 services:
     nginx:
-        container_name: nginx
-        hostname: nginx
+        container_name: pioneer_nginx
+        hostname: pioneer_nginx
         image: nginx
         ports:
             - ${NGINX_PORT:-80}:80
@@ -21,8 +21,8 @@ services:
 
 
     mongo:
-        container_name: mongo
-        hostname: mongo
+        container_name: pioneer_mongo
+        hostname: pioneer_mongo
         image: mongo
         ports:
             - ${MONGO_PORT:-27017}:27017
@@ -32,8 +32,8 @@ services:
 
 
     ui:
-        container_name: ui
-        hostname: ui
+        container_name: pioneer_ui
+        hostname: pioneer_ui
         build:
             context: ./ui
         entrypoint: "npm run serve"
@@ -48,8 +48,8 @@ services:
             - nginx
 
     api:
-        container_name: api
-        hostname: api
+        container_name: pioneer_api
+        hostname: pioneer_api
         build:
             context: ./api
         privileged: true
@@ -59,6 +59,7 @@ services:
             - 3000:3000
         restart: always
         volumes:
+            - ./api/assets:/app/assets
             - ./api/config:/app/config
             - ./api/src:/app/src
             - ./api/storage:/app/storage
