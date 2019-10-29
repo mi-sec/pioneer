@@ -21,7 +21,7 @@
 		"express-pino-logger": "4.0.0",
 		"http-response-class": "1.2.6",
 		"lighthouse": "5.1.0",
-		"mongoose": "5.5.15",
+		"mongoose": "5.7.5",
 		"pino": "5.12.6",
 		"puppeteer": "1.17.0",
 		"superstruct": "0.6.1",
