@@ -6,27 +6,27 @@
 'use strict';
 
 const
-	mongoose = require( 'mongoose' ),
-	Schema   = mongoose.Schema;
+    mongoose = require( 'mongoose' ),
+    Schema   = mongoose.Schema;
 
 const queueSchema = new Schema(
-	{
-		_id: Schema.Types.ObjectId,
-		state: {
-			type: String,
-			enum: [ 'PENDING', 'IN_PROGRESS', 'STALLED', 'FATAL', 'FAILED', 'COMPLETE' ],
-			default: 'PENDING'
-		},
-		config: Object,
-		data: {
-			type: Object,
-			default: {}
-		},
-		error: Object
-	},
-	{
-		timestamps: true
-	}
+    {
+        _id: Schema.Types.ObjectId,
+        state: {
+            type: String,
+            enum: [ 'PENDING', 'IN_PROGRESS', 'STALLED', 'FATAL', 'FAILED', 'COMPLETE' ],
+            default: 'PENDING'
+        },
+        config: Object,
+        data: {
+            type: Object,
+            default: {}
+        },
+        error: Object
+    },
+    {
+        timestamps: true
+    }
 );
 
 module.exports = mongoose.models.queue || mongoose.model( 'queue', queueSchema );
