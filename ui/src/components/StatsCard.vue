@@ -66,18 +66,18 @@ export default {
 
             return n >= 0.9 ? 'mdi-alpha-a' :
                 n >= 0.8 ? 'mdi-alpha-b' :
-                    n >= 0.7 ? 'mdi-alpha-c' :
-                        n >= 0.6 ? 'mdi-alpha-d' :
-                            'mdi-alpha-f';
+                n >= 0.7 ? 'mdi-alpha-c' :
+                n >= 0.6 ? 'mdi-alpha-d' :
+                'mdi-alpha-f';
         },
         calculateColorForGrade() {
             const n = this.category.score;
 
             return n >= 0.9 ? 'A' :
                 n >= 0.8 ? 'B' :
-                    n >= 0.7 ? 'C' :
-                        n >= 0.6 ? 'D' :
-                            'F';
+                n >= 0.7 ? 'C' :
+                n >= 0.6 ? 'D' :
+                'F';
         }
     }
 };

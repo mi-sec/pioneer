@@ -10,7 +10,16 @@ const
 module.exports = async () => {
     logger.trace( 'application on-start' );
 
+    const assetPath = config.get( 'storage.assets' );
     const storagePath = config.get( 'storage.path' );
+
+    // ensure the local asset storage path exists
+    try {
+        await fs.access( assetPath );
+    }
+    catch {
+        await fs.mkdir( assetPath, { recursive: true } );
+    }
 
     // ensure the local storage path exists
     try {

@@ -205,8 +205,8 @@ export default {
                 originBuilder = d => {
                     return d.parent == null ? origin :
                         d.parent.x0 !== undefined ? { x: d.parent.x0, y: d.parent.y0 } :
-                            d.parent._x0 !== undefined ? { x: d.parent._x0, y: d.parent._y0 } :
-                                origin;
+                        d.parent._x0 !== undefined ? { x: d.parent._x0, y: d.parent._y0 } :
+                        origin;
                 };
 
                 source = this.root;
@@ -249,7 +249,7 @@ export default {
                 } );
 
             updateLinks.attr( 'd',
-                d => drawLink( originBuilder( d ), originBuilder( d ) )
+                              d => drawLink( originBuilder( d ), originBuilder( d ) )
             );
 
             const

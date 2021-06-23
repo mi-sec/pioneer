@@ -35,6 +35,7 @@ const config = {
     },
 
     storage: {
+        assets: path.join( process.cwd(), 'assets' ),
         path: path.join( process.cwd(), 'storage' ),
         apiRoute: '/api/storage/'
     },
