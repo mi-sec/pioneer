@@ -7,55 +7,55 @@
 
 class Scheduler
 {
-	constructor( opts = {} )
-	{
-		this.frequency = opts.frequency || 1000;
-		this.task      = opts.task || ( () => {} );
-		this.timer     = null;
-		this.running   = false;
-	}
+    constructor( opts = {} )
+    {
+        this.frequency = opts.frequency || 1000;
+        this.task      = opts.task || ( () => {} );
+        this.timer     = null;
+        this.running   = false;
+    }
 
-	isRunning()
-	{
-		return this.running;
-	}
+    isRunning()
+    {
+        return this.running;
+    }
 
-	restartTimer()
-	{
-		if ( !this.isRunning() ) {
-			this.running = true;
-			this.timer   = setInterval( this.task, this.frequency );
-		}
+    restartTimer()
+    {
+        if ( !this.isRunning() ) {
+            this.running = true;
+            this.timer   = setInterval( this.task, this.frequency );
+        }
 
-		return this.timer;
-	}
+        return this.timer;
+    }
 
-	start()
-	{
-		return this.restartTimer();
-	}
+    start()
+    {
+        return this.restartTimer();
+    }
 
-	resume()
-	{
-		return this.restartTimer();
-	}
+    resume()
+    {
+        return this.restartTimer();
+    }
 
-	pause()
-	{
-		this.running = false;
-		return clearInterval( this.timer );
-	}
+    pause()
+    {
+        this.running = false;
+        return clearInterval( this.timer );
+    }
 
-	stop()
-	{
-		this.running = false;
-		return clearInterval( this.timer );
-	}
+    stop()
+    {
+        this.running = false;
+        return clearInterval( this.timer );
+    }
 
-	setTask( fn, bindTo )
-	{
-		this.task = fn.bind( bindTo );
-	}
+    setTask( fn, bindTo )
+    {
+        this.task = fn.bind( bindTo );
+    }
 }
 
 module.exports = Scheduler;

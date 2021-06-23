@@ -8,9 +8,9 @@
 let id = 0;
 
 function getId() {
-	return id++;
+    return id++;
 }
 
 module.exports = {
-	getId
+    getId
 };

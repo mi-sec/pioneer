@@ -1,211 +1,267 @@
-/** ****************************************************************************************************
- * @file: server.js
- * Project: boilerplate-express-api
- * @author Nick Soggin <iSkore@users.noreply.github.com> on 30-Oct-2017
- *******************************************************************************************************/
 'use strict';
 
 const
-	config      = require( 'config' ),
-	express     = require( 'express' ),
-	cors        = require( 'cors' ),
-	bodyParser  = require( 'body-parser' ),
-	logger      = require( 'pino' )( {
-		level: process.env.NODE_ENV === 'production' ? 'info' : 'trace'
-	} ),
-	expressPino = require( 'express-pino-logger' );
+    config      = require( 'config' ),
+    express     = require( 'express' ),
+    cors        = require( 'cors' ),
+    bodyParser  = require( 'body-parser' ),
+    expressPino = require( 'express-pino-logger' ),
+    crypto      = require( 'crypto' );
 
 const
-	setupRoute               = require( './setupRoute' ),
-	methodNotAllowed         = require( './methodNotAllowed' ),
-	captureErrors            = require( './middleware/captureErrors' ),
-	recursivelyReadDirectory = require( '../utils/recursivelyReadDirectory' );
+    logger                   = require( '../services/logger' ),
+    recursivelyReadDirectory = require( '../utils/recursively-read-directory' ),
+    methodNotAllowed         = require( './method-not-allowed' );
 
-/**
- * Server
- */
 class Server
 {
-	constructor()
-	{
-		this.isClosed = false;
-	}
+    constructor()
+    {
+        this.app      = null;
+        this.server   = null;
+        this.isClosed = false;
+    }
 
-	bindProcess()
-	{
-		logger.trace( 'bindProcess' );
+    /**
+     * bindProcess
+     * @description
+     * bind the process to `SIGINT`, `SIGQUIT`, `SIGTERM`, `unhandledRejection`, `uncaughtException`, `beforeExit`,
+     * and `exit` program POSIX signal events to assist with safe shutdown
+     */
+    bindProcess()
+    {
+        logger.trace( 'server.bindProcess' );
 
-		// catch all the ways node might exit
-		process
-			.on( 'SIGINT', ( msg, code ) => ( logger.info( 'SIGINT' ), process.exit( code ) ) )
-			.on( 'SIGQUIT', ( msg, code ) => ( logger.info( 'SIGQUIT' ), process.exit( code ) ) )
-			.on( 'SIGTERM', ( msg, code ) => ( logger.info( 'SIGTERM' ), process.exit( code ) ) )
-			.on( 'unhandledRejection', err => logger.error( 'unhandledRejection', err ) )
-			.on( 'uncaughtException', err => logger.error( 'uncaughtException', err ) )
-			.on( 'beforeExit', () => logger.info( 'beforeExit' ) )
-			.on( 'exit', () => logger.info( 'exit' ) );
-	}
+        // catch all the ways node might exit
+        if ( !process.env.TESTING ) {
+            process
+                .on( 'SIGINT', ( msg, code ) => ( logger.info( 'SIGINT' ), process.exit( code ) ) )
+                .on( 'SIGQUIT', ( msg, code ) => ( logger.info( 'SIGQUIT' ), process.exit( code ) ) )
+                .on( 'SIGTERM', ( msg, code ) => ( logger.info( 'SIGTERM' ), process.exit( code ) ) )
+                .on( 'unhandledRejection', ( err ) => logger.error( 'unhandledRejection', err ) )
+                .on( 'uncaughtException', ( err ) => logger.error( 'uncaughtException', err ) )
+                .on( 'beforeExit', () => logger.info( 'beforeExit' ) )
+                .on( 'exit', () => logger.info( 'exit' ) );
+        }
+    }
 
-	/**
-	 * expressInitialize
-	 * @description
-	 * Initialize express middleware and hook the middleware
-	 */
-	expressInitialize()
-	{
-		logger.trace( 'expressInitialize' );
+    /**
+     * expressInitialize
+     * @description
+     * Initialize express middleware and hook the middleware
+     */
+    expressInitialize()
+    {
+        logger.trace( 'server.expressInitialize' );
 
-		this.app = express();
+        this.app = express();
 
-		this.app.use( expressPino( { logger } ) );
+        this.app.use( expressPino( { logger } ) );
+        this.app.set( 'trust proxy', 1 );
 
-		this.app.use( cors() );
-		this.app.use( bodyParser.raw( { limit: '5gb' } ) );
-		this.app.use( bodyParser.urlencoded( { extended: false } ) );
-		this.app.use( bodyParser.json() );
-	}
+        this.app.use( cors() );
+        this.app.use( bodyParser.raw( { limit: '5gb' } ) );
+        this.app.use( bodyParser.urlencoded( { extended: false } ) );
+        this.app.use( bodyParser.text() );
+        this.app.use( bodyParser.json() );
+    }
 
-	/**
-	 * hookRoute
-	 * @param {object} item - item from the api config
-	 * @returns {*} - returns item with required execution function
-	 */
-	hookRoute( item )
-	{
-		logger.trace( `hookRoute ${ item.method } ${ item.route }` );
+    /**
+     * hookRoute
+     * @param {object} item - item from the api config
+     * @returns {*} - returns item with required execution function
+     */
+    hookRoute( item )
+    {
+        logger.trace( `server.hookRoute ${ item.method } ${ item.route }` );
 
-		const exec = [
-			( req, res, next ) => ( this.meters.reqMeter.mark(), next() )
-		];
+        // TODO::: add a hook to check for authentication if the handler file requires it
+        const exec = [
+            ( req, res, next ) => ( this.meters.reqMeter.mark(), next() ),
+            ( req, res, next ) => {
+                if ( res ) {
+                    try {
+                        res.set( { 'request-id': crypto.randomUUID() } );
+                        item.exec( req, res, next );
+                    }
+                    catch ( e ) {
+                        res.status( 500 ).json( {
+                            error: 'unknown server error',
+                            ...e
+                        } );
+                    }
+                }
+                else {
+                    res.status( 500 ).json( { error: 'unknown server error' } );
+                }
+            }
+        ];
 
-		setupRoute( item, exec );
+        item.method = item.method.toLowerCase();
 
-		// hook route to express
-		this.app[ item.method ]( item.route, exec );
+        // hook route to express
+        this.app[ item.method ]( item.route, exec );
 
-		return item;
-	}
+        return item;
+    }
 
-	routerInitialize()
-	{
-		logger.trace( 'routerInitialize' );
+    routerInitialize()
+    {
+        logger.trace( 'server.routerInitialize' );
 
-		this.routes.map( item => this.hookRoute( item ) );
+        this.routes.map( ( item ) => this.hookRoute( item ) );
 
-		// capture all unhandled routes
-		this.routes.push( this.hookRoute( methodNotAllowed ) );
+        // capture all unhandled routes
+        this.routes.push( this.hookRoute( methodNotAllowed ) );
 
-		// capture all unhandled errors that might occur
-		this.app.use( captureErrors() );
-	}
+        // capture all unhandled errors that might occur
+        this.app.use( ( e, req, res, next ) => {
+            if ( e ) {
+                res
+                    .set( {
+                        'Access-Control-Allow-Origin': '*',
+                        'Access-Control-Max-Age': 1728000,
+                        'Content-Type': 'application/json; charset=utf-8',
+                        'request-id': crypto.randomUUID()
+                    } )
+                    .status( 500 )
+                    .json( { error: e.message || e } );
+            }
+            else {
+                next();
+            }
+        } );
+    }
 
-	async loadRoutes()
-	{
-		logger.trace( 'loadRoutes' );
+    async loadRoutes()
+    {
+        logger.trace( 'server.loadRoutes' );
 
-		this.routes = await recursivelyReadDirectory( config.get( 'server.routes' ) );
-		this.routes = this.routes.map( route => require( `${ route }` ) );
-	}
+        this.routes = await recursivelyReadDirectory( config.get( 'server.routes' ) );
+        this.routes = this.routes.filter( ( route ) => /([a-z0-9\s_\\.\-():])+(.m?t?jsx?)$/i.test( route ) );
+        this.routes = this.routes.map( ( route ) => require( `${ route }` ) );
+        this.routes = this.routes.sort( ( a ) => a.method.toUpperCase() === 'HEAD' ? -1 : 0 );
+    }
 
-	/**
-	 * initialize
-	 * @description
-	 * Hook `process` variables `uncaughtException`, `unhandledRejection`, and `exit` to handle any potential errors
-	 * that may occur. This will allow us to properly handle exit and log all non-V8 level errors without the program
-	 * crashing.
-	 * @returns {Server} - this
-	 */
-	async initialize()
-	{
-		logger.trace( 'initialize' );
+    bindDocuments()
+    {
+        this.app.use( '/docs', express.static( 'docs' ) );
+    }
 
-		// override process handlers to handle failures
-		this.bindProcess();
+    /**
+     * initialize
+     * @description
+     * Hook `process` variables `uncaughtException`, `unhandledRejection`, and `exit` to handle any potential errors
+     * that may occur. This will allow us to properly handle exit and log all non-V8 level errors without the program
+     * crashing.
+     */
+    async initialize()
+    {
+        logger.trace( 'server.initialize' );
 
-		// setup express
-		this.expressInitialize();
-		await this.loadRoutes();
+        // override process handlers to handle failures
+        this.bindProcess();
 
-		this.routerInitialize();
-	}
+        // setup express
+        this.expressInitialize();
+        await this.loadRoutes();
 
-	/**
-	 * onStart
-	 * @description
-	 * create instance of an http server and start listening on the port
-	 * @param {function} cb - pm2 callback
-	 */
-	onStart( cb )
-	{
-		logger.trace( 'onStart' );
+        this.bindDocuments();
 
-		this.server = this.app.listen(
-			config.get( 'server.port' ),
-			config.get( 'server.host' ),
-			() => {
-				process.stdout.write(
-					`${ config.get( 'name' ) } ${ config.get( 'version' ) } ` +
-					`running on ${ config.get( 'server.host' ) }:${ config.get( 'server.port' ) }\n`
-				);
+        this.routerInitialize();
+    }
 
-				logger.info( 'started' );
+    /**
+     * onStart
+     * @description
+     * create instance of an http server and start listening on the port
+     * @param {function?} cb - pm2 callback
+     */
+    onStart( cb = () => {} )
+    {
+        logger.trace( 'server.onStart' );
 
-				cb();
-			}
-		);
-	}
+        this.server = this.app.listen(
+            config.get( 'server.port' ),
+            config.get( 'server.host' ),
+            () => {
+                logger.info( {
+                    name: config.get( 'name' ),
+                    version: config.get( 'version' ),
+                    host: config.get( 'server.host' ),
+                    port: config.get( 'server.port' )
+                } );
 
-	sensors( io )
-	{
-		logger.trace( 'sensors' );
+                logger.info( 'server started' );
 
-		this.meters          = {};
-		this.meters.reqMeter = io.meter( 'req/min' );
-	}
+                cb();
+            }
+        );
+    }
 
-	actuators( io )
-	{
-		logger.trace( 'actuators' );
+    /**
+     * sensors
+     * @description
+     * bind pm2 sensors to server
+     * @param {*} io - pass in from pm2
+     */
+    sensors( io )
+    {
+        logger.trace( 'server.sensors' );
 
-		io.action( 'process', reply => reply( { env: process.env } ) );
-		io.action( 'server', reply => reply( { server: this.server } ) );
-		io.action( 'config', reply => reply( { config: config } ) );
-	}
+        this.meters          = {};
+        this.meters.reqMeter = io.meter( 'req/min' );
+    }
 
-	/**
-	 * onStop
-	 * @param {*} err - error
-	 * @param {function} cb - pm2 callback
-	 * @param {number} code - exit code
-	 * @param {string} signal - kill signal
-	 */
-	onStop( err, cb, code, signal )
-	{
-		logger.trace( 'onStop' );
+    /**
+     * actuators
+     * @description
+     * bind pm2 actuators to server
+     * @param {*} io - pass in from pm2
+     */
+    actuators( io )
+    {
+        logger.trace( 'server.actuators' );
 
-		if ( this.server ) {
-			this.server.close();
-		}
+        io.action( 'process', ( reply ) => reply( { env: process.env } ) );
+        io.action( 'server', ( reply ) => reply( { server: this.server } ) );
+        io.action( 'config', ( reply ) => reply( { config: config } ) );
+    }
 
-		if ( err ) {
-			logger.error( err );
-		}
+    /**
+     * onStop
+     * @param {*} err - error
+     * @param {function} cb - pm2 callback
+     * @param {number} code - exit code
+     * @param {string} signal - kill signal
+     */
+    onStop( err, cb = () => {}, code, signal )
+    {
+        logger.trace( 'server.onStop' );
 
-		if ( this.isClosed ) {
-			logger.debug( 'Shutdown after SIGINT, forced shutdown...' );
-		}
+        if ( this.server ) {
+            this.server.close();
+        }
 
-		this.isClosed = true;
+        if ( err ) {
+            logger.error( err );
+        }
 
-		logger.debug( `server exiting with code: ${ code } ${ signal }` );
-		cb();
-	}
+        if ( this.isClosed ) {
+            logger.debug( 'shutdown after SIGINT, forced shutdown...' );
+        }
+
+        this.isClosed = true;
+
+        logger.debug( `server exiting with code: ${ code } ${ signal }` );
+        cb();
+    }
 }
 
 /**
  * module.exports
  * @description
- * export a singleton instance of Server
+ * export Server class
  * @type {Server}
  */
 module.exports = Server;

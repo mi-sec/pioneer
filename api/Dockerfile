@@ -1,4 +1,4 @@
-FROM node:12
+FROM node:14
 
 RUN apt-get update && \
 	apt-get install -y wget --no-install-recommends && \
@@ -13,6 +13,8 @@ RUN apt-get update && \
 ADD https://github.com/Yelp/dumb-init/releases/download/v1.2.0/dumb-init_1.2.0_amd64 /usr/local/bin/dumb-init
 RUN chmod +x /usr/local/bin/dumb-init
 
+ARG BUILD_ENV
+
 WORKDIR /app
 
 COPY ./package*.json ./
@@ -21,8 +23,10 @@ RUN npm install -g pm2
 RUN npm i
 RUN npm i puppeteer
 
+COPY . .
+
 EXPOSE 3000
 
 ENTRYPOINT [ "dumb-init", "--" ]
 
-CMD [ "pm2-runtime", "start", "ecosystem.config.js", "--env", "development" ]
+CMD [ "pm2-runtime", "start", "ecosystem.config.js", "--env", "${BUILD_ENV:-production}" ]

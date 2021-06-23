@@ -9,53 +9,53 @@
 const querystring = require( 'querystring' );
 
 const
-	{
-		ERROR, ARGUMENT_ERROR, FUNCTION_ERROR, ARGUMENT_ERROR_PROPERTY,
-		ARGUMENT_ERROR_BOOLEAN, ARGUMENT_ERROR_STRING, ARGUMENT_ERROR_NUMBER, ARGUMENT_ERROR_ARRAY,
-		ARGUMENT_ERROR_OBJECT, ARGUMENT_ERROR_FUNCTION, ARGUMENT_ERROR_POWER, ARGUMENT_ERROR_HTTP,
-		ARGUMENT_ERROR_EMAIL, ARGUMENT_ERROR_IPV4, ARGUMENT_ERROR_DOMAIN_NAME, LARGE_ARRAY_SIZE,
-		FLOAT_EPSILON, DOUBLE_EPSILON, LOG_KIBIBYTE, EDGE
-	} = require( './variables' );
+    {
+        ERROR, ARGUMENT_ERROR, FUNCTION_ERROR, ARGUMENT_ERROR_PROPERTY,
+        ARGUMENT_ERROR_BOOLEAN, ARGUMENT_ERROR_STRING, ARGUMENT_ERROR_NUMBER, ARGUMENT_ERROR_ARRAY,
+        ARGUMENT_ERROR_OBJECT, ARGUMENT_ERROR_FUNCTION, ARGUMENT_ERROR_POWER, ARGUMENT_ERROR_HTTP,
+        ARGUMENT_ERROR_EMAIL, ARGUMENT_ERROR_IPV4, ARGUMENT_ERROR_DOMAIN_NAME, LARGE_ARRAY_SIZE,
+        FLOAT_EPSILON, DOUBLE_EPSILON, LOG_KIBIBYTE, EDGE
+    } = require( './variables' );
 
 const
-	{
-		isNaN, isUndefined, isNull, isBoolean,
-		isString, isNumber, isPrimitive, isArray,
-		isMap, isUint8Array, isInt8Array, isInt16Array,
-		isUint16Array, isInt32Array, isUint32Array, isFloat32Array,
-		isFloat64Array, isAnyArray, isObject, isBuffer,
-		isFunction, isValue, instanceOf
-	} = require( './objectLiterals' );
+    {
+        isNaN, isUndefined, isNull, isBoolean,
+        isString, isNumber, isPrimitive, isArray,
+        isMap, isUint8Array, isInt8Array, isInt16Array,
+        isUint16Array, isInt32Array, isUint32Array, isFloat32Array,
+        isFloat64Array, isAnyArray, isObject, isBuffer,
+        isFunction, isValue, instanceOf
+    } = require( './objectLiterals' );
 
 function isPowerOfTwo( n ) {
-	return !( n & ( n - 1 ) );
+    return !( n & ( n - 1 ) );
 }
 
 function keys( o ) {
-	return isObject( o ) ? Object.keys( o ) : o;
+    return isObject( o ) ? Object.keys( o ) : o;
 }
 
 function values( o ) {
-	return isObject( o ) ? Object.values( o ) : o;
+    return isObject( o ) ? Object.values( o ) : o;
 }
 
 function publicObject( o ) {
-	return isObject( o ) ? keys( o ).reduce( ( r, i ) => ( r[ i ] = o[ i ], r ), {} ) : o;
+    return isObject( o ) ? keys( o ).reduce( ( r, i ) => ( r[ i ] = o[ i ], r ), {} ) : o;
 }
 
 function has( o, ...args ) {
-	if ( isString( o ) ) {
-		return args.filter( i => o.indexOf( i ) !== -1 ).length === args.length;
-	}
-	else if ( isArray( o ) ) {
-		return args.filter( i => o.includes( i ) ).length === args.length;
-	}
-	else if ( isObject( o ) ) {
-		return args.filter( i => o.hasOwnProperty( i ) ).length === args.length;
-	}
-	else {
-		return false;
-	}
+    if ( isString( o ) ) {
+        return args.filter( i => o.indexOf( i ) !== -1 ).length === args.length;
+    }
+    else if ( isArray( o ) ) {
+        return args.filter( i => o.includes( i ) ).length === args.length;
+    }
+    else if ( isObject( o ) ) {
+        return args.filter( i => o.hasOwnProperty( i ) ).length === args.length;
+    }
+    else {
+        return false;
+    }
 }
 
 /**
@@ -68,292 +68,294 @@ function has( o, ...args ) {
  * findMissingKeys( { a: 0, b: 1 }, 'a' ) // -> [ 'b' ]
  */
 function findMissingKeys( o, ...args ) {
-	if ( isArray( args[ 0 ] ) ) {
-		args = args[ 0 ];
-	}
+    if ( isArray( args[ 0 ] ) ) {
+        args = args[ 0 ];
+    }
 
-	if ( !isObject( o ) ) {
-		throw new Error( ARGUMENT_ERROR_OBJECT );
-	}
+    if ( !isObject( o ) ) {
+        throw new Error( ARGUMENT_ERROR_OBJECT );
+    }
 
-	const missing = [];
+    const missing = [];
 
-	for ( let i = 0; i < args.length; i++ ) {
-		if ( !o.hasOwnProperty( args[ i ] ) ) {
-			missing.push( args[ i ] );
-		}
-	}
+    for ( let i = 0; i < args.length; i++ ) {
+        if ( !o.hasOwnProperty( args[ i ] ) ) {
+            missing.push( args[ i ] );
+        }
+    }
 
-	return missing;
+    return missing;
 }
 
 function hasSome( o, ...args ) {
-	if ( isArray( args[ 0 ] ) ) {
-		args = args[ 0 ];
-	}
+    if ( isArray( args[ 0 ] ) ) {
+        args = args[ 0 ];
+    }
 
-	if ( isString( o ) ) {
-		return !!( args.filter( i => o.indexOf( i ) !== -1 ).length );
-	}
-	else if ( isArray( o ) ) {
-		return !!( args.filter( i => o.includes( i ) ).length );
-	}
-	else if ( isObject( o ) ) {
-		return !!( args.filter( i => o.hasOwnProperty( i ) ).length );
-	}
-	else {
-		return false;
-	}
+    if ( isString( o ) ) {
+        return !!( args.filter( i => o.indexOf( i ) !== -1 ).length );
+    }
+    else if ( isArray( o ) ) {
+        return !!( args.filter( i => o.includes( i ) ).length );
+    }
+    else if ( isObject( o ) ) {
+        return !!( args.filter( i => o.hasOwnProperty( i ) ).length );
+    }
+    else {
+        return false;
+    }
 }
 
 function omit( o, ...keys ) {
-	return Object.keys( o )
-		.reduce(
-			( r, k ) => {
-				if ( !keys.includes( k ) ) {
-					r[ k ] = o[ k ];
-				}
+    return Object.keys( o )
+        .reduce(
+            ( r, k ) => {
+                if ( !keys.includes( k ) ) {
+                    r[ k ] = o[ k ];
+                }
 
-				return r;
-			}, {}
-		);
+                return r;
+            }, {}
+        );
 }
 
 function include( o, ...keys ) {
-	return Object.keys( o )
-		.reduce(
-			( r, k ) => {
-				if ( keys.includes( k ) ) {
-					r[ k ] = o[ k ];
-				}
+    return Object.keys( o )
+        .reduce(
+            ( r, k ) => {
+                if ( keys.includes( k ) ) {
+                    r[ k ] = o[ k ];
+                }
 
-				return r;
-			}, {}
-		);
+                return r;
+            }, {}
+        );
 }
 
 function sortObject( o ) {
-	if ( !isObject( o ) ) {
-		throw new Error( ARGUMENT_ERROR_OBJECT );
-	}
+    if ( !isObject( o ) ) {
+        throw new Error( ARGUMENT_ERROR_OBJECT );
+    }
 
-	const
-		sorted = {},
-		a      = [];
+    const
+        sorted = {},
+        a      = [];
 
-	for ( const key in o ) {
-		if ( o.hasOwnProperty( key ) ) {
-			a.push( key );
-		}
-	}
+    for ( const key in o ) {
+        if ( o.hasOwnProperty( key ) ) {
+            a.push( key );
+        }
+    }
 
-	a.sort();
+    a.sort();
 
-	for ( let i = 0; i < a.length; i++ ) {
-		sorted[ a[ i ] ] = o[ a[ i ] ];
-	}
+    for ( let i = 0; i < a.length; i++ ) {
+        sorted[ a[ i ] ] = o[ a[ i ] ];
+    }
 
-	return sorted;
+    return sorted;
 }
 
 function sort( obj ) {
-	if ( isArray( obj ) ) {
-		return obj.sort();
-	}
-	else if ( isObject( obj ) ) {
-		return sortObject( obj );
-	}
-	else {
-		throw new Error( ARGUMENT_ERROR_ARRAY );
-	}
+    if ( isArray( obj ) ) {
+        return obj.sort();
+    }
+    else if ( isObject( obj ) ) {
+        return sortObject( obj );
+    }
+    else {
+        throw new Error( ARGUMENT_ERROR_ARRAY );
+    }
 }
 
 function stringify( n ) {
-	if ( isObject( n ) ) {
-		return JSON.stringify( n );
-	}
-	else {
-		throw new Error( ARGUMENT_ERROR_OBJECT );
-	}
+    if ( isObject( n ) ) {
+        return JSON.stringify( n );
+    }
+    else {
+        throw new Error( ARGUMENT_ERROR_OBJECT );
+    }
 }
 
 function parse( n ) {
-	if ( !isPrimitive( n ) ) {
-		return n;
-	}
+    if ( !isPrimitive( n ) ) {
+        return n;
+    }
 
-	if ( isString( n ) ) {
-		if ( isBoolean( n ) || n.startsWith( '{' ) || n.startsWith( '[' ) || n.startsWith( '"' ) ) {
-			return JSON.parse( n );
-		}
-		else {
-			return n;
-		}
-	}
-	else {
-		throw new Error( 'Argument Error - expected string' );
-	}
+    if ( isString( n ) ) {
+        if ( isBoolean( n ) || n.startsWith( '{' ) || n.startsWith( '[' ) || n.startsWith( '"' ) ) {
+            return JSON.parse( n );
+        }
+        else {
+            return n;
+        }
+    }
+    else {
+        throw new Error( 'Argument Error - expected string' );
+    }
 }
 
 function map( o, fn ) {
-	if ( isArray( o ) && isFunction( fn ) ) {
-		return o.map( fn );
-	}
-	else if ( isObject( o ) && isFunction( fn ) ) {
-		return keys( o )
-			.reduce( ( r, i ) => {
-				fn( i, r[ i ], r );
-				return r;
-			}, o );
-	}
-	else {
-		if ( !isFunction( fn ) ) {
-			throw new Error( ARGUMENT_ERROR_FUNCTION );
-		}
-		else {
-			throw new Error( ARGUMENT_ERROR_ARRAY );
-		}
-	}
+    if ( isArray( o ) && isFunction( fn ) ) {
+        return o.map( fn );
+    }
+    else if ( isObject( o ) && isFunction( fn ) ) {
+        return keys( o )
+            .reduce( ( r, i ) => {
+                fn( i, r[ i ], r );
+                return r;
+            }, o );
+    }
+    else {
+        if ( !isFunction( fn ) ) {
+            throw new Error( ARGUMENT_ERROR_FUNCTION );
+        }
+        else {
+            throw new Error( ARGUMENT_ERROR_ARRAY );
+        }
+    }
 }
 
 function startsWith( str, n ) {
-	return isString( str ) && str.startsWith( n );
+    return isString( str ) && str.startsWith( n );
 }
 
 function isValidJSON( str ) {
-	if ( !isString( str ) || isUndefined( str ) || isNull( str ) ) {
-		return false;
-	}
+    if ( !isString( str ) || isUndefined( str ) || isNull( str ) ) {
+        return false;
+    }
 
-	return /^[\],:{}\s]*$/.test(
-		str
-			.replace( /\\["\\/bfnrtu]/g, '@' )
-			.replace( /"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+-]?\d+)?/g, ']' )
-			.replace( /(?:^|:|,)(?:\s*\[)+/g, '' )
-	);
+    return /^[\],:{}\s]*$/.test(
+        str
+            .replace( /\\["\\/bfnrtu]/g, '@' )
+            .replace( /"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+-]?\d+)?/g, ']' )
+            .replace( /(?:^|:|,)(?:\s*\[)+/g, '' )
+    );
 }
 
 function safeAccess( o, p ) {
-	if ( !Array.isArray( p ) ) {
-		throw new Error( ARGUMENT_ERROR_ARRAY );
-	}
+    if ( !Array.isArray( p ) ) {
+        throw new Error( ARGUMENT_ERROR_ARRAY );
+    }
 
-	return p.reduce(
-		( r, k ) => ( r && r[ k ] ) ? r[ k ] : null,
-		o
-	);
+    return p.reduce(
+        ( r, k ) => ( r && r[ k ] ) ? r[ k ] : null,
+        o
+    );
 
 }
 
 function isValidHTTPMethod( n ) {
-	return (
-		isString( n ) &&
-		/^(GET|POST|PUT|PATCH|DELETE|COPY|HEAD|OPTIONS|CONNECT)$/.test( n.toUpperCase() )
-	);
+    return (
+        isString( n ) &&
+        /^(GET|POST|PUT|PATCH|DELETE|COPY|HEAD|OPTIONS|CONNECT)$/.test( n.toUpperCase() )
+    );
 }
 
 function isValidWebDAVMethod( n ) {
-	return (
-		isString( n ) &&
-		(
-			isValidHTTPMethod( n ) ||
-			/^(LINK|UNLINK|PURGE|LOCK|UNLOCK|PROPFIND|VIEW)$/.test( n.toUpperCase() )
-		)
-	);
+    return (
+        isString( n ) &&
+        (
+            isValidHTTPMethod( n ) ||
+            /^(LINK|UNLINK|PURGE|LOCK|UNLOCK|PROPFIND|VIEW)$/.test( n.toUpperCase() )
+        )
+    );
 }
 
 function isProtocol( n ) {
-	return (
-		isString( n ) &&
-		/s?m?h?f?t?tps?|wss|file/i.test( n.toLowerCase() )
-	);
+    return (
+        isString( n ) &&
+        /s?m?h?f?t?tps?|wss|file/i.test( n.toLowerCase() )
+    );
 }
 
 function isValidEmail( n ) {
-	return /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i.test( n );
+    return /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i.test(
+        n );
 }
 
 function isValidIPv4( n ) {
-	return /\b((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.|$)){4}\b/.test( n );
+    return /\b((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.|$)){4}\b/.test( n );
 }
 
 function isValidDomainName( n ) {
-	return (
-		n === 'localhost' ||
-		/^(?:(?:(?:[a-zA-Z0-9-]+):\/{1,3})?(?:[a-zA-Z0-9])(?:[a-zA-Z0-9-.]){1,61}[a-zA-Z0-9](?:\.[a-zA-Z]{2,})+|\[(?:(?:(?:[a-fA-F0-9]){1,4})(?::(?:[a-fA-F0-9]){1,4}){7}|::1|::)\]|(?:(?:[0-9]{1,3})(?:\.[0-9]{1,3}){3}))(?::[0-9]{1,5})?$/i.test( n )
-	);
+    return (
+        n === 'localhost' ||
+        /^(?:(?:(?:[a-zA-Z0-9-]+):\/{1,3})?(?:[a-zA-Z0-9])(?:[a-zA-Z0-9-.]){1,61}[a-zA-Z0-9](?:\.[a-zA-Z]{2,})+|\[(?:(?:(?:[a-fA-F0-9]){1,4})(?::(?:[a-fA-F0-9]){1,4}){7}|::1|::)\]|(?:(?:[0-9]{1,3})(?:\.[0-9]{1,3}){3}))(?::[0-9]{1,5})?$/i.test(
+            n )
+    );
 }
 
 function isValidURL( str ) {
-	return !!/(http|https):\/\/(\w+:?\w*)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%\-\/]))?/.test( str );
+    return !!/(http|https):\/\/(\w+:?\w*)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%\-\/]))?/.test( str );
 }
 
 function isPath( n ) {
-	return /(\\|\/)([a-z0-9\s_@\-^!#$%&+={}[\]]+)(\\|\/)/i.test( n );
+    return /(\\|\/)([a-z0-9\s_@\-^!#$%&+={}[\]]+)(\\|\/)/i.test( n );
 }
 
 function isValidQueryString( qs ) {
-	const t = querystring.parse( qs );
-	return isString( qs ) && isObject( t );
+    const t = querystring.parse( qs );
+    return isString( qs ) && isObject( t );
 }
 
 function buildQueryString( qs ) {
-	if ( !isObject( qs ) ) {
-		throw new Error( ARGUMENT_ERROR_OBJECT );
-	}
+    if ( !isObject( qs ) ) {
+        throw new Error( ARGUMENT_ERROR_OBJECT );
+    }
 
-	function deepCheck( o ) {
-		map( o, ( k, v ) => {
-			if ( isObject( v ) ) {
-				o[ k ] = querystring.stringify( v, ',', ':' );
-			}
-		} );
+    function deepCheck( o ) {
+        map( o, ( k, v ) => {
+            if ( isObject( v ) ) {
+                o[ k ] = querystring.stringify( v, ',', ':' );
+            }
+        } );
 
-		return o;
-	}
+        return o;
+    }
 
-	qs = deepCheck( qs );
-	qs = querystring.stringify( qs );
+    qs = deepCheck( qs );
+    qs = querystring.stringify( qs );
 
-	if ( isValidQueryString( qs ) ) {
-		return `?${ qs }`;
-	}
-	else {
-		throw new Error( FUNCTION_ERROR );
-	}
+    if ( isValidQueryString( qs ) ) {
+        return `?${ qs }`;
+    }
+    else {
+        throw new Error( FUNCTION_ERROR );
+    }
 }
 
 function isEmpty( o ) {
-	return !o || ( isArray( o ) ? !o.length : !keys( o ).length );
+    return !o || ( isArray( o ) ? !o.length : !keys( o ).length );
 }
 
 function flatten( arr, result = [] ) {
-	const
-		length = arr && arr.length;
+    const
+        length = arr && arr.length;
 
-	if ( !length ) {
-		return result;
-	}
+    if ( !length ) {
+        return result;
+    }
 
-	let index = -1;
+    let index = -1;
 
-	while ( ++index < length ) {
-		let value = arr[ index ];
-		if ( isArray( value ) ) {
-			flatten( value, result );
-		}
-		else {
-			result[ result.length ] = value;
-		}
-	}
+    while ( ++index < length ) {
+        let value = arr[ index ];
+        if ( isArray( value ) ) {
+            flatten( value, result );
+        }
+        else {
+            result[ result.length ] = value;
+        }
+    }
 
-	return result;
+    return result;
 }
 
 function extractIP( inets ) {
-	return flatten( values( inets ) )
-		.filter( a => !a.internal && a.family !== 'IPv6' )
-		.map( a => a.address )[ 0 ] || 'offline';
+    return flatten( values( inets ) )
+        .filter( a => !a.internal && a.family !== 'IPv6' )
+        .map( a => a.address )[ 0 ] || 'offline';
 }
 
 /**
@@ -367,27 +369,27 @@ function extractIP( inets ) {
  * @return {Object} - object with the applied modification
  */
 function defineProperty( o, name, g, s = null ) {
-	let prop;
-	if ( !s && isObject( g ) ) {
-		return Object.defineProperty( o, name, g );
-	}
-	else {
-		prop = {
-			enumerable: false,
-			set: s || undefined,
-			get: g || undefined
-		};
-	}
+    let prop;
+    if ( !s && isObject( g ) ) {
+        return Object.defineProperty( o, name, g );
+    }
+    else {
+        prop = {
+            enumerable: false,
+            set: s || undefined,
+            get: g || undefined
+        };
+    }
 
-	if ( o.hasOwnProperty( name ) ) {
-		throw new Error(
-			`Property "${ name }" already exists on object: ` +
-			JSON.stringify( Object.getOwnPropertyDescriptor( o, name ) )
-		);
-	}
+    if ( o.hasOwnProperty( name ) ) {
+        throw new Error(
+            `Property "${ name }" already exists on object: ` +
+            JSON.stringify( Object.getOwnPropertyDescriptor( o, name ) )
+        );
+    }
 
-	Object.defineProperty( o, name, prop );
-	return o;
+    Object.defineProperty( o, name, prop );
+    return o;
 }
 
 /**
@@ -400,45 +402,45 @@ function defineProperty( o, name, g, s = null ) {
  * @return {Object} - object with the applied modification
  */
 function nonEnumerableProperty( o, name, val ) {
-	if ( !isObject( o ) ) {
-		throw new Error( ARGUMENT_ERROR_OBJECT );
-	}
+    if ( !isObject( o ) ) {
+        throw new Error( ARGUMENT_ERROR_OBJECT );
+    }
 
-	return defineProperty( o, name, {
-		configurable: true,
-		writable: true,
-		enumerable: false,
-		value: val
-	} );
+    return defineProperty( o, name, {
+        configurable: true,
+        writable: true,
+        enumerable: false,
+        value: val
+    } );
 }
 
 function pad2( n ) {
-	return n < 10 ? '0' + n : n;
+    return n < 10 ? '0' + n : n;
 }
 
 function secondsToReadableTime( n ) {
-	const
-		sec = parseInt( n, 10 ),
-		h   = pad2( ~~( sec / 3600 ) ),
-		m   = pad2( ~~( ( sec - ( h * 3600 ) ) / 60 ) ),
-		s   = pad2( sec - ( h * 3600 ) - ( m * 60 ) );
-	return `${ h }:${ m }:${ s }`;
+    const
+        sec = parseInt( n, 10 ),
+        h   = pad2( ~~( sec / 3600 ) ),
+        m   = pad2( ~~( ( sec - ( h * 3600 ) ) / 60 ) ),
+        s   = pad2( sec - ( h * 3600 ) - ( m * 60 ) );
+    return `${ h }:${ m }:${ s }`;
 }
 
 function isObjectId( id ) {
-	return /^[\da-f]{24}$/i.test( id );
+    return /^[\da-f]{24}$/i.test( id );
 }
 
 function isObjectIdReference( id ) {
-	return /^\$ref:([\da-f]{24})$/i.test( id );
+    return /^\$ref:([\da-f]{24})$/i.test( id );
 }
 
 function extractReferenceId( id ) {
-	if ( !isObjectIdReference( id ) ) {
-		return null;
-	}
+    if ( !isObjectIdReference( id ) ) {
+        return null;
+    }
 
-	return id.match( /^\$ref:([\da-f]{24})$/i )[ 0 ];
+    return id.match( /^\$ref:([\da-f]{24})$/i )[ 0 ];
 }
 
 /**
@@ -449,20 +451,20 @@ function extractReferenceId( id ) {
  * getDeepKeys( { a: { b: true } } ); // -> [ 'a', 'a.b' ]
  */
 function getDeepKeys( o ) {
-	const keys = [];
-	for ( const k in o ) {
-		if ( !o.hasOwnProperty( k ) ) {
-			continue;
-		}
+    const keys = [];
+    for ( const k in o ) {
+        if ( !o.hasOwnProperty( k ) ) {
+            continue;
+        }
 
-		keys.push( k );
-		if ( typeof o[ k ] === 'object' ) {
-			const subKeys = getDeepKeys( o[ k ] );
-			keys.push( ...subKeys.map( subKey => k + '.' + subKey ) );
-		}
-	}
+        keys.push( k );
+        if ( typeof o[ k ] === 'object' ) {
+            const subKeys = getDeepKeys( o[ k ] );
+            keys.push( ...subKeys.map( subKey => k + '.' + subKey ) );
+        }
+    }
 
-	return keys;
+    return keys;
 }
 
 /**
@@ -475,17 +477,17 @@ function getDeepKeys( o ) {
  * objectFilteredForRegex( { a: 0, b: 1 }, /A/i ) // -> returns { a: 0 }
  */
 function objectFilteredForRegex( obj, rx ) {
-	if ( !isObject( obj ) ) {
-		throw new Error( ARGUMENT_ERROR_OBJECT );
-	}
+    if ( !isObject( obj ) ) {
+        throw new Error( ARGUMENT_ERROR_OBJECT );
+    }
 
-	const keys = {};
-	for ( const key in obj ) {
-		if ( obj.hasOwnProperty( key ) && rx.test( key ) ) {
-			keys[ key ] = obj[ key ];
-		}
-	}
-	return keys;
+    const keys = {};
+    for ( const key in obj ) {
+        if ( obj.hasOwnProperty( key ) && rx.test( key ) ) {
+            keys[ key ] = obj[ key ];
+        }
+    }
+    return keys;
 }
 
 /**
@@ -498,15 +500,15 @@ function objectFilteredForRegex( obj, rx ) {
  * getValueForRegexKey( { a: 0, b: 1 }, /B/i ) // -> returns 1
  */
 function getValueForRegexKey( obj, rx ) {
-	if ( !isObject( obj ) ) {
-		throw new Error( ARGUMENT_ERROR_OBJECT );
-	}
+    if ( !isObject( obj ) ) {
+        throw new Error( ARGUMENT_ERROR_OBJECT );
+    }
 
-	for ( const key in obj ) {
-		if ( obj.hasOwnProperty( key ) && rx.test( key ) ) {
-			return obj[ key ];
-		}
-	}
+    for ( const key in obj ) {
+        if ( obj.hasOwnProperty( key ) && rx.test( key ) ) {
+            return obj[ key ];
+        }
+    }
 }
 
 /**
@@ -519,11 +521,11 @@ function getValueForRegexKey( obj, rx ) {
  * arrayFilteredForRegex( [ 'a', 'b' ], /a/i ) // -> returns [ 'a' ]
  */
 function arrayFilteredForRegex( arr, rx ) {
-	if ( !isArray( arr ) ) {
-		throw new Error( ARGUMENT_ERROR_ARRAY );
-	}
+    if ( !isArray( arr ) ) {
+        throw new Error( ARGUMENT_ERROR_ARRAY );
+    }
 
-	return arr.filter( i => rx.test( i ) );
+    return arr.filter( i => rx.test( i ) );
 }
 
 /**
@@ -537,14 +539,14 @@ function arrayFilteredForRegex( arr, rx ) {
  * removeItemsFromArray( [ 'a', 'b', 'c' ], 'c' ) // -> returns [ 'a', 'b' ]
  */
 function removeItemsFromArray( arr, ...args ) {
-	if ( !isArray( arr ) ) {
-		throw new Error( ARGUMENT_ERROR_ARRAY );
-	}
-	else if ( isArray( args[ 0 ] ) ) {
-		args = args[ 0 ];
-	}
+    if ( !isArray( arr ) ) {
+        throw new Error( ARGUMENT_ERROR_ARRAY );
+    }
+    else if ( isArray( args[ 0 ] ) ) {
+        args = args[ 0 ];
+    }
 
-	return arr.filter( i => !args.includes( i ) );
+    return arr.filter( i => !args.includes( i ) );
 }
 
 /**
@@ -558,20 +560,20 @@ function removeItemsFromArray( arr, ...args ) {
  * removeItemsFromObject( { a: 0, b: 1 }, 'a' ) // -> returns { b: 1 }
  */
 function removeItemsFromObject( obj, ...args ) {
-	if ( !isObject( obj ) ) {
-		throw new Error( ARGUMENT_ERROR_OBJECT );
-	}
-	else if ( isArray( args[ 0 ] ) ) {
-		args = args[ 0 ];
-	}
+    if ( !isObject( obj ) ) {
+        throw new Error( ARGUMENT_ERROR_OBJECT );
+    }
+    else if ( isArray( args[ 0 ] ) ) {
+        args = args[ 0 ];
+    }
 
-	const ks = keys( obj );
+    const ks = keys( obj );
 
-	ks.forEach(
-		i => !args.includes( i ) || delete obj[ i ]
-	);
+    ks.forEach(
+        i => !args.includes( i ) || delete obj[ i ]
+    );
 
-	return obj;
+    return obj;
 }
 
 /**
@@ -585,13 +587,13 @@ function removeItemsFromObject( obj, ...args ) {
  *     .then() // -> will pass 'hello world' in 100ms
  */
 function wait( t, v ) {
-	if ( !isNumber( t ) ) {
-		throw new Error( ARGUMENT_ERROR_NUMBER );
-	}
+    if ( !isNumber( t ) ) {
+        throw new Error( ARGUMENT_ERROR_NUMBER );
+    }
 
-	return new Promise(
-		res => setTimeout( () => res( v ), t )
-	);
+    return new Promise(
+        res => setTimeout( () => res( v ), t )
+    );
 }
 
 /**
@@ -606,31 +608,31 @@ function wait( t, v ) {
  *     .then() // -> will not resolve until the condition succeeds
  */
 function waitFor( condition, frequency, immediateInvoke = true ) {
-	return new Promise(
-		res => {
-			const
-				checkCondition = () => new Promise(
-					( rev, rex ) => condition()
-						.then( d => !!d ? rev() : rex() )
-						.catch( rex )
-				),
-				_waitFor       = () => setTimeout(
-					() => checkCondition()
-						.then( res )
-						.catch( () => _waitFor() ),
-					frequency
-				);
+    return new Promise(
+        res => {
+            const
+                checkCondition = () => new Promise(
+                    ( rev, rex ) => condition()
+                        .then( d => !!d ? rev() : rex() )
+                        .catch( rex )
+                ),
+                _waitFor       = () => setTimeout(
+                    () => checkCondition()
+                        .then( res )
+                        .catch( () => _waitFor() ),
+                    frequency
+                );
 
-			if ( immediateInvoke ) {
-				return checkCondition()
-					.then( res )
-					.catch( () => _waitFor() );
-			}
-			else {
-				return _waitFor();
-			}
-		}
-	);
+            if ( immediateInvoke ) {
+                return checkCondition()
+                    .then( res )
+                    .catch( () => _waitFor() );
+            }
+            else {
+                return _waitFor();
+            }
+        }
+    );
 }
 
 
@@ -642,12 +644,12 @@ function waitFor( condition, frequency, immediateInvoke = true ) {
  * absoluteValue( -50 ) // -> returns 50
  */
 function absoluteValue( n ) {
-	if ( ~~n === n ) {
-		return ( n ^ ( n >> 31 ) ) - ( n >> 31 );
-	}
-	else {
-		return Math.abs( n );
-	}
+    if ( ~~n === n ) {
+        return ( n ^ ( n >> 31 ) ) - ( n >> 31 );
+    }
+    else {
+        return Math.abs( n );
+    }
 }
 
 /**
@@ -662,17 +664,17 @@ function absoluteValue( n ) {
  * performanceDifference( 50, 100 ) // -> Performance increase of: 50%
  */
 function performanceDifference( newTime, oldTime ) {
-	const time = ( ( newTime - oldTime ) / oldTime ) * 100;
+    const time = ( ( newTime - oldTime ) / oldTime ) * 100;
 
-	if ( time < 0 ) {
-		return `Performance increase of: ${ absoluteValue( time ) }%`;
-	}
-	else if ( time > 0 ) {
-		return `Performance decrease of: ${ absoluteValue( time ) }%`;
-	}
-	else {
-		return 'Performance did not change';
-	}
+    if ( time < 0 ) {
+        return `Performance increase of: ${ absoluteValue( time ) }%`;
+    }
+    else if ( time > 0 ) {
+        return `Performance decrease of: ${ absoluteValue( time ) }%`;
+    }
+    else {
+        return 'Performance did not change';
+    }
 }
 
 /**
@@ -685,15 +687,15 @@ function performanceDifference( newTime, oldTime ) {
  * bytesToSize( 1073741824 ) // -> 1 GB
  */
 function bytesToSize( bytes ) {
-	if ( !bytes ) {
-		return '0 Byte';
-	}
+    if ( !bytes ) {
+        return '0 Byte';
+    }
 
-	const
-		sizes = [ 'Bytes', 'KB', 'MB', 'GB', 'TB' ],
-		i     = ~~( Math.log( bytes ) / LOG_KIBIBYTE );
+    const
+        sizes = [ 'Bytes', 'KB', 'MB', 'GB', 'TB' ],
+        i     = ~~( Math.log( bytes ) / LOG_KIBIBYTE );
 
-	return Math.round( bytes / Math.pow( 1024, i ) ) + ' ' + sizes[ i ];
+    return Math.round( bytes / Math.pow( 1024, i ) ) + ' ' + sizes[ i ];
 }
 
 /**
@@ -720,30 +722,30 @@ function bytesToSize( bytes ) {
  * sizeToBytes( '1 Kibibytes' ) // -> 1024
  */
 function sizeToBytes( bytes ) {
-	let match;
+    let match;
 
-	return !bytes ? 0 : bytes === +bytes ? bytes :
-		( match = /^(\d+) ?(tB|Ter[a,i]bytes?)$/gim.exec( bytes ) ) ?
-			/tera/gi.test( match[ 2 ] ) ? match[ 1 ] * 1000000000000 : match[ 1 ] * 1099511627776 :
-			( match = /^(\d+) ?(gB|Gig[a,i]bytes?)$/gim.exec( bytes ) ) ?
-				/giga/gi.test( match[ 2 ] ) ? match[ 1 ] * 1000000000 : match[ 1 ] * 1073741824 :
-				( match = /^(\d+) ?(mB|Meg[a,i]bytes?)$/gim.exec( bytes ) ) ?
-					/mega/gi.test( match[ 2 ] ) ? match[ 1 ] * 1000000 : match[ 1 ] * 1048576 :
-					( match = /^(\d+) ?(kB|Ki(?:lo|bi)bytes?)$/gim.exec( bytes ) ) ?
-						/kilo/gi.test( match[ 2 ] ) ? match[ 1 ] * 1000 : match[ 1 ] * 1024 :
-						( match = /^(\d+) ?(?:B|Bytes?)$/gim.exec( bytes ) ) ? +match[ 1 ] : 0;
+    return !bytes ? 0 : bytes === +bytes ? bytes :
+        ( match = /^(\d+) ?(tB|Ter[a,i]bytes?)$/gim.exec( bytes ) ) ?
+            /tera/gi.test( match[ 2 ] ) ? match[ 1 ] * 1000000000000 : match[ 1 ] * 1099511627776 :
+            ( match = /^(\d+) ?(gB|Gig[a,i]bytes?)$/gim.exec( bytes ) ) ?
+                /giga/gi.test( match[ 2 ] ) ? match[ 1 ] * 1000000000 : match[ 1 ] * 1073741824 :
+                ( match = /^(\d+) ?(mB|Meg[a,i]bytes?)$/gim.exec( bytes ) ) ?
+                    /mega/gi.test( match[ 2 ] ) ? match[ 1 ] * 1000000 : match[ 1 ] * 1048576 :
+                    ( match = /^(\d+) ?(kB|Ki(?:lo|bi)bytes?)$/gim.exec( bytes ) ) ?
+                        /kilo/gi.test( match[ 2 ] ) ? match[ 1 ] * 1000 : match[ 1 ] * 1024 :
+                        ( match = /^(\d+) ?(?:B|Bytes?)$/gim.exec( bytes ) ) ? +match[ 1 ] : 0;
 
-	// Consider digital storage unit specifications
-	// return !bytes ? 0 : bytes === +bytes ? bytes :
-	// 	( match = /^(\d+) ?(tB|TiB|Ter[a,i]bytes?)$/gim.exec( bytes ) ) ?
-	// 		/tB|tera/gi.test( match[ 2 ] ) ? match[ 1 ] * 1000000000000 : match[ 1 ] * 1099511627776 :
-	// 		( match = /^(\d+) ?(gB|GiB|Gig[a,i]bytes?)$/gim.exec( bytes ) ) ?
-	// 			/gB|giga/gi.test( match[ 2 ] ) ? match[ 1 ] * 1000000000 : match[ 1 ] * 1073741824 :
-	// 			( match = /^(\d+) ?(mB|MiB|Meg[a,i]bytes?)$/gim.exec( bytes ) ) ?
-	// 				/mB|mega/gi.test( match[ 2 ] ) ? match[ 1 ] * 1000000 : match[ 1 ] * 1048576 :
-	// 				( match = /^(\d+) ?(kB|KiB|Ki(?:lo|bi)bytes?)$/gim.exec( bytes ) ) ?
-	// 					/kB|kilo/gi.test( match[ 2 ] ) ? match[ 1 ] * 1000 : match[ 1 ] * 1024 :
-	// 					( match = /^(\d+) ?(?:B|Bytes?)$/gim.exec( bytes ) ) ? +match[ 1 ] : 0;
+    // Consider digital storage unit specifications
+    // return !bytes ? 0 : bytes === +bytes ? bytes :
+    // 	( match = /^(\d+) ?(tB|TiB|Ter[a,i]bytes?)$/gim.exec( bytes ) ) ?
+    // 		/tB|tera/gi.test( match[ 2 ] ) ? match[ 1 ] * 1000000000000 : match[ 1 ] * 1099511627776 :
+    // 		( match = /^(\d+) ?(gB|GiB|Gig[a,i]bytes?)$/gim.exec( bytes ) ) ?
+    // 			/gB|giga/gi.test( match[ 2 ] ) ? match[ 1 ] * 1000000000 : match[ 1 ] * 1073741824 :
+    // 			( match = /^(\d+) ?(mB|MiB|Meg[a,i]bytes?)$/gim.exec( bytes ) ) ?
+    // 				/mB|mega/gi.test( match[ 2 ] ) ? match[ 1 ] * 1000000 : match[ 1 ] * 1048576 :
+    // 				( match = /^(\d+) ?(kB|KiB|Ki(?:lo|bi)bytes?)$/gim.exec( bytes ) ) ?
+    // 					/kB|kilo/gi.test( match[ 2 ] ) ? match[ 1 ] * 1000 : match[ 1 ] * 1024 :
+    // 					( match = /^(\d+) ?(?:B|Bytes?)$/gim.exec( bytes ) ) ? +match[ 1 ] : 0;
 }
 
 /**
@@ -753,20 +755,20 @@ function sizeToBytes( bytes ) {
  * @returns {number} 2, 8, 10, or 16 to specify radix
  */
 function radixToNumber( radix ) {
-	if ( radix === 'binary' ) {
-		radix = 2;
-	}
-	else if ( radix === 'octal' ) {
-		radix = 8;
-	}
-	else if ( radix === 'base10' ) {
-		radix = 10;
-	}
-	else {
-		radix = 16;
-	}
+    if ( radix === 'binary' ) {
+        radix = 2;
+    }
+    else if ( radix === 'octal' ) {
+        radix = 8;
+    }
+    else if ( radix === 'base10' ) {
+        radix = 10;
+    }
+    else {
+        radix = 16;
+    }
 
-	return radix;
+    return radix;
 }
 
 /**
@@ -778,16 +780,16 @@ function radixToNumber( radix ) {
  * @returns {number} - random generated number
  */
 function generateRandomNumber( min = 0, max = 16, floored = true ) {
-	let n;
+    let n;
 
-	if ( min < 0 ) {
-		n = min + Math.random() * ( absoluteValue( min ) + max );
-	}
-	else {
-		n = min + Math.random() * max;
-	}
+    if ( min < 0 ) {
+        n = min + Math.random() * ( absoluteValue( min ) + max );
+    }
+    else {
+        n = min + Math.random() * max;
+    }
 
-	return floored ? n | 0 : n;
+    return floored ? n | 0 : n;
 }
 
 /**
@@ -800,8 +802,8 @@ function generateRandomNumber( min = 0, max = 16, floored = true ) {
  * @returns {string} - random generated string with specified radix encoding
  */
 function generateRandomString( min = 0, max = 16, radix = 16, floored = true ) {
-	radix = radixToNumber( radix );
-	return generateRandomNumber( min, max, floored ).toString( radix );
+    radix = radixToNumber( radix );
+    return generateRandomNumber( min, max, floored ).toString( radix );
 }
 
 /**
@@ -810,7 +812,7 @@ function generateRandomString( min = 0, max = 16, radix = 16, floored = true ) {
  * @returns {string} - random generated hex character
  */
 function generateRandomHex() {
-	return generateRandomString();
+    return generateRandomString();
 }
 
 /**
@@ -821,9 +823,9 @@ function generateRandomHex() {
  * @returns {number} random number between minimum and maximum specified values
  */
 function getRandomInt( min, max ) {
-	min = ~~min;
-	max = ~~max;
-	return ~~( Math.random() * ( max - min ) ) + min;
+    min = ~~min;
+    max = ~~max;
+    return ~~( Math.random() * ( max - min ) ) + min;
 }
 
 /**
@@ -837,28 +839,28 @@ function getRandomInt( min, max ) {
  * replaceMatchesWithValue( "abc", /abc/i, "123" )
  */
 function replaceMatchesWithValue( item, identifier, replacement ) {
-	if ( !isString( item ) ) {
-		throw new Error( ARGUMENT_ERROR_STRING );
-	}
-	else if ( !isNumber( replacement ) && !isString( replacement ) ) {
-		throw new Error( ARGUMENT_ERROR );
-	}
+    if ( !isString( item ) ) {
+        throw new Error( ARGUMENT_ERROR_STRING );
+    }
+    else if ( !isNumber( replacement ) && !isString( replacement ) ) {
+        throw new Error( ARGUMENT_ERROR );
+    }
 
-	let check;
+    let check;
 
-	if ( identifier instanceof RegExp ) {
-		check = item.match( identifier );
-	}
-	else {
-		check = item.includes( identifier );
-	}
+    if ( identifier instanceof RegExp ) {
+        check = item.match( identifier );
+    }
+    else {
+        check = item.includes( identifier );
+    }
 
-	if ( check ) {
-		return item.replace( identifier, replacement );
-	}
-	else {
-		return item;
-	}
+    if ( check ) {
+        return item.replace( identifier, replacement );
+    }
+    else {
+        return item;
+    }
 }
 
 /**
@@ -871,43 +873,43 @@ function replaceMatchesWithValue( item, identifier, replacement ) {
  *     .then() // -> { key: [ 2 ] }
  */
 function recursivePromiseResolve( P ) {
-	const
-		map   = ( pl, n ) => Promise.all(
-			pl.map( p => Promise.resolve( p ).then( n ) )
-		),
-		props = o => {
-			const arr = [];
+    const
+        map   = ( pl, n ) => Promise.all(
+            pl.map( p => Promise.resolve( p ).then( n ) )
+        ),
+        props = o => {
+            const arr = [];
 
-			keys( o )
-				.map(
-					k => arr.push(
-						Promise.resolve( o[ k ] )
-							.then( v => ( o[ k ] = v, o ) )
-					)
-				);
+            keys( o )
+                .map(
+                    k => arr.push(
+                        Promise.resolve( o[ k ] )
+                            .then( v => ( o[ k ] = v, o ) )
+                    )
+                );
 
-			return Promise.all( arr ).then( () => ( o ) );
-		},
-		rNP   = o => Promise.resolve( o )
-			.then( o => {
-				if ( isArray( o ) ) {
-					return map( o, rNP );
-				}
-				else if ( typeof o === 'object' ) {
-					const oa = {};
+            return Promise.all( arr ).then( () => ( o ) );
+        },
+        rNP   = o => Promise.resolve( o )
+            .then( o => {
+                if ( isArray( o ) ) {
+                    return map( o, rNP );
+                }
+                else if ( typeof o === 'object' ) {
+                    const oa = {};
 
-					for ( const ka in o ) {
-						if ( o.hasOwnProperty( ka ) ) {
-							oa[ ka ] = rNP( o[ ka ] );
-						}
-					}
+                    for ( const ka in o ) {
+                        if ( o.hasOwnProperty( ka ) ) {
+                            oa[ ka ] = rNP( o[ ka ] );
+                        }
+                    }
 
-					return props( oa );
-				}
-				return o;
-			} );
+                    return props( oa );
+                }
+                return o;
+            } );
 
-	return ( rNP )( P );
+    return ( rNP )( P );
 }
 
 /**
@@ -923,8 +925,8 @@ function recursivePromiseResolve( P ) {
  * objectId() // -> "5a5cfafcbf2752b429d4cba7"
  */
 function objectId( len = 16 ) {
-	const timestamp = ( new Date().getTime() / 1000 | 0 ).toString( 16 );
-	return timestamp + ( 'x'.repeat( len ) ).replace( /[x]/g, generateRandomHex ).toLowerCase();
+    const timestamp = ( new Date().getTime() / 1000 | 0 ).toString( 16 );
+    return timestamp + ( 'x'.repeat( len ) ).replace( /[x]/g, generateRandomHex ).toLowerCase();
 }
 
 /**
@@ -942,20 +944,20 @@ function objectId( len = 16 ) {
  * convertHighResolutionTime( end ); // -> { seconds: 0.000002, milli: 0.002, micro: 2, nano: 2000 }
  */
 function convertHighResolutionTime( hrtime ) {
-	if ( !isArray( hrtime ) ) {
-		throw new Error( ARGUMENT_ERROR_ARRAY );
-	}
-	else if ( hrtime.length !== 2 ) {
-		throw new Error( ARGUMENT_ERROR_PROPERTY( 'hrtime_tuple' ) );
-	}
+    if ( !isArray( hrtime ) ) {
+        throw new Error( ARGUMENT_ERROR_ARRAY );
+    }
+    else if ( hrtime.length !== 2 ) {
+        throw new Error( ARGUMENT_ERROR_PROPERTY( 'hrtime_tuple' ) );
+    }
 
-	const
-		nano    = ( hrtime[ 0 ] * 1e9 ) + hrtime[ 1 ],
-		micro   = nano / 1e3,
-		milli   = nano / 1e6,
-		seconds = nano / 1e9;
+    const
+        nano    = ( hrtime[ 0 ] * 1e9 ) + hrtime[ 1 ],
+        micro   = nano / 1e3,
+        milli   = nano / 1e6,
+        seconds = nano / 1e9;
 
-	return { seconds, milli, micro, nano };
+    return { seconds, milli, micro, nano };
 }
 
 /**
@@ -968,12 +970,12 @@ function convertHighResolutionTime( hrtime ) {
  * convertHRTimeToReadable( [ 0, 5000 ] ); // -> '5.00 μs'
  */
 function convertHRTimeToReadable( hrtime ) {
-	const t = convertHighResolutionTime( hrtime );
+    const t = convertHighResolutionTime( hrtime );
 
-	return t.nano < 1000 ? `${ toFixed( t.nano ) } ns` :
-		t.nano < 1000000 ? `${ toFixed( t.micro ) } μs` :
-			t.nano < 1000000000 ? `${ toFixed( t.milli ) } ms` :
-				`${ toFixed( t.seconds ) } s`;
+    return t.nano < 1000 ? `${ toFixed( t.nano ) } ns` :
+        t.nano < 1000000 ? `${ toFixed( t.micro ) } μs` :
+            t.nano < 1000000000 ? `${ toFixed( t.milli ) } ms` :
+                `${ toFixed( t.seconds ) } s`;
 }
 
 /**
@@ -987,11 +989,11 @@ function convertHRTimeToReadable( hrtime ) {
  * isUUIDv4( 'b33ce0f0-fadc-11e7-8da3-d19e5c798a48' ) // -> false
  */
 function isUUIDv4( uuid ) {
-	if ( !isString( uuid ) ) {
-		throw new Error( ARGUMENT_ERROR_STRING );
-	}
+    if ( !isString( uuid ) ) {
+        throw new Error( ARGUMENT_ERROR_STRING );
+    }
 
-	return /[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12}/i.test( uuid );
+    return /[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12}/i.test( uuid );
 }
 
 /**
@@ -1005,11 +1007,11 @@ function isUUIDv4( uuid ) {
  * ascendingSort( 10, 9 ) // -> 1
  */
 function ascendingSort( n1, n2 ) {
-	if ( !isNumber( n1, n2 ) ) {
-		throw new Error( ARGUMENT_ERROR_NUMBER );
-	}
+    if ( !isNumber( n1, n2 ) ) {
+        throw new Error( ARGUMENT_ERROR_NUMBER );
+    }
 
-	return n1 - n2;
+    return n1 - n2;
 }
 
 /**
@@ -1024,7 +1026,7 @@ function ascendingSort( n1, n2 ) {
  * clamp( 0.900001, 0.1, 0.9 ) // -> 0.9
  */
 function clamp( n, min, max ) {
-	return Math.max( min, Math.min( n, max ) );
+    return Math.max( min, Math.min( n, max ) );
 }
 
 /**
@@ -1038,7 +1040,7 @@ function clamp( n, min, max ) {
  * absoluteMinimum( 1.5, 2.1 ) // -> 1.5
  */
 function absoluteMinimum( n1, n2 ) {
-	return Math.min( absoluteValue( n1 ), absoluteValue( n2 ) );
+    return Math.min( absoluteValue( n1 ), absoluteValue( n2 ) );
 }
 
 /**
@@ -1052,7 +1054,7 @@ function absoluteMinimum( n1, n2 ) {
  * absoluteMaximum( 1.5, 2.1 ) // -> 2.1
  */
 function absoluteMaximum( n1, n2 ) {
-	return Math.max( absoluteValue( n1 ), absoluteValue( n2 ) );
+    return Math.max( absoluteValue( n1 ), absoluteValue( n2 ) );
 }
 
 /**
@@ -1071,15 +1073,15 @@ function absoluteMaximum( n1, n2 ) {
  * precisionDelta( 100, 101, 0.9999999999999999, 0 ) // -> false
  */
 function precisionDelta( n1, n2, absoluteTolerance = 0, relativeTolerance = 0 ) {
-	if ( !isNumber( n1, n2, absoluteTolerance, relativeTolerance ) ) {
-		throw new Error( ARGUMENT_ERROR_NUMBER );
-	}
+    if ( !isNumber( n1, n2, absoluteTolerance, relativeTolerance ) ) {
+        throw new Error( ARGUMENT_ERROR_NUMBER );
+    }
 
-	const delta = absoluteValue( n1 - n2 );
+    const delta = absoluteValue( n1 - n2 );
 
-	return delta <= absoluteTolerance ||
-		delta <= relativeTolerance * absoluteMinimum( n1, n2 ) ||
-		n1 === n2;
+    return delta <= absoluteTolerance ||
+        delta <= relativeTolerance * absoluteMinimum( n1, n2 ) ||
+        n1 === n2;
 }
 
 /**
@@ -1094,7 +1096,7 @@ function precisionDelta( n1, n2, absoluteTolerance = 0, relativeTolerance = 0 ) 
  * floatPrecision( 100, 100.0001 ) // -> false
  */
 function floatPrecisionDelta( n1, n2 ) {
-	return precisionDelta( n1, n2, FLOAT_EPSILON, FLOAT_EPSILON );
+    return precisionDelta( n1, n2, FLOAT_EPSILON, FLOAT_EPSILON );
 }
 
 /**
@@ -1109,7 +1111,7 @@ function floatPrecisionDelta( n1, n2 ) {
  * doublePrecision( 100, 100.0000000000001 ) // -> false
  */
 function doublePrecisionDelta( n1, n2 ) {
-	return precisionDelta( n1, n2, DOUBLE_EPSILON, DOUBLE_EPSILON );
+    return precisionDelta( n1, n2, DOUBLE_EPSILON, DOUBLE_EPSILON );
 }
 
 /**
@@ -1126,18 +1128,18 @@ function doublePrecisionDelta( n1, n2 ) {
  * percentError( 1, 1.09, 0.08 ) // -> false
  */
 function percentError( n1, n2, acceptedDelta ) {
-	if ( !isNumber( n1, n2, acceptedDelta ) ) {
-		throw new Error( ARGUMENT_ERROR_NUMBER );
-	}
-	else if ( ~~acceptedDelta !== 0 ) {
-		throw new Error( ARGUMENT_ERROR_PROPERTY( 'acceptedDelta must be a number between 0 and 1' ) );
-	}
+    if ( !isNumber( n1, n2, acceptedDelta ) ) {
+        throw new Error( ARGUMENT_ERROR_NUMBER );
+    }
+    else if ( ~~acceptedDelta !== 0 ) {
+        throw new Error( ARGUMENT_ERROR_PROPERTY( 'acceptedDelta must be a number between 0 and 1' ) );
+    }
 
-	if ( acceptedDelta === 0 ) {
-		return n1 === n2;
-	}
+    if ( acceptedDelta === 0 ) {
+        return n1 === n2;
+    }
 
-	return acceptedDelta >= absoluteValue( ( n1 - n2 ) / n2 );
+    return acceptedDelta >= absoluteValue( ( n1 - n2 ) / n2 );
 }
 
 /**
@@ -1156,11 +1158,11 @@ function percentError( n1, n2, acceptedDelta ) {
  * percentDifference( 50, 100 ) // -> 0.6666666666666666
  */
 function percentDifference( n1, n2 ) {
-	if ( !isNumber( n1, n2 ) ) {
-		throw new Error( ARGUMENT_ERROR_NUMBER );
-	}
+    if ( !isNumber( n1, n2 ) ) {
+        throw new Error( ARGUMENT_ERROR_NUMBER );
+    }
 
-	return ( absoluteValue( n1 - n2 ) / ( ( n1 + n2 ) / 2 ) );
+    return ( absoluteValue( n1 - n2 ) / ( ( n1 + n2 ) / 2 ) );
 }
 
 /**
@@ -1179,11 +1181,11 @@ function percentDifference( n1, n2 ) {
  * percentChange( 100, 80 ) // -> -0.2
  */
 function percentChange( n1, n2 ) {
-	if ( !isNumber( n1, n2 ) ) {
-		throw new Error( ARGUMENT_ERROR_NUMBER );
-	}
+    if ( !isNumber( n1, n2 ) ) {
+        throw new Error( ARGUMENT_ERROR_NUMBER );
+    }
 
-	return ( ( n2 - n1 ) / absoluteValue( n1 ) );
+    return ( ( n2 - n1 ) / absoluteValue( n1 ) );
 }
 
 
@@ -1197,21 +1199,21 @@ function percentChange( n1, n2 ) {
  * sum( 1, 2, 3 ); // -> 6
  */
 function sum( ...args ) {
-	if ( isArray( args[ 0 ] ) ) {
-		args = args[ 0 ];
-	}
+    if ( isArray( args[ 0 ] ) ) {
+        args = args[ 0 ];
+    }
 
-	if ( !isNumber( ...args ) ) {
-		throw new Error( ARGUMENT_ERROR_NUMBER );
-	}
+    if ( !isNumber( ...args ) ) {
+        throw new Error( ARGUMENT_ERROR_NUMBER );
+    }
 
-	let n = 0;
+    let n = 0;
 
-	for ( let i = 0; i < args.length; i++ ) {
-		n += args[ i ];
-	}
+    for ( let i = 0; i < args.length; i++ ) {
+        n += args[ i ];
+    }
 
-	return n;
+    return n;
 }
 
 /**
@@ -1224,7 +1226,7 @@ function sum( ...args ) {
  * mean( 1, 2, 3 ) // -> 2
  */
 function mean( ...args ) {
-	return sum( ...args ) / args.length;
+    return sum( ...args ) / args.length;
 }
 
 /**
@@ -1239,11 +1241,12 @@ function mean( ...args ) {
  * isSemanticVersion( '0.2.4' ) // -> false
  */
 function isSemanticVersion( n ) {
-	if ( !isString( n ) ) {
-		return false;
-	}
+    if ( !isString( n ) ) {
+        return false;
+    }
 
-	return ( /\bv?(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-[\da-z-]+(?:\.[\da-z-]+)*)?(?:\+[\da-z-]+(?:\.[\da-z-]+)*)?\b/ig ).test( n );
+    return ( /\bv?(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-[\da-z-]+(?:\.[\da-z-]+)*)?(?:\+[\da-z-]+(?:\.[\da-z-]+)*)?\b/ig ).test(
+        n );
 }
 
 /**
@@ -1255,20 +1258,20 @@ function isSemanticVersion( n ) {
  * @return {{}} - flatten results
  */
 function flattenObject( obj, r = {} ) {
-	for ( const i in obj ) {
-		if ( !obj.hasOwnProperty( i ) ) {
-			continue;
-		}
+    for ( const i in obj ) {
+        if ( !obj.hasOwnProperty( i ) ) {
+            continue;
+        }
 
-		if ( isObject( obj[ i ] ) ) {
-			r = { ...r, ...flattenObject( obj[ i ], r ) };
-		}
-		else {
-			r[ i ] = obj[ i ];
-		}
-	}
+        if ( isObject( obj[ i ] ) ) {
+            r = { ...r, ...flattenObject( obj[ i ], r ) };
+        }
+        else {
+            r[ i ] = obj[ i ];
+        }
+    }
 
-	return r;
+    return r;
 }
 
 /**
@@ -1280,27 +1283,27 @@ function flattenObject( obj, r = {} ) {
  * @return {Array} - value results
  */
 function deepValues( obj, r = [] ) {
-	if ( !isArray( r ) ) {
-		throw new Error( ARGUMENT_ERROR_ARRAY );
-	}
+    if ( !isArray( r ) ) {
+        throw new Error( ARGUMENT_ERROR_ARRAY );
+    }
 
-	for ( const i in obj ) {
-		if ( !obj.hasOwnProperty( i ) ) {
-			continue;
-		}
+    for ( const i in obj ) {
+        if ( !obj.hasOwnProperty( i ) ) {
+            continue;
+        }
 
-		if ( isObject( obj[ i ] ) ) {
-			r.concat( deepValues( obj[ i ], r ) );
-		}
-		else if ( isArray( obj[ i ] ) ) {
-			r.concat( obj[ i ] );
-		}
-		else {
-			r.push( obj[ i ] );
-		}
-	}
+        if ( isObject( obj[ i ] ) ) {
+            r.concat( deepValues( obj[ i ], r ) );
+        }
+        else if ( isArray( obj[ i ] ) ) {
+            r.concat( obj[ i ] );
+        }
+        else {
+            r.push( obj[ i ] );
+        }
+    }
 
-	return r;
+    return r;
 }
 
 /**
@@ -1311,22 +1314,22 @@ function deepValues( obj, r = [] ) {
  * @returns {{min: number, max: number}} - "min" and "max" respectively
  */
 function minAndMax( arr ) {
-	if ( !isAnyArray( arr ) ) {
-		throw new Error( ARGUMENT_ERROR_ARRAY );
-	}
+    if ( !isAnyArray( arr ) ) {
+        throw new Error( ARGUMENT_ERROR_ARRAY );
+    }
 
-	let min = Infinity, max = -Infinity, i = 0;
+    let min = Infinity, max = -Infinity, i = 0;
 
-	for ( ; i < arr.length; i++ ) {
-		if ( min >= arr[ i ] ) {
-			min = arr[ i ];
-		}
-		else if ( max <= arr[ i ] ) {
-			max = arr[ i ];
-		}
-	}
+    for ( ; i < arr.length; i++ ) {
+        if ( min >= arr[ i ] ) {
+            min = arr[ i ];
+        }
+        else if ( max <= arr[ i ] ) {
+            max = arr[ i ];
+        }
+    }
 
-	return { min, max };
+    return { min, max };
 }
 
 /**
@@ -1339,11 +1342,11 @@ function minAndMax( arr ) {
  * escapeRegExp( '(?=[[]])' ) // -> '\\(\\?=\\[\\[\\]\\]\\)'
  */
 function escapeRegExp( str ) {
-	if ( !isString( str ) ) {
-		throw new Error( ARGUMENT_ERROR_STRING );
-	}
+    if ( !isString( str ) ) {
+        throw new Error( ARGUMENT_ERROR_STRING );
+    }
 
-	return str.replace( /[-[\]/{}()*+?.\\^$|]/g, '\\$&' );
+    return str.replace( /[-[\]/{}()*+?.\\^$|]/g, '\\$&' );
 }
 
 /**
@@ -1355,11 +1358,11 @@ function escapeRegExp( str ) {
  * @returns {RegExp} - returns build RegExp object
  */
 function regexpFromString( str, flags = 'igm' ) {
-	if ( !isString( str, flags ) ) {
-		throw new Error( ARGUMENT_ERROR_STRING );
-	}
+    if ( !isString( str, flags ) ) {
+        throw new Error( ARGUMENT_ERROR_STRING );
+    }
 
-	return new RegExp( str, flags );
+    return new RegExp( str, flags );
 }
 
 /**
@@ -1373,14 +1376,14 @@ function regexpFromString( str, flags = 'igm' ) {
  * testUppercase( "aBcD1234", 2 ) // -> true
  */
 function testUppercase( str, n = 0 ) {
-	if ( !isString( str ) ) {
-		throw new Error( ARGUMENT_ERROR_STRING );
-	}
-	else if ( !isNumber( n ) ) {
-		throw new Error( ARGUMENT_ERROR_NUMBER );
-	}
+    if ( !isString( str ) ) {
+        throw new Error( ARGUMENT_ERROR_STRING );
+    }
+    else if ( !isNumber( n ) ) {
+        throw new Error( ARGUMENT_ERROR_NUMBER );
+    }
 
-	return regexpFromString( `(?=${ '.*[A-Z]'.repeat( n ) })`, 'gm' ).test( str );
+    return regexpFromString( `(?=${ '.*[A-Z]'.repeat( n ) })`, 'gm' ).test( str );
 }
 
 /**
@@ -1394,14 +1397,14 @@ function testUppercase( str, n = 0 ) {
  * testUppercase( "aBcD1234", 2 ) // -> true
  */
 function testLowercase( str, n = 0 ) {
-	if ( !isString( str ) ) {
-		throw new Error( ARGUMENT_ERROR_STRING );
-	}
-	else if ( !isNumber( n ) ) {
-		throw new Error( ARGUMENT_ERROR_NUMBER );
-	}
+    if ( !isString( str ) ) {
+        throw new Error( ARGUMENT_ERROR_STRING );
+    }
+    else if ( !isNumber( n ) ) {
+        throw new Error( ARGUMENT_ERROR_NUMBER );
+    }
 
-	return regexpFromString( `(?=${ '.*[a-z]'.repeat( n ) })`, 'gm' ).test( str );
+    return regexpFromString( `(?=${ '.*[a-z]'.repeat( n ) })`, 'gm' ).test( str );
 }
 
 /**
@@ -1415,14 +1418,14 @@ function testLowercase( str, n = 0 ) {
  * testUppercase( "aBcD1234", 2 ) // -> true
  */
 function testDigitcase( str, n = 0 ) {
-	if ( !isString( str ) ) {
-		throw new Error( ARGUMENT_ERROR_STRING );
-	}
-	else if ( !isNumber( n ) ) {
-		throw new Error( ARGUMENT_ERROR_NUMBER );
-	}
+    if ( !isString( str ) ) {
+        throw new Error( ARGUMENT_ERROR_STRING );
+    }
+    else if ( !isNumber( n ) ) {
+        throw new Error( ARGUMENT_ERROR_NUMBER );
+    }
 
-	return regexpFromString( `(?=${ '.*[0-9]'.repeat( n ) })`, 'igm' ).test( str );
+    return regexpFromString( `(?=${ '.*[0-9]'.repeat( n ) })`, 'igm' ).test( str );
 }
 
 /**
@@ -1437,14 +1440,14 @@ function testDigitcase( str, n = 0 ) {
  * testUppercase( "aBcD1234!!", 2 ) // -> true
  */
 function testSpecialcase( str, n = 0, validCharacters = escapeRegExp( '~!@#$%^&*()_+-={}[]:;<>?,.' ) ) {
-	if ( !isString( str ) ) {
-		throw new Error( ARGUMENT_ERROR_STRING );
-	}
-	else if ( !isNumber( n ) ) {
-		throw new Error( ARGUMENT_ERROR_NUMBER );
-	}
+    if ( !isString( str ) ) {
+        throw new Error( ARGUMENT_ERROR_STRING );
+    }
+    else if ( !isNumber( n ) ) {
+        throw new Error( ARGUMENT_ERROR_NUMBER );
+    }
 
-	return regexpFromString( `(?=${ ( '.*[' + validCharacters + ']' ).repeat( n ) })`, 'igm' ).test( str );
+    return regexpFromString( `(?=${ ( '.*[' + validCharacters + ']' ).repeat( n ) })`, 'igm' ).test( str );
 }
 
 /**
@@ -1458,14 +1461,14 @@ function testSpecialcase( str, n = 0, validCharacters = escapeRegExp( '~!@#$%^&*
  * testUppercase( "aBcD1234", 2 ) // -> true
  */
 function testMinimumLength( str, n = 8 ) {
-	if ( !isString( str ) ) {
-		throw new Error( ARGUMENT_ERROR_STRING );
-	}
-	else if ( !isNumber( n ) ) {
-		throw new Error( ARGUMENT_ERROR_NUMBER );
-	}
+    if ( !isString( str ) ) {
+        throw new Error( ARGUMENT_ERROR_STRING );
+    }
+    else if ( !isNumber( n ) ) {
+        throw new Error( ARGUMENT_ERROR_NUMBER );
+    }
 
-	return str.length >= n;
+    return str.length >= n;
 }
 
 /**
@@ -1479,7 +1482,7 @@ function testMinimumLength( str, n = 8 ) {
  * toPrecison( 123, 2 ) // -> 1.2e+2
  */
 function toPrecison( n, p = 2 ) {
-	return ( n ).toPrecision( p );
+    return ( n ).toPrecision( p );
 }
 
 /**
@@ -1493,7 +1496,7 @@ function toPrecison( n, p = 2 ) {
  * toFixed( 123, 1 ) // -> "123.0"
  */
 function toFixed( n, p = 2 ) {
-	return ( n ).toFixed( p );
+    return ( n ).toFixed( p );
 }
 
 /**
@@ -1506,11 +1509,11 @@ function toFixed( n, p = 2 ) {
  * isEven( 4 ) // -> true
  */
 function isEven( n ) {
-	if ( !isNumber( n ) ) {
-		return false;
-	}
+    if ( !isNumber( n ) ) {
+        return false;
+    }
 
-	return n && n === ~~n && !( ~~n & 1 );
+    return n && n === ~~n && !( ~~n & 1 );
 }
 
 /**
@@ -1522,7 +1525,7 @@ function isEven( n ) {
  * isOdd( 4 ) // -> false
  */
 function isOdd( n ) {
-	return !isEven( n );
+    return !isEven( n );
 }
 
 /**
@@ -1536,23 +1539,23 @@ function isOdd( n ) {
  * objectToFlatMap( { a: { b: 1 } } ) // -> map { 'b' => 1 }
  */
 function objectToFlatMap( obj, result = new Map() ) {
-	if ( !isObject( obj ) ) {
-		throw new Error( ARGUMENT_ERROR_OBJECT );
-	}
+    if ( !isObject( obj ) ) {
+        throw new Error( ARGUMENT_ERROR_OBJECT );
+    }
 
-	keys( obj )
-		.forEach( k => {
-			const v = obj[ k ];
+    keys( obj )
+        .forEach( k => {
+            const v = obj[ k ];
 
-			if ( isObject( v ) ) {
-				objectToFlatMap( v, result );
-			}
-			else {
-				result.set( k, v );
-			}
-		} );
+            if ( isObject( v ) ) {
+                objectToFlatMap( v, result );
+            }
+            else {
+                result.set( k, v );
+            }
+        } );
 
-	return result;
+    return result;
 }
 
 /**
@@ -1563,11 +1566,11 @@ function objectToFlatMap( obj, result = new Map() ) {
  * @return {number} - result
  */
 function positiveFloorAddition( n ) {
-	if ( !isNumber( n ) ) {
-		throw new Error( ARGUMENT_ERROR_NUMBER );
-	}
+    if ( !isNumber( n ) ) {
+        throw new Error( ARGUMENT_ERROR_NUMBER );
+    }
 
-	return ~~-~( n );
+    return ~~-~( n );
 }
 
 /**
@@ -1578,7 +1581,7 @@ function positiveFloorAddition( n ) {
  * @return {number} - result in radians
  */
 function degreesToRadians( n ) {
-	return Math.PI * n / 180;
+    return Math.PI * n / 180;
 }
 
 /**
@@ -1589,141 +1592,141 @@ function degreesToRadians( n ) {
  * @return {number} - result in degrees
  */
 function radiansToDegrees( n ) {
-	return 180 * n / Math.PI;
+    return 180 * n / Math.PI;
 }
 
 module.exports = {
-	ERROR,
-	FUNCTION_ERROR,
-	ARGUMENT_ERROR,
-	ARGUMENT_ERROR_PROPERTY,
-	ARGUMENT_ERROR_BOOLEAN,
-	ARGUMENT_ERROR_STRING,
-	ARGUMENT_ERROR_NUMBER,
-	ARGUMENT_ERROR_ARRAY,
-	ARGUMENT_ERROR_OBJECT,
-	ARGUMENT_ERROR_FUNCTION,
-	ARGUMENT_ERROR_POWER,
-	ARGUMENT_ERROR_HTTP,
-	ARGUMENT_ERROR_EMAIL,
-	ARGUMENT_ERROR_IPV4,
-	ARGUMENT_ERROR_DOMAIN_NAME,
-	LARGE_ARRAY_SIZE,
-	FLOAT_EPSILON,
-	DOUBLE_EPSILON,
-	LOG_KIBIBYTE,
-	EDGE,
-	isNaN,
-	isUndefined,
-	isNull,
-	isBoolean,
-	isString,
-	isNumber,
-	isValue,
-	isPrimitive,
-	isArray,
-	isMap,
-	isUint8Array,
-	isInt8Array,
-	isInt16Array,
-	isUint16Array,
-	isInt32Array,
-	isUint32Array,
-	isFloat32Array,
-	isFloat64Array,
-	isObject,
-	isBuffer,
-	isFunction,
-	isPowerOfTwo,
-	keys,
-	values,
-	publicObject,
-	instanceOf,
-	has,
-	findMissingKeys,
-	hasSome,
-	omit,
-	include,
-	sortObject,
-	sort,
-	isValidJSON,
-	safeAccess,
-	stringify,
-	parse,
-	map,
-	startsWith,
-	isValidHTTPMethod,
-	isValidWebDAVMethod,
-	isProtocol,
-	isValidEmail,
-	isValidIPv4,
-	isPath,
-	isValidDomainName,
-	isValidURL,
-	isValidQueryString,
-	buildQueryString,
-	isEmpty,
-	flatten,
-	extractIP,
-	defineProperty,
-	nonEnumerableProperty,
-	pad2,
-	secondsToReadableTime,
-	isObjectId,
-	isObjectIdReference,
-	extractReferenceId,
-	getDeepKeys,
-	objectFilteredForRegex,
-	getValueForRegexKey,
-	arrayFilteredForRegex,
-	removeItemsFromArray,
-	removeItemsFromObject,
-	wait,
-	waitFor,
-	absoluteValue,
-	performanceDifference,
-	bytesToSize,
-	sizeToBytes,
-	radixToNumber,
-	generateRandomNumber,
-	generateRandomString,
-	generateRandomHex,
-	getRandomInt,
-	replaceMatchesWithValue,
-	recursivePromiseResolve,
-	objectId,
-	convertHighResolutionTime,
-	convertHRTimeToReadable,
-	isUUIDv4,
-	ascendingSort,
-	clamp,
-	absoluteMinimum,
-	absoluteMaximum,
-	precisionDelta,
-	floatPrecisionDelta,
-	doublePrecisionDelta,
-	percentError,
-	percentDifference,
-	percentChange,
-	sum,
-	mean,
-	isSemanticVersion,
-	flattenObject,
-	deepValues,
-	minAndMax,
-	escapeRegExp,
-	regexpFromString,
-	testUppercase,
-	testLowercase,
-	testDigitcase,
-	testSpecialcase,
-	testMinimumLength,
-	toPrecison,
-	toFixed,
-	isEven,
-	isOdd,
-	objectToFlatMap,
-	positiveFloorAddition,
-	degreesToRadians,
-	radiansToDegrees
+    ERROR,
+    FUNCTION_ERROR,
+    ARGUMENT_ERROR,
+    ARGUMENT_ERROR_PROPERTY,
+    ARGUMENT_ERROR_BOOLEAN,
+    ARGUMENT_ERROR_STRING,
+    ARGUMENT_ERROR_NUMBER,
+    ARGUMENT_ERROR_ARRAY,
+    ARGUMENT_ERROR_OBJECT,
+    ARGUMENT_ERROR_FUNCTION,
+    ARGUMENT_ERROR_POWER,
+    ARGUMENT_ERROR_HTTP,
+    ARGUMENT_ERROR_EMAIL,
+    ARGUMENT_ERROR_IPV4,
+    ARGUMENT_ERROR_DOMAIN_NAME,
+    LARGE_ARRAY_SIZE,
+    FLOAT_EPSILON,
+    DOUBLE_EPSILON,
+    LOG_KIBIBYTE,
+    EDGE,
+    isNaN,
+    isUndefined,
+    isNull,
+    isBoolean,
+    isString,
+    isNumber,
+    isValue,
+    isPrimitive,
+    isArray,
+    isMap,
+    isUint8Array,
+    isInt8Array,
+    isInt16Array,
+    isUint16Array,
+    isInt32Array,
+    isUint32Array,
+    isFloat32Array,
+    isFloat64Array,
+    isObject,
+    isBuffer,
+    isFunction,
+    isPowerOfTwo,
+    keys,
+    values,
+    publicObject,
+    instanceOf,
+    has,
+    findMissingKeys,
+    hasSome,
+    omit,
+    include,
+    sortObject,
+    sort,
+    isValidJSON,
+    safeAccess,
+    stringify,
+    parse,
+    map,
+    startsWith,
+    isValidHTTPMethod,
+    isValidWebDAVMethod,
+    isProtocol,
+    isValidEmail,
+    isValidIPv4,
+    isPath,
+    isValidDomainName,
+    isValidURL,
+    isValidQueryString,
+    buildQueryString,
+    isEmpty,
+    flatten,
+    extractIP,
+    defineProperty,
+    nonEnumerableProperty,
+    pad2,
+    secondsToReadableTime,
+    isObjectId,
+    isObjectIdReference,
+    extractReferenceId,
+    getDeepKeys,
+    objectFilteredForRegex,
+    getValueForRegexKey,
+    arrayFilteredForRegex,
+    removeItemsFromArray,
+    removeItemsFromObject,
+    wait,
+    waitFor,
+    absoluteValue,
+    performanceDifference,
+    bytesToSize,
+    sizeToBytes,
+    radixToNumber,
+    generateRandomNumber,
+    generateRandomString,
+    generateRandomHex,
+    getRandomInt,
+    replaceMatchesWithValue,
+    recursivePromiseResolve,
+    objectId,
+    convertHighResolutionTime,
+    convertHRTimeToReadable,
+    isUUIDv4,
+    ascendingSort,
+    clamp,
+    absoluteMinimum,
+    absoluteMaximum,
+    precisionDelta,
+    floatPrecisionDelta,
+    doublePrecisionDelta,
+    percentError,
+    percentDifference,
+    percentChange,
+    sum,
+    mean,
+    isSemanticVersion,
+    flattenObject,
+    deepValues,
+    minAndMax,
+    escapeRegExp,
+    regexpFromString,
+    testUppercase,
+    testLowercase,
+    testDigitcase,
+    testSpecialcase,
+    testMinimumLength,
+    toPrecison,
+    toFixed,
+    isEven,
+    isOdd,
+    objectToFlatMap,
+    positiveFloorAddition,
+    degreesToRadians,
+    radiansToDegrees
 };

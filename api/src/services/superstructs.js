@@ -6,28 +6,27 @@
 'use strict';
 
 const
-	Response        = require( 'http-response-class' ),
-	{ superstruct } = require( 'superstruct' ),
-	{
-		isValidURL,
-		isObjectId
-	}               = require( '../utils/general' );
+    { superstruct } = require( 'superstruct' ),
+    {
+        isValidURL,
+        isObjectId
+    }               = require( '../utils/general' );
 
 const
-	types  = {
-		hostname: d => isValidURL( d ),
-		objectId: d => isObjectId( d ),
-		stringNumber: d => +d === d,
-		map: d => Array.isArray( d ) ?
-			d.filter(
-				i => Array.isArray( i ) && i.length === 2
-			).length === d.length :
-			false,
-		'*': d => d === d
-	},
-	struct = superstruct( {
-		types
-	} );
+    types  = {
+        hostname: d => isValidURL( d ),
+        objectId: d => isObjectId( d ),
+        stringNumber: d => +d === d,
+        map: d => Array.isArray( d ) ?
+            d.filter(
+                i => Array.isArray( i ) && i.length === 2
+            ).length === d.length :
+            false,
+        '*': d => d === d
+    },
+    struct = superstruct( {
+        types
+    } );
 
 /**
  * structs
@@ -36,43 +35,43 @@ const
  * @mixin structs
  */
 module.exports = {
-	map: 'map',
-	array: 'array',
-	arrayOfObjects: [ 'object' ],
-	object: 'object',
-	objectId: 'objectId',
-	pioneerTask: struct(
-		{
-			url: 'hostname',
-			browserOpts: 'object?',
-			pageOpts: 'object?',
-			scan: 'boolean?',
-			plugins: 'array'
-		},
-		{
-			browserOpts: {
-				headless: true,
-				slowMo: 250,
-				devtools: true
-			},
-			pageOpts: {
-				waitUntil: 'networkidle2'
-			},
-			scan: false,
-			plugins: []
-		}
-	),
-	types,
-	struct,
-	validate: ( expected, data ) => new Promise(
-		( res, rej ) => {
-			const validation = struct( expected ).validate( data );
-			if ( validation[ 0 ] ) {
-				rej( new Response( 417, { error: validation[ 0 ].message, expected } ) );
-			}
-			else {
-				res( validation[ 1 ] );
-			}
-		}
-	)
+    map: 'map',
+    array: 'array',
+    arrayOfObjects: [ 'object' ],
+    object: 'object',
+    objectId: 'objectId',
+    pioneerTask: struct(
+        {
+            url: 'hostname',
+            browserOpts: 'object?',
+            pageOpts: 'object?',
+            scan: 'boolean?',
+            plugins: 'array'
+        },
+        {
+            browserOpts: {
+                headless: true,
+                slowMo: 250,
+                devtools: true
+            },
+            pageOpts: {
+                waitUntil: 'networkidle2'
+            },
+            scan: false,
+            plugins: []
+        }
+    ),
+    types,
+    struct,
+    validate: ( expected, data ) => new Promise(
+        ( res, rej ) => {
+            const validation = struct( expected ).validate( data );
+            if ( validation[ 0 ] ) {
+                rej( new Response( 417, { error: validation[ 0 ].message, expected } ) );
+            }
+            else {
+                res( validation[ 1 ] );
+            }
+        }
+    )
 };

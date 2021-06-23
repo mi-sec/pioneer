@@ -7,119 +7,119 @@
 
 class PioneerPlugin
 {
-	#config = null;
-	#result = null;
+    #config = null;
+    #result = null;
 
-	constructor( config )
-	{
-		this.#config = config;
-	}
+    constructor( config )
+    {
+        this.#config = config;
+    }
 
-	getResults()
-	{
-		return this.#result;
-	}
+    getResults()
+    {
+        return this.#result;
+    }
 
-	setResults( v )
-	{
-		console.log( 'setResults', v );
-		this.#result = v;
-	}
+    setResults( v )
+    {
+        console.log( 'setResults', v );
+        this.#result = v;
+    }
 
-	init()
-	{
+    init()
+    {
 
-	}
+    }
 
-	onPreBrowserLaunch()
-	{
+    onPreBrowserLaunch()
+    {
 
-	}
+    }
 
-	onPostBrowserLaunch()
-	{
+    onPostBrowserLaunch()
+    {
 
-	}
+    }
 
-	onPostPageLoaded()
-	{
+    onPostPageLoaded()
+    {
 
-	}
+    }
 
-	onPreBrowserClose()
-	{
+    onPreBrowserClose()
+    {
 
-	}
+    }
 
-	onPostBrowserClose()
-	{
+    onPostBrowserClose()
+    {
 
-	}
+    }
 
-	onPrePageInit()
-	{
+    onPrePageInit()
+    {
 
-	}
+    }
 
-	onPostPageInit()
-	{
+    onPostPageInit()
+    {
 
-	}
+    }
 
-	onRequest()
-	{
+    onRequest()
+    {
 
-	}
+    }
 
-	onRequestFailed()
-	{
+    onRequestFailed()
+    {
 
-	}
+    }
 
-	onResponse()
-	{
+    onResponse()
+    {
 
-	}
+    }
 
-	onDomContentLoaded()
-	{
+    onDomContentLoaded()
+    {
 
-	}
+    }
 
-	onRequestFinished()
-	{
+    onRequestFinished()
+    {
 
-	}
+    }
 
-	onConsole()
-	{
+    onConsole()
+    {
 
-	}
+    }
 
-	onNetworkRequestWillBeSent()
-	{
+    onNetworkRequestWillBeSent()
+    {
 
-	}
+    }
 
-	onNetworkRequestIntercepted()
-	{
+    onNetworkRequestIntercepted()
+    {
 
-	}
+    }
 
-	onNetworkResponseReceived()
-	{
+    onNetworkResponseReceived()
+    {
 
-	}
+    }
 
-	preGoto()
-	{
+    preGoto()
+    {
 
-	}
+    }
 
-	postGoto()
-	{
+    postGoto()
+    {
 
-	}
+    }
 }
 
 module.exports = PioneerPlugin;

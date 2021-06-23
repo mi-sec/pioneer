@@ -1,117 +1,124 @@
-/** ****************************************************************************************************
- * File: PollTasks.js
- * Project: pioneer
- * @author Nick Soggin <iSkore@users.noreply.github.com> on 12-Jun-2019
- *******************************************************************************************************/
 'use strict';
 
 const
-	{ Worker }  = require( 'worker_threads' ),
-	{ resolve } = require( 'path' ),
-	config      = require( 'config' ),
-	LightMap    = require( '@mi-sec/lightmap' ),
-	opts        = config.get( 'workers.polling' );
+    { Worker } = require( 'worker_threads' ),
+    path       = require( 'path' ),
+    config     = require( 'config' ),
+    LightMap   = require( '@mi-sec/lightmap' ),
+    opts       = config.get( 'workers.polling' );
 
 const
-	{ waitFor } = require( '../utils/general' ),
-	MongoDB     = require( '../services/mongo/MongoDB' );
+    { waitFor } = require( '../utils/general' ),
+    logger      = require( '../services/logger' ),
+    MongoDB     = require( '../services/MongoDB' );
 
 const
-	Scheduler = require( './Scheduler' );
+    Scheduler = require( './Scheduler' );
 
 const
-	workerFile = resolve( __dirname, './tasks/ScanTask.js' );
+    workerFile = path.resolve( __dirname, './tasks/ScanTask.js' );
 
 class PollTasks extends Scheduler
 {
-	constructor()
-	{
-		super( { frequency: opts.frequency } );
-		this.config = opts;
+    constructor()
+    {
+        super( { frequency: opts.frequency } );
+        this.config = opts;
 
-		this.tasks = new LightMap();
+        this.tasks = new LightMap();
 
-		this.setTask();
-	}
+        this.setTask();
+    }
 
-	async start()
-	{
-		console.debug( `${ this.constructor.name } started` );
+    async start()
+    {
+        logger.trace( `${ this.constructor.name } started` );
 
-		try {
-			await waitFor( async () => {
-				await MongoDB.connect();
-				return MongoDB.isConnected();
-			}, 2000, true );
-		} catch ( e ) {
-			console.error( e );
-		}
+        try {
+            await waitFor( async () => {
+                await MongoDB.connect();
+                return MongoDB.isConnected();
+            }, 2000, true );
+        }
+        catch ( e ) {
+            logger.error( e );
+        }
 
-		console.debug( 'mongo connected' );
+        logger.trace( 'mongo connected' );
 
-		return super.start();
-	}
+        return super.start();
+    }
 
-	async stop()
-	{
-		console.debug( `${ this.constructor.name } stopped` );
-		await MongoDB.disconnect();
-		return super.stop();
-	}
+    async stop()
+    {
+        logger.trace( `${ this.constructor.name } stopped` );
+        await MongoDB.disconnect();
+        return super.stop();
+    }
 
-	async pendingTasks()
-	{
-		const Queue = MongoDB.collections.get( 'queue' );
-		return await Queue.find( { state: 'PENDING' } );
-	}
+    async pendingTasks()
+    {
+        const Queue = MongoDB.collections.get( 'queue' );
+        return await Queue.find( { state: 'PENDING' } );
+    }
 
-	setTask()
-	{
-		const fn = async () => {
-			const pendingTasks = await this.pendingTasks();
+    setTask()
+    {
+        const fn = async () => {
+            const pendingTasks = await this.pendingTasks();
 
-			if ( pendingTasks.length ) {
-				this.pause();
-				try {
+            if ( pendingTasks.length ) {
+                this.pause();
+                try {
 
-					// Make reporting system from worker to see if it's still alive
-					for ( let i = 0; i < pendingTasks.length; i++ ) {
-						const
-							task   = pendingTasks[ i ],
-							worker = new Worker( workerFile, {
-								workerData: task.config
-							} );
+                    // Make reporting system from worker to see if it's still alive
+                    for ( let i = 0; i < pendingTasks.length; i++ ) {
+                        const
+                            task   = pendingTasks[ i ],
+                            worker = new Worker( workerFile, {
+                                workerData: task.config
+                            } );
 
-						worker
-							.on( 'online', async () => {
-								console.log( 'WORKER online' );
-							} )
-							.on( 'message', async ( { state, data } ) => {
-								task.state = state;
-								task.data  = data;
-								await task.save();
-							} )
-							.on( 'error', async e => {
-								task.state = 'FATAL';
-								task.error = e;
-								await task.save();
-							} )
-							.on( 'exit', () => {
-								this.tasks.delete( task._id );
-							} );
+                        worker
+                            .on( 'online', async () => {
+                                logger.trace( 'WORKER online' );
+                            } )
+                            .on( 'message', async ( msg ) => {
+                                logger.trace( 'WORKER recieved message', msg );
+                                task.state = msg.state;
+                                task.data  = msg.data;
 
-						this.tasks.set( task._id, worker );
-					}
-				} catch ( e ) {
-					console.error( `${ this.constructor.name } error`, e );
-				} finally {
-					this.resume();
-				}
-			}
-		};
+                                if ( msg.error ) {
+                                    task.error = msg.error;
+                                }
 
-		super.setTask( fn, this );
-	}
+                                await task.save();
+                            } )
+                            .on( 'error', async ( err ) => {
+                                logger.trace( 'WORKER recieved error', err );
+                                task.state = 'FATAL';
+                                task.error = err;
+                                await task.save();
+                            } )
+                            .on( 'exit', () => {
+                                logger.trace( 'WORKER exited' );
+                                this.tasks.delete( task._id );
+                            } );
+
+                        this.tasks.set( task._id, worker );
+                    }
+                }
+                catch ( e ) {
+                    logger.error( `${ this.constructor.name } error`, e );
+                }
+                finally {
+                    this.resume();
+                }
+            }
+        };
+
+        super.setTask( fn, this );
+    }
 }
 
 module.exports = new PollTasks();

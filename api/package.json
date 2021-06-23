@@ -1,47 +1,54 @@
 {
-	"name": "pioneer-api",
-	"version": "0.0.1",
-	"description": "Pioneer API",
-	"main": "entrypoint.js",
-	"scripts": {
-		"lint": "eslint .",
-		"start": "pm2-runtime start ecosystem.config.js --env development",
-		"test": "mocha"
-	},
-	"author": "MI-SEC",
-	"license": "MIT",
-	"dependencies": {
-		"@mi-sec/lightmap": "0.1.4",
-		"@pm2/io": "4.2.3",
-		"axios": "0.19.0",
-		"body-parser": "1.19.0",
-		"config": "3.1.0",
-		"cors": "2.8.5",
-		"express": "4.17.1",
-		"express-pino-logger": "4.0.0",
-		"http-response-class": "1.2.6",
-		"lighthouse": "5.1.0",
-		"mongoose": "5.7.5",
-		"pino": "5.12.6",
-		"puppeteer": "1.17.0",
-		"superstruct": "0.6.1",
-		"uuid": "3.3.2"
-	},
-	"directories": {
-		"test": "test"
-	},
-	"devDependencies": {},
-	"repository": {
-		"type": "git",
-		"url": "git+ssh://git@github.com/mi-sec/pioneer.git"
-	},
-	"keywords": [
-		"pioneer",
-		"web",
-		"crawler"
-	],
-	"bugs": {
-		"url": "https://github.com/mi-sec/pioneer/issues"
-	},
-	"homepage": "https://github.com/mi-sec/pioneer#readme"
+    "name": "pioneer-api",
+    "version": "0.0.1",
+    "description": "Pioneer API",
+    "main": "api.entrypoint.js",
+    "scripts": {
+        "build": "node build.js",
+        "build:prod": "npm run clean && npm run build -- --bundle --minify",
+        "start": "pm2-runtime start ecosystem.config.js --env development",
+        "start:prod": "pm2 start ecosystem.config.js --env production",
+        "clean": "rm -rf ./dist/*",
+        "lint": "eslint .",
+        "test": "nyc mocha"
+    },
+    "author": "MI-SEC",
+    "license": "MIT",
+    "dependencies": {
+        "@mi-sec/lightmap": "^0.1.9",
+        "@pm2/io": "^5.0.0",
+        "axios": "^0.21.1",
+        "body-parser": "^1.19.0",
+        "config": "^3.3.6",
+        "cors": "^2.8.5",
+        "express": "^4.17.1",
+        "express-pino-logger": "^6.0.0",
+        "formidable": "^1.2.2",
+        "lighthouse": "^8.0.0",
+        "mongoose": "^5.12.14",
+        "pino": "^6.11.3",
+        "puppeteer": "^10.0.0",
+        "uuid": "^8.3.2"
+    },
+    "devDependencies": {
+        "chai": "^4.3.4",
+        "chai-http": "^4.3.0",
+        "esbuild": "^0.12.9",
+        "eslint": "^7.29.0",
+        "mocha": "^9.0.1",
+        "nyc": "^15.1.0"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+ssh://git@github.com/mi-sec/pioneer.git"
+    },
+    "keywords": [
+        "pioneer",
+        "web",
+        "crawler"
+    ],
+    "bugs": {
+        "url": "https://github.com/mi-sec/pioneer/issues"
+    },
+    "homepage": "https://github.com/mi-sec/pioneer#readme"
 }

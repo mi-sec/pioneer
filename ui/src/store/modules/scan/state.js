@@ -1,8 +1,8 @@
 import LightMap from '@mi-sec/lightmap';
 
 export default {
-	scans: [],
-	loadedScans: new LightMap(),
+    scans: [],
+    loadedScans: new LightMap(),
 
-	currentScan: null
+    currentScan: null
 };
