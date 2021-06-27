@@ -7,7 +7,13 @@ class Api
         this.baseUrl = url;
     }
 
-    request( params ) {
+    getBaseUrl()
+    {
+        return this.baseUrl;
+    }
+
+    request( params )
+    {
         let data;
 
         if ( Array.isArray( params.data ) ) {

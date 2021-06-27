@@ -1,16 +1,9 @@
 <template>
-    <v-layout
-        grid-list-xl
-        pa-3
-        wrap
-        row
-    >
+    <v-layout>
         <v-flex xs12 sm12 md4>
-            <v-flex xs12>
-                <SummaryCard
-                    :scan="scan"
-                />
-            </v-flex>
+            <SummaryCard
+                :scan="scan"
+            />
         </v-flex>
 
         <v-flex xs12 sm12 md8>

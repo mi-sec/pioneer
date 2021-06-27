@@ -5,6 +5,8 @@
             :src="screenshot"
             class="elevation-4"
             aspect-ratio="2.0"
+            max-height="400px"
+            contain
         />
 
         <v-card-title primary-title class="success">
@@ -14,7 +16,8 @@
                         {{ scan.data.url }}
                     </a>
                 </h3>
-                <span class="white--text">Created: {{ scan.createdAt }}</span><br/>
+                <span class="overline">ID: {{ scan._id }}</span><br/>
+                <span class="overline">Created: {{ scan.createdAt }}</span>
             </div>
         </v-card-title>
 
@@ -51,11 +54,12 @@ export default {
         };
     },
     async mounted() {
-        console.log( this.scan );
+        console.log( '[SummaryCard]', this.scan );
         const screenshot = this.scan.data.plugins.find( plugin => plugin.module === 'screenshot' );
 
         if ( screenshot ) {
-            this.screenshot = screenshot.apiPath;
+            this.screenshot = new URL( screenshot.apiPath, this.$api.getBaseUrl() ).toString();
+            console.log( this.screenshot );
         }
     }
 };

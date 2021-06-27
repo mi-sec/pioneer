@@ -5,13 +5,10 @@
             :class="scan.data.response.securityState === 'secure' ? 'green' : 'red'"
         >
             <div>
-                <h3 class="mb-0 white--text">Security</h3>
+                <h3 class="mb-0 white--text">cyptography</h3>
 
                 <span class="font-weight-bold">security state: </span>
-                <v-btn
-                    small
-                    dark
-                >
+                <v-btn small>
                     {{ scan.data.response.securityState }}
                 </v-btn>
                 <br/>
@@ -76,7 +73,7 @@
 
 <script>
 export default {
-    name: 'SecurityInfoCard',
+    name: 'CryptographyInfoCard',
     props: {
         scan: Object
     },

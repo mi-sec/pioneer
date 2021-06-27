@@ -1,97 +1,69 @@
 <template>
-    <v-layout
-        justify-center
-        class="secondary"
-        pa-3
-    >
-        <v-flex xs12>
-            <v-card>
-                <v-card-title
-                    class="font-weight-bold"
-                >
-                    Performance
-                </v-card-title>
+    <v-container class="ma-0 pa-0" fluid>
+        <CryptographyInfoCard
+            class="ma-4"
+            :scan="scan"
+        />
 
-                <v-card-text>
-                    <v-tabs
-                        v-model="active"
-                        v-if="groups"
-                        color="purple"
-                        fixed-tabs
-                        grow
-                        dark
-                    >
-                        <v-tab
-                            v-for="n in groups.keys()"
-                            :key="n"
-                            ripple
-                        >
-                            {{ n }}
-                        </v-tab>
-                        <v-tab-item
-                            v-for="n in groups.keys()"
-                            :key="n"
-                        >
-                            <v-flex xs12>
-                                <v-container grid-list-xl fluid>
-                                    <v-layout wrap row>
-                                        <v-flex
-                                            v-for="auditName in groups.get( n ).keys()"
-                                            :key="auditName"
-                                            xs12 sm6 md4
-                                        >
-                                            <v-card>
-                                                <v-card-title xs12>
-                                                    {{ groups.get( n ).get( auditName ).title }}
+        <v-card
+            class="ma-4"
+            v-for="n in groups.keys()"
+            :key="n"
+        >
+            <v-card-title class="font-weight-bold">
+                {{ n }}
+            </v-card-title>
 
-                                                    <!--<v-icon v-on="on" right>-->
-                                                    <!--	mdi-help-circle-outline-->
-                                                    <!--</v-icon>-->
-                                                    <!--{{ groups.get( n ).get( auditName ).description }}-->
-                                                </v-card-title>
-                                                <v-card-text>
-                                                    <v-layout wrap row>
-                                                        <v-flex xs4>
-                                                            Weight: {{ groups.get( n ).get( auditName ).weight }}
-                                                        </v-flex>
-                                                        <v-flex xs4>
-                                                            Time: {{ groups.get( n ).get( auditName ).displayValue }}
-                                                        </v-flex>
-                                                        <v-flex xs4>
-                                                            Score: {{ groups.get( n ).get( auditName ).score * 100 }}%
-                                                        </v-flex>
-                                                    </v-layout>
-                                                </v-card-text>
-                                            </v-card>
-                                        </v-flex>
-                                    </v-layout>
-                                </v-container>
-                            </v-flex>
-                        </v-tab-item>
-                    </v-tabs>
-                </v-card-text>
-            </v-card>
-        </v-flex>
-    </v-layout>
+            <v-card-text>
+                <v-simple-table dense>
+                    <template v-slot:default>
+                        <thead>
+                        <tr>
+                            <th class="text-left">Title</th>
+                            <th class="text-left">Value</th>
+                            <th class="text-left">Score</th>
+                            <th class="text-left">Weight</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr
+                            v-for="g in groups.get( n ).keys()"
+                            :key="g"
+                        >
+                            <td>
+                                {{
+                                    groups.get( n ).get( g ).scoreDisplayMode === 'notApplicable' ?
+                                        '[Not Applicable]' :
+                                        ''
+                                }}
+                                {{ groups.get( n ).get( g ).title }} ({{ groups.get( n ).get( g ).acronym }})
+                            </td>
+                            <td>{{ groups.get( n ).get( g ).displayValue }}</td>
+                            <td>{{ ~~( groups.get( n ).get( g ).score * 10000 ) / 100 }}%</td>
+                            <td>{{ groups.get( n ).get( g ).weight }}</td>
+                        </tr>
+                        </tbody>
+                    </template>
+                </v-simple-table>
+            </v-card-text>
+        </v-card>
+    </v-container>
 </template>
 
 <script>
-import LightMap from '@mi-sec/lightmap';
+import LightMap             from '@mi-sec/lightmap';
+import CryptographyInfoCard from '@/components/scanPage/CryptographyInfoCard';
 
 export default {
     name: 'PerformanceBlock',
-    components: {},
+    components: {
+        CryptographyInfoCard
+    },
     props: {
         scan: Object
     },
     data() {
         return {
-            active: null,
-            cards: [
-                { title: 'Pre-fab homes', src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg' },
-                { title: 'Favorite road trips', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg' },
-                { title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg' }
-            ],
             groups: null,
             audits: null
         };
@@ -121,7 +93,7 @@ export default {
             }
         );
 
-        console.log( this.groups );
+        console.log( '[PerformanceBlock]', this.groups );
 
         this.audits.auditRefs = this.audits.auditRefs.map(
             ref => ( {
@@ -130,7 +102,7 @@ export default {
             } )
         );
 
-        console.log( this.audits.auditRefs );
+        console.log( '[PerformanceBlock]', this.audits.auditRefs );
     },
     methods: {}
 };
