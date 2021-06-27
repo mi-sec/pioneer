@@ -1,5 +1,9 @@
 <template>
-    <v-container class="ma-0 pa-0" fluid>
+    <v-container
+        v-if="groups"
+        class="ma-0 pa-0"
+        fluid
+    >
         <CryptographyInfoCard
             class="ma-4"
             :scan="scan"
@@ -25,7 +29,9 @@
                             <th class="text-left">Weight</th>
                         </tr>
                         </thead>
-                        <tbody>
+                        <tbody
+                            v-if="groups.has( n )"
+                        >
                         <tr
                             v-for="g in groups.get( n ).keys()"
                             :key="g"
